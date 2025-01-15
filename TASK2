@@ -1,0 +1,63 @@
+
+
+CREATE COMPUTE MODULE xmljson_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage()
+	BEGIN
+		DECLARE myvar CHARACTER;
+		DECLARE myblob BLOB;
+		DECLARE parseData CHARACTER;
+
+
+		SET myblob = InputRoot.BLOB.BLOB;
+		SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
+		SET myvar = parseData;
+
+
+		DECLARE xmlStart INT;
+		DECLARE xmlEnd INT;
+		DECLARE xmlData CHARACTER;
+
+		SET xmlStart = POSITION('<employee>' IN myvar);
+		SET xmlEnd = POSITION('</employee>' IN myvar);
+
+
+		IF (xmlStart > 0 AND xmlEnd > 0) THEN
+
+			SET xmlData = SUBSTRING(myvar FROM xmlStart FOR (xmlEnd + LENGTH('</employee>') - xmlStart + 1));
+		ELSE
+			SET xmlData = '';
+		END IF;
+
+
+
+		SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
+		SET OutputLocalEnvironment.Destination.File.Directory = 'C:\Users\pankaj.m\Desktop\P10\OUT2';
+		SET OutputLocalEnvironment.Destination.File.Name = 'outputxml';
+		PROPAGATE;
+
+		DECLARE jsonStart INT;
+		DECLARE jsonEnd INT;
+		DECLARE jsonData CHARACTER;
+
+
+		SET jsonStart = POSITION('{' IN myvar);
+		SET jsonEnd = POSITION('}' IN myvar);
+
+		IF (jsonStart > 0 AND jsonEnd > 0) THEN
+			SET jsonData = SUBSTRING(myvar FROM jsonStart FOR (jsonEnd - jsonStart + 1));
+		ELSE
+			SET jsonData = '';
+		END IF;
+		
+		SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
+		SET OutputLocalEnvironment.Destination.File.Directory = 'C:\Users\pankaj.m\Desktop\P10\OUT';
+		SET OutputLocalEnvironment.Destination.File.Name = 'outputjson';
+		PROPAGATE;
+	END;
+END MODULE;
