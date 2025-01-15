@@ -63,3 +63,15 @@ CREATE COMPUTE MODULE xmljson_Compute
         END IF;
     END;
 END MODULE;
+<note>
+    <to>Tove</to>
+    <from>Jani</from>
+    <heading>Reminder</heading>
+    <body>Don't forget me this weekend!</body>
+</note>
+{"name": "John", "age": 30, "city": "New York"}
+<message>
+    <sender>Admin</sender>
+    <content>Hello, welcome!</content>
+</message>
+{"product": "Laptop", "price": 1200, "stock": true}
