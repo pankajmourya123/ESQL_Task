@@ -16,7 +16,7 @@ CREATE COMPUTE MODULE xmljson_Compute
         DECLARE jsonData CHARACTER;
 
         -- Check if InputRoot.BLOB.BLOB exists
-        IF EXISTS(InputRoot.BLOB.BLOB) THEN
+        IF InputRoot.BLOB.BLOB IS NOT NULL THEN
             -- Convert BLOB to CHARACTER
             SET myblob = InputRoot.BLOB.BLOB;
             SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
@@ -24,26 +24,26 @@ CREATE COMPUTE MODULE xmljson_Compute
             -- Extract XML data
             WHILE POSITION('<' IN mychar) > 0 DO
                 SET xmlStartPos = POSITION('<' IN mychar);
-                SET xmlEndPos = POSITION('>' IN mychar) + 1; -- Include the closing tag
+                SET xmlEndPos = POSITION('>' IN SUBSTRING(mychar FROM xmlStartPos)) + xmlStartPos - 1; -- Adjust position relative to original string
 
                 IF xmlStartPos > 0 AND xmlEndPos > 0 THEN
-                    SET xmlData = SUBSTRING(mychar FROM xmlStartPos FOR (xmlEndPos - xmlStartPos));
+                    SET xmlData = SUBSTRING(mychar FROM xmlStartPos FOR (xmlEndPos - xmlStartPos + 1));
 
                     -- Set output for XML
                     SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
                     SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
-                    SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CURRENT_TIMESTAMP || '.xml';
+                    SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CAST(CURRENT_TIMESTAMP AS CHARACTER) || '.xml';
                     PROPAGATE;
 
                     -- Remove processed XML from the input
-                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartPos FOR (xmlEndPos - xmlStartPos));
+                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartPos FOR (xmlEndPos - xmlStartPos + 1));
                 END IF;
             END WHILE;
 
             -- Extract JSON data
             WHILE POSITION('{' IN mychar) > 0 DO
                 SET jsonStartPos = POSITION('{' IN mychar);
-                SET jsonEndPos = POSITION('}' IN mychar, jsonStartPos); -- Find the closing brace
+                SET jsonEndPos = POSITION('}' IN SUBSTRING(mychar FROM jsonStartPos)) + jsonStartPos - 1; -- Adjust position relative to original string
 
                 IF jsonStartPos > 0 AND jsonEndPos > 0 THEN
                     SET jsonData = SUBSTRING(mychar FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
@@ -51,7 +51,7 @@ CREATE COMPUTE MODULE xmljson_Compute
                     -- Set output for JSON
                     SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
                     SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT';
-                    SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CURRENT_TIMESTAMP || '.json';
+                    SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(CURRENT_TIMESTAMP AS CHARACTER) || '.json';
                     PROPAGATE;
 
                     -- Remove processed JSON from the input
