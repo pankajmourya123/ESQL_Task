@@ -61,3 +61,90 @@ CREATE COMPUTE MODULE xmljson_Compute
         END IF;
     END;
 END MODULE;
+
+
+<root>
+    <employees>
+        <employee>
+            <id>1</id>
+            <name>John Doe</name>
+            <position>Software Engineer</position>
+            <skills>
+                <skill>Java</skill>
+                <skill>Python</skill>
+                <skill>JavaScript</skill>
+            </skills>
+        </employee>
+        <employee>
+            <id>2</id>
+            <name>Jane Smith</name>
+            <position>Data Scientist</position>
+            <skills>
+                <skill>R</skill>
+                <skill>Python</skill>
+                <skill>Machine Learning</skill>
+            </skills>
+        </employee>
+    </employees>
+</root>
+
+
+{
+    "projects": [
+        {
+            "id": "101",
+            "name": "Project Alpha",
+            "description": "A project focused on developing a new web application.",
+            "team": [
+                {
+                    "employeeId": 1,
+                    "role": "Lead Developer"
+                },
+                {
+                    "employeeId": 2,
+                    "role": "Data Analyst"
+                }
+            ],
+            "startDate": "2023-01-15",
+            "endDate": "2023-06-30"
+        },
+        {
+            "id": "102",
+            "name": "Project Beta",
+            "description": "A project aimed at data analysis and reporting.",
+            "team": [
+                {
+                    "employeeId": 2,
+                    "role": "Lead Data Scientist"
+                }
+            ],
+            "startDate": "2023-02-01",
+            "endDate": "2023-08-15"
+        }
+    ]
+}
+
+
+{
+    "projects": [
+        {
+            "id": "101",
+            "name": "Project Alpha",
+            "description": "A project focused on developing a new web application.",
+            "team": [
+                {
+                    "employeeId": 1,
+                    "role": "Lead Developer"
+                }{
+                    "employeeId": 2,
+                    "role": "Data Analyst"
+                }{
+            "id": "102",
+            "name": "Project Beta",
+            "description": "A project aimed at data analysis and reporting.",
+            "team": [
+                {
+                    "employeeId": 2,
+                    "role": "Lead Data Scientist"
+                }
+
