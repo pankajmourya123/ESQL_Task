@@ -56,3 +56,29 @@ BEGIN
 	SET OutputLocalEnvironment.Destination.File.Name = 'outputxml';
 	PROPAGATE;
 END;
+<root>
+    <employees>
+        <employee>
+            <id>1</id>
+            <name>John Doe</name>
+            <position>Software Engineer</position>
+            <skills>
+                <skill>Java</skill>
+                <skill>Python</skill>
+                <skill>JavaScript</skill>
+            </skills>
+        </employee>
+        <employee>
+            <id>2</id>
+            <name>Jane Smith</name>
+            <position>Data Scientist</position>
+            <skills>
+                <skill>R</skill>
+                <skill>Python</skill>
+                <skill>Machine Learning</skill>
+            </skills>
+        </employee>
+    </employees>
+</root>
+
+
