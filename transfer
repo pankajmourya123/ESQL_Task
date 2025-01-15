@@ -6,46 +6,56 @@ CREATE COMPUTE MODULE xmljson_Compute
     END;
 
     CREATE PROCEDURE CopyEntireMessage() BEGIN
-        DECLARE myvar CHARACTER;
         DECLARE myblob BLOB;
-        DECLARE parseData CHARACTER;
+        DECLARE mychar CHARACTER;
+        DECLARE xmlStartTag CHARACTER;
+        DECLARE xmlEndTag CHARACTER;
+        DECLARE jsonStart CHARACTER '{';
+        DECLARE jsonEnd CHARACTER '}';
         DECLARE xmlData CHARACTER;
         DECLARE jsonData CHARACTER;
 
-        -- Extract the BLOB from InputRoot and convert it to CHARACTER
+        -- Convert the BLOB input to CHARACTER
         IF EXISTS(InputRoot.BLOB.BLOB) THEN
             SET myblob = InputRoot.BLOB.BLOB;
-            SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
-            SET myvar = parseData;
+            SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
 
-            -- Extract and process XML data
-            DECLARE xmlPattern CHARACTER '<[^>]+>.*?</[^>]+>';
-            WHILE REGEXP_MATCHES(myvar, xmlPattern) DO
-                SET xmlData = REGEXP_SUBSTRING(myvar, xmlPattern);
+            -- Extract XML content
+            WHILE POSITION('<' IN mychar) > 0 DO
+                SET xmlStartTag = POSITION('<' IN mychar);
+                SET xmlEndTag = POSITION('>' IN mychar, xmlStartTag + 1);
                 
-                -- Set output for XML
-                SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
-                SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
-                SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
-                PROPAGATE;
+                IF xmlStartTag > 0 AND xmlEndTag > 0 THEN
+                    SET xmlData = SUBSTRING(mychar FROM xmlStartTag FOR (xmlEndTag - xmlStartTag + 1));
+                    
+                    -- Set output for XML
+                    SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
+                    SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
+                    SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CURRENT_TIMESTAMP || '.xml';
+                    PROPAGATE;
 
-                -- Remove the extracted XML from the input string
-                SET myvar = REGEXP_REPLACE(myvar, xmlPattern, '', 1, 1);
+                    -- Remove the processed XML from the input
+                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartTag FOR (xmlEndTag - xmlStartTag + 1));
+                END IF;
             END WHILE;
 
-            -- Extract and process JSON data
-            DECLARE jsonPattern CHARACTER '{[^}]+}';
-            WHILE REGEXP_MATCHES(myvar, jsonPattern) DO
-                SET jsonData = REGEXP_SUBSTRING(myvar, jsonPattern);
-                
-                -- Set output for JSON
-                SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
-                SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT';
-                SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
-                PROPAGATE;
+            -- Extract JSON content
+            WHILE POSITION(jsonStart IN mychar) > 0 DO
+                DECLARE jsonStartPos INT POSITION(jsonStart IN mychar);
+                DECLARE jsonEndPos INT POSITION(jsonEnd IN mychar, jsonStartPos + 1);
 
-                -- Remove the extracted JSON from the input string
-                SET myvar = REGEXP_REPLACE(myvar, jsonPattern, '', 1, 1);
+                IF jsonStartPos > 0 AND jsonEndPos > 0 THEN
+                    SET jsonData = SUBSTRING(mychar FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
+
+                    -- Set output for JSON
+                    SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
+                    SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT';
+                    SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CURRENT_TIMESTAMP || '.json';
+                    PROPAGATE;
+
+                    -- Remove the processed JSON from the input
+                    SET mychar = OVERLAY(mychar PLACING '' FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
+                END IF;
             END WHILE;
         ELSE
             THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010;
