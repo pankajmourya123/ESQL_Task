@@ -1,0 +1,43 @@
+
+    
+
+CREATE COMPUTE MODULE xml_to_mutiple_txt_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+	  CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE customerName CHARACTER;
+        DECLARE i INT 1;
+        DECLARE bookCount INT;
+
+        SET bookCount = CARDINALITY(InputRoot.XMLNSC.library.book[]);
+ 
+        WHILE i <= bookCount DO
+            
+            SET customerName = InputRoot.XMLNSC.library.book[i].title;
+
+           
+            DECLARE fileName CHARACTER;
+            SET fileName = customerName || '.txt';
+
+           
+            SET OutputRoot = InputRoot;
+
+           
+            SET OutputLocalEnvironment.Destination.File.Name = fileName;
+            SET OutputLocalEnvironment.Destination.File.Directory = 'C:\Users\pankaj.m\Desktop\P10\OUT';
+
+            
+            PROPAGATE TO TERMINAL 'out';
+
+           
+            SET i = i + 1;
+        END WHILE;
+	END;
+END MODULE;
