@@ -8,41 +8,42 @@ CREATE COMPUTE MODULE xmljson_Compute
     CREATE PROCEDURE CopyEntireMessage() BEGIN
         DECLARE myblob BLOB;
         DECLARE mychar CHARACTER;
-        DECLARE xmlStartTag CHARACTER;
-        DECLARE xmlEndTag CHARACTER;
-        DECLARE jsonStart CHARACTER '{';
-        DECLARE jsonEnd CHARACTER '}';
+        DECLARE xmlStartPos INT;
+        DECLARE xmlEndPos INT;
+        DECLARE jsonStartPos INT;
+        DECLARE jsonEndPos INT;
         DECLARE xmlData CHARACTER;
         DECLARE jsonData CHARACTER;
 
-        -- Convert the BLOB input to CHARACTER
+        -- Check if InputRoot.BLOB.BLOB exists
         IF EXISTS(InputRoot.BLOB.BLOB) THEN
+            -- Convert BLOB to CHARACTER
             SET myblob = InputRoot.BLOB.BLOB;
             SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
 
-            -- Extract XML content
+            -- Extract XML data
             WHILE POSITION('<' IN mychar) > 0 DO
-                SET xmlStartTag = POSITION('<' IN mychar);
-                SET xmlEndTag = POSITION('>' IN mychar, xmlStartTag + 1);
-                
-                IF xmlStartTag > 0 AND xmlEndTag > 0 THEN
-                    SET xmlData = SUBSTRING(mychar FROM xmlStartTag FOR (xmlEndTag - xmlStartTag + 1));
-                    
+                SET xmlStartPos = POSITION('<' IN mychar);
+                SET xmlEndPos = POSITION('>' IN mychar) + 1; -- Include the closing tag
+
+                IF xmlStartPos > 0 AND xmlEndPos > 0 THEN
+                    SET xmlData = SUBSTRING(mychar FROM xmlStartPos FOR (xmlEndPos - xmlStartPos));
+
                     -- Set output for XML
                     SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
                     SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
                     SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CURRENT_TIMESTAMP || '.xml';
                     PROPAGATE;
 
-                    -- Remove the processed XML from the input
-                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartTag FOR (xmlEndTag - xmlStartTag + 1));
+                    -- Remove processed XML from the input
+                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartPos FOR (xmlEndPos - xmlStartPos));
                 END IF;
             END WHILE;
 
-            -- Extract JSON content
-            WHILE POSITION(jsonStart IN mychar) > 0 DO
-                DECLARE jsonStartPos INT POSITION(jsonStart IN mychar);
-                DECLARE jsonEndPos INT POSITION(jsonEnd IN mychar, jsonStartPos + 1);
+            -- Extract JSON data
+            WHILE POSITION('{' IN mychar) > 0 DO
+                SET jsonStartPos = POSITION('{' IN mychar);
+                SET jsonEndPos = POSITION('}' IN mychar, jsonStartPos); -- Find the closing brace
 
                 IF jsonStartPos > 0 AND jsonEndPos > 0 THEN
                     SET jsonData = SUBSTRING(mychar FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
@@ -53,12 +54,12 @@ CREATE COMPUTE MODULE xmljson_Compute
                     SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CURRENT_TIMESTAMP || '.json';
                     PROPAGATE;
 
-                    -- Remove the processed JSON from the input
+                    -- Remove processed JSON from the input
                     SET mychar = OVERLAY(mychar PLACING '' FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
                 END IF;
             END WHILE;
         ELSE
-            THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010;
+            THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010 VALUES('Input BLOB not found');
         END IF;
     END;
 END MODULE;
