@@ -1,49 +1,31 @@
 CREATE COMPUTE MODULE xmljson_Compute
     CREATE FUNCTION Main() RETURNS BOOLEAN
     BEGIN
-        CALL CopyEntireMessage();
+        CALL ProcessInputMessage();
         RETURN TRUE;
     END;
 
-    CREATE PROCEDURE CopyEntireMessage() BEGIN
+    CREATE PROCEDURE ProcessInputMessage() BEGIN
         DECLARE myblob BLOB;
         DECLARE mychar CHARACTER;
-        DECLARE xmlStartPos INT;
-        DECLARE xmlEndPos INT;
         DECLARE jsonStartPos INT;
         DECLARE jsonEndPos INT;
-        DECLARE xmlData CHARACTER;
         DECLARE jsonData CHARACTER;
 
+        -- Convert BLOB to CHARACTER
         IF InputRoot.BLOB.BLOB IS NOT NULL THEN
             SET myblob = InputRoot.BLOB.BLOB;
             SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
 
-            -- Extract XML data
-            WHILE POSITION('<' IN mychar) > 0 DO
-                SET xmlStartPos = POSITION('<' IN mychar);
-                SET xmlEndPos = POSITION('>' IN SUBSTRING(mychar FROM xmlStartPos)) + xmlStartPos - 1;
-
-                IF xmlStartPos > 0 AND xmlEndPos > 0 THEN
-                    SET xmlData = SUBSTRING(mychar FROM xmlStartPos FOR (xmlEndPos - xmlStartPos + 1));
-
-                    -- Set output for XML
-                    SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
-                    SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
-                    SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CAST(CURRENT_TIMESTAMP AS CHARACTER) || '.xml';
-                    PROPAGATE;
-
-                    -- Remove processed XML
-                    SET mychar = OVERLAY(mychar PLACING '' FROM xmlStartPos FOR (xmlEndPos - xmlStartPos + 1));
-                END IF;
-            END WHILE;
-
             -- Extract JSON data
             WHILE POSITION('{' IN mychar) > 0 DO
+                -- Find the start of a JSON object
                 SET jsonStartPos = POSITION('{' IN mychar);
-                SET jsonEndPos = POSITION('}' IN SUBSTRING(mychar FROM jsonStartPos)) + jsonStartPos - 1;
+                -- Use a custom function to locate the corresponding closing '}'
+                SET jsonEndPos = FindJsonEnd(mychar, jsonStartPos);
 
                 IF jsonStartPos > 0 AND jsonEndPos > 0 THEN
+                    -- Extract JSON block
                     SET jsonData = SUBSTRING(mychar FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
 
                     -- Set output for JSON
@@ -52,99 +34,39 @@ CREATE COMPUTE MODULE xmljson_Compute
                     SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(CURRENT_TIMESTAMP AS CHARACTER) || '.json';
                     PROPAGATE;
 
-                    -- Remove processed JSON
+                    -- Remove processed JSON block
                     SET mychar = OVERLAY(mychar PLACING '' FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
+                ELSE
+                    -- If no valid JSON block is found, exit the loop
+                    LEAVE;
                 END IF;
             END WHILE;
         ELSE
             THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010 VALUES('Input BLOB not found');
         END IF;
     END;
+
+    -- Function to find the corresponding closing '}' for a JSON block
+    CREATE FUNCTION FindJsonEnd(data CHARACTER, startPos INT) RETURNS INT
+    BEGIN
+        DECLARE openBraces INT 1;
+        DECLARE pos INT startPos + 1;
+
+        WHILE pos <= LENGTH(data) DO
+            IF SUBSTRING(data FROM pos FOR 1) = '{' THEN
+                SET openBraces = openBraces + 1;
+            ELSEIF SUBSTRING(data FROM pos FOR 1) = '}' THEN
+                SET openBraces = openBraces - 1;
+
+                IF openBraces = 0 THEN
+                    RETURN pos;
+                END IF;
+            END IF;
+
+            SET pos = pos + 1;
+        END WHILE;
+
+        -- If no closing brace is found, return -1
+        RETURN -1;
+    END;
 END MODULE;
-
-
-<root>
-    <employees>
-        <employee>
-            <id>1</id>
-            <name>John Doe</name>
-            <position>Software Engineer</position>
-            <skills>
-                <skill>Java</skill>
-                <skill>Python</skill>
-                <skill>JavaScript</skill>
-            </skills>
-        </employee>
-        <employee>
-            <id>2</id>
-            <name>Jane Smith</name>
-            <position>Data Scientist</position>
-            <skills>
-                <skill>R</skill>
-                <skill>Python</skill>
-                <skill>Machine Learning</skill>
-            </skills>
-        </employee>
-    </employees>
-</root>
-
-
-{
-    "projects": [
-        {
-            "id": "101",
-            "name": "Project Alpha",
-            "description": "A project focused on developing a new web application.",
-            "team": [
-                {
-                    "employeeId": 1,
-                    "role": "Lead Developer"
-                },
-                {
-                    "employeeId": 2,
-                    "role": "Data Analyst"
-                }
-            ],
-            "startDate": "2023-01-15",
-            "endDate": "2023-06-30"
-        },
-        {
-            "id": "102",
-            "name": "Project Beta",
-            "description": "A project aimed at data analysis and reporting.",
-            "team": [
-                {
-                    "employeeId": 2,
-                    "role": "Lead Data Scientist"
-                }
-            ],
-            "startDate": "2023-02-01",
-            "endDate": "2023-08-15"
-        }
-    ]
-}
-
-
-{
-    "projects": [
-        {
-            "id": "101",
-            "name": "Project Alpha",
-            "description": "A project focused on developing a new web application.",
-            "team": [
-                {
-                    "employeeId": 1,
-                    "role": "Lead Developer"
-                }{
-                    "employeeId": 2,
-                    "role": "Data Analyst"
-                }{
-            "id": "102",
-            "name": "Project Beta",
-            "description": "A project aimed at data analysis and reporting.",
-            "team": [
-                {
-                    "employeeId": 2,
-                    "role": "Lead Data Scientist"
-                }
-
