@@ -5,49 +5,50 @@ CREATE COMPUTE MODULE xmljson_Compute
         RETURN TRUE;
     END;
 
-    CREATE PROCEDURE CopyEntireMessage()
-    BEGIN
+    CREATE PROCEDURE CopyEntireMessage() BEGIN
         DECLARE myvar CHARACTER;
         DECLARE myblob BLOB;
         DECLARE parseData CHARACTER;
-
-        -- Get the input BLOB and convert it to CHARACTER
-        SET myblob = InputRoot.BLOB.BLOB;
-        SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
-        SET myvar = parseData;
-
-        -- Extract XML data
         DECLARE xmlData CHARACTER;
-        DECLARE xmlPattern CHARACTER '(<[^>]+>.*?</[^>]+>)';
-        SET xmlData = REGEXP_SUBSTR(myvar, xmlPattern, 1, 1);
-
-        WHILE xmlData IS NOT NULL DO
-            -- Set the output for XML
-            SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
-            SET OutputLocalEnvironment.Destination.File.Directory = 'C:\Users\pankaj.m\Desktop\P10\OUT2';
-            SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
-            PROPAGATE;
-
-            -- Remove the extracted XML from the input string
-            SET myvar = REGEXP_REPLACE(myvar, xmlPattern, '', 1, 1);
-            SET xmlData = REGEXP_SUBSTR(myvar, xmlPattern, 1, 1);
-        END WHILE;
-
-        -- Extract JSON data
         DECLARE jsonData CHARACTER;
-        DECLARE jsonPattern CHARACTER '({[^}]+})';
-        SET jsonData = REGEXP_SUBSTR(myvar, jsonPattern, 1, 1);
 
-        WHILE jsonData IS NOT NULL DO
-            -- Set the output for JSON
-            SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
-            SET OutputLocalEnvironment.Destination.File.Directory = 'C:\Users\pankaj.m\Desktop\P10\OUT';
-            SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
-            PROPAGATE;
+        -- Extract the BLOB from InputRoot and convert it to CHARACTER
+        IF EXISTS(InputRoot.BLOB.BLOB) THEN
+            SET myblob = InputRoot.BLOB.BLOB;
+            SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
+            SET myvar = parseData;
 
-            -- Remove the extracted JSON from the input string
-            SET myvar = REGEXP_REPLACE(myvar, jsonPattern, '', 1, 1);
-            SET jsonData = REGEXP_SUBSTR(myvar, jsonPattern, 1, 1);
-        END WHILE;
+            -- Extract and process XML data
+            DECLARE xmlPattern CHARACTER '<[^>]+>.*?</[^>]+>';
+            WHILE REGEXP_MATCHES(myvar, xmlPattern) DO
+                SET xmlData = REGEXP_SUBSTRING(myvar, xmlPattern);
+                
+                -- Set output for XML
+                SET OutputRoot.BLOB.BLOB = CAST(xmlData AS BLOB CCSID 1208);
+                SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT2';
+                SET OutputLocalEnvironment.Destination.File.Name = 'outputxml_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
+                PROPAGATE;
+
+                -- Remove the extracted XML from the input string
+                SET myvar = REGEXP_REPLACE(myvar, xmlPattern, '', 1, 1);
+            END WHILE;
+
+            -- Extract and process JSON data
+            DECLARE jsonPattern CHARACTER '{[^}]+}';
+            WHILE REGEXP_MATCHES(myvar, jsonPattern) DO
+                SET jsonData = REGEXP_SUBSTRING(myvar, jsonPattern);
+                
+                -- Set output for JSON
+                SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
+                SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT';
+                SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(ROW_NUMBER() OVER() AS CHARACTER);
+                PROPAGATE;
+
+                -- Remove the extracted JSON from the input string
+                SET myvar = REGEXP_REPLACE(myvar, jsonPattern, '', 1, 1);
+            END WHILE;
+        ELSE
+            THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010;
+        END IF;
     END;
 END MODULE;
