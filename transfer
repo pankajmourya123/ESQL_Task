@@ -1,72 +1,20 @@
-CREATE COMPUTE MODULE xmljson_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL ProcessInputMessage();
-        RETURN TRUE;
-    END;
+DECLARE inputString CHARACTER 'This is a test sentence.';
+DECLARE targetChar CHARACTER 't';
+DECLARE originalLength INT;
+DECLARE modifiedLength INT;
+DECLARE charCount INT;
 
-    CREATE PROCEDURE ProcessInputMessage() BEGIN
-        DECLARE myblob BLOB;
-        DECLARE mychar CHARACTER;
-        DECLARE jsonStartPos INT;
-        DECLARE jsonEndPos INT;
-        DECLARE jsonData CHARACTER;
+-- Calculate the original length of the string
+SET originalLength = LENGTH(inputString);
 
-        -- Convert BLOB to CHARACTER
-        IF InputRoot.BLOB.BLOB IS NOT NULL THEN
-            SET myblob = InputRoot.BLOB.BLOB;
-            SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
+-- Remove all occurrences of the target character
+SET inputString = REPLACE(inputString, targetChar, '');
 
-            -- Extract JSON data
-            WHILE POSITION('{' IN mychar) > 0 DO
-                -- Find the start of a JSON object
-                SET jsonStartPos = POSITION('{' IN mychar);
-                -- Use a custom function to locate the corresponding closing '}'
-                SET jsonEndPos = FindJsonEnd(mychar, jsonStartPos);
+-- Calculate the length of the modified string
+SET modifiedLength = LENGTH(inputString);
 
-                IF jsonStartPos > 0 AND jsonEndPos > 0 THEN
-                    -- Extract JSON block
-                    SET jsonData = SUBSTRING(mychar FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
+-- Count of the target character
+SET charCount = originalLength - modifiedLength;
 
-                    -- Set output for JSON
-                    SET OutputRoot.BLOB.BLOB = CAST(jsonData AS BLOB CCSID 1208);
-                    SET OutputLocalEnvironment.Destination.File.Directory = 'C:/Users/pankaj.m/Desktop/P10/OUT';
-                    SET OutputLocalEnvironment.Destination.File.Name = 'outputjson_' || CAST(CURRENT_TIMESTAMP AS CHARACTER) || '.json';
-                    PROPAGATE;
-
-                    -- Remove processed JSON block
-                    SET mychar = OVERLAY(mychar PLACING '' FROM jsonStartPos FOR (jsonEndPos - jsonStartPos + 1));
-                ELSE
-                    -- If no valid JSON block is found, exit the loop
-                    LEAVE;
-                END IF;
-            END WHILE;
-        ELSE
-            THROW USER EXCEPTION CATALOG 'UserException' MESSAGE 1010 VALUES('Input BLOB not found');
-        END IF;
-    END;
-
-    -- Function to find the corresponding closing '}' for a JSON block
-    CREATE FUNCTION FindJsonEnd(data CHARACTER, startPos INT) RETURNS INT
-    BEGIN
-        DECLARE openBraces INT 1;
-        DECLARE pos INT startPos + 1;
-
-        WHILE pos <= LENGTH(data) DO
-            IF SUBSTRING(data FROM pos FOR 1) = '{' THEN
-                SET openBraces = openBraces + 1;
-            ELSEIF SUBSTRING(data FROM pos FOR 1) = '}' THEN
-                SET openBraces = openBraces - 1;
-
-                IF openBraces = 0 THEN
-                    RETURN pos;
-                END IF;
-            END IF;
-
-            SET pos = pos + 1;
-        END WHILE;
-
-        -- If no closing brace is found, return -1
-        RETURN -1;
-    END;
-END MODULE;
+-- Output the count
+RETURN charCount;
