@@ -3,6 +3,9 @@
 
 
 
+
+
+
 CREATE COMPUTE MODULE datatypes_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
@@ -14,9 +17,10 @@ CREATE COMPUTE MODULE datatypes_Compute
 		--CALL numericDECIMAL();
 		--CALL numericFLOAT();
 		--CALL numericInteger();
-		CALL ReferenceExm();
-         
-         RETURN TRUE;
+		--CALL ReferenceExm();
+		CALL rowdatatype();
+
+		RETURN TRUE;
 	END;
 
 	CREATE PROCEDURE BooleanDatatype()
@@ -247,18 +251,66 @@ CREATE COMPUTE MODULE datatypes_Compute
 		DECLARE myDecimalValue DECIMAL;
 		SET myDecimalValue = 12345678901234567890;
 		SET OutputRoot.JSON.Data.myDecimalValue = myDecimalValue;
+
 	END;
-
-
-
-	DECLARE PROCEDURE ReferenceExm()
+	CREATE PROCEDURE ReferenceExm()
 	BEGIN
-		SET inputReference = InputRoot.JSON.Data;
-		SET myReference = OutputRoot.JSON.Data;
+		DECLARE inputReference Reference TO InputRoot.JSON.Data;
+		DECLARE outputReference Reference TO OutputRoot.JSON.Data;
 
-		SET myReference.name=inputReference.text;
+		DECLARE STR CHARACTER;
+		SET STR ='pankaj';
 
+
+		SET outputReference.name=inputReference.text;
+		SET outputReference.nameSTR=STR;
 	END;
 
+
+	CREATE PROCEDURE rowdatatype()
+	BEGIN
+		DECLARE ChocolateData ROW;
+		DECLARE BiscuitData ROW;
+		DECLARE FruitData ROW;
+
+
+
+		SET ChocolateData.PartNumber = 1;
+		SET ChocolateData.Description = 'Chocolate bar';
+		SET ChocolateData.Price = 0.30;
+
+		SET BiscuitData.PartNumber = 2;
+		SET BiscuitData.Description = 'Biscuit';
+		SET BiscuitData.Price = 0.35;
+
+		SET FruitData.PartNumber = 3;
+		SET FruitData.Description = 'Fruit';
+		SET FruitData.Price = 0.42;		
+		
+
+
+		DECLARE ProductsList LIST{} ;
+
+		SET ProductsList[1] = ChocolateData;
+		SET ProductsList[2] = BiscuitData;
+		SET ProductsList[3] = FruitData;
+
+		SET OutputRoot.XMLNSC.Products = ProductsList;		
+		
+		
+		
+
+
+		DECLARE SelectedProduct ROW;
+		-- Select a product from the list (for example, the second product)
+		SET SelectedProduct = SELECT * FROM ProductsList WHERE PartNumber = 2;
+		-- Output the selected product to the OutputRoot
+		SET OutputRoot.XMLNSC.SelectedProduct.PartNumber = SelectedProduct.PartNumber;
+		SET OutputRoot.XMLNSC.SelectedProduct.Description = SelectedProduct.Description;
+		SET OutputRoot.XMLNSC.SelectedProduct.Price = SelectedProduct.Price;
+
+
+
+	END;
 
 END MODULE;
