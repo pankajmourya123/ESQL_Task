@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 CREATE COMPUTE MODULE datatypes_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
@@ -285,32 +277,31 @@ CREATE COMPUTE MODULE datatypes_Compute
 
 		SET FruitData.PartNumber = 3;
 		SET FruitData.Description = 'Fruit';
-		SET FruitData.Price = 0.42;		
-		
+		SET FruitData.Price = 0.42;
+		/*DECLARE ProductList LIST;
+		SET ProductList[]=LIST{ChocolateData,BiscuitData,FruitData};
+		SET OutputRoot.XMLNSC.Data.RESULT[]=ProductList[];*/
 
 
-		DECLARE ProductsList LIST{} ;
-
-		SET ProductsList[1] = ChocolateData;
-		SET ProductsList[2] = BiscuitData;
-		SET ProductsList[3] = FruitData;
-
-		SET OutputRoot.XMLNSC.Products = ProductsList;		
-		
-		
-		
-
-
-		DECLARE SelectedProduct ROW;
+		SET OutputRoot.XMLNS.Data.ProductsList[] = LIST{ChocolateData,
+		BiscuitData,
+		FruitData};
+		/*DECLARE SelectedProduct ROW;
 		-- Select a product from the list (for example, the second product)
 		SET SelectedProduct = SELECT * FROM ProductsList WHERE PartNumber = 2;
 		-- Output the selected product to the OutputRoot
 		SET OutputRoot.XMLNSC.SelectedProduct.PartNumber = SelectedProduct.PartNumber;
 		SET OutputRoot.XMLNSC.SelectedProduct.Description = SelectedProduct.Description;
-		SET OutputRoot.XMLNSC.SelectedProduct.Price = SelectedProduct.Price;
+		SET OutputRoot.XMLNSC.SelectedProduct.Price = SelectedProduct.Price; */
 
-
-
+		DECLARE count INTERGER 1;
+		WHILE count <=CARDINALITY(ProductsList)DO
+			DECLARE curritem ROW;
+			SET curritem =ProductsList[count];
+			SET OutputRoot.XMLNS.Data=curritem;
+			SET count=count+1;
+		END WHILE;
 	END;
+	
 
 END MODULE;
