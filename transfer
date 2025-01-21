@@ -1,35 +1,39 @@
-CREATE COMPUTE MODULE Timepass_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Declare cursors pointing to the root elements of the input and output message
-        DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
-        DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
-        DECLARE count INTEGER DEFAULT 0;
-
-        -- Check if the root element in OutputRoot is valid before proceeding
-        IF trgCursor IS NULL THEN
-            CREATE LASTCHILD OF OutputRoot.XMLNSC AS trgCursor;
-        END IF;
-
-        -- Loop through the source message and copy elements to the target message
-        X: WHILE LASTMOVE(srcCursor) DO
-
-            -- Create a sibling for trgCursor in OutputRoot, using the REPEAT clause for repetition
-            CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
-
-            -- Move to the next sibling in the source structure
-            MOVE srcCursor NEXTSIBLING;
-
-            -- Increment the counter
-            SET count = count + 1;
-
-            -- Exit the loop after processing 10 elements
-            IF count = 10 THEN
-                LEAVE X;
-            END IF;
-        END WHILE;
-
-        -- Return TRUE to indicate successful processing
-        RETURN TRUE;
-    END;
-END MODULE;
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://www.example.com">
+    <element>
+        <field>Value 1</field>
+    </element>
+    <element>
+        <field>Value 2</field>
+    </element>
+    <element>
+        <field>Value 3</field>
+    </element>
+    <element>
+        <field>Value 4</field>
+    </element>
+    <element>
+        <field>Value 5</field>
+    </element>
+    <element>
+        <field>Value 6</field>
+    </element>
+    <element>
+        <field>Value 7</field>
+    </element>
+    <element>
+        <field>Value 8</field>
+    </element>
+    <element>
+        <field>Value 9</field>
+    </element>
+    <element>
+        <field>Value 10</field>
+    </element>
+    <element>
+        <field>Value 11</field>
+    </element>
+    <element>
+        <field>Value 12</field>
+    </element>
+</root>
