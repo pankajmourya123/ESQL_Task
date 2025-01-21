@@ -1,28 +1,47 @@
-CREATE COMPUTE MODULE Timepass_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
-        DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
-        DECLARE count INTEGER 0;
+Property
+M
+C
+Default
+Description
+Record definition
+Yes	No	Record is Whole File	Specify how the records are placed in the output file. Select one of the following options:
+Record is Whole File specifies that the file is to contain a single record. The file is finished immediately after the record is written; the FileOutput node does not wait for a message on the Finish File terminal. This value is the default.
+Record is Unmodified Data specifies that records are accumulated in a file with neither padding or delimiters applied. The file is finished only when a message is received on the Finish File terminal.
+Record is Fixed Length Data specifies that records are padded to a given length if necessary and accumulated in a file by concatenation. You specify this length in the Length property. If the record is longer than the value specified in Length, the node produces an exception. Use the Padding byte property to specify the byte to be used for padding the message to the required length. Records are added to this file until a message is received on the Finish File terminal.
+Record is Delimited Data to specify that records are separated by a delimiter and accumulated by concatenation. The delimiter is specified by the Delimiter, Custom delimiter, and Delimiter type properties. Records are added to this file until a message is received on the Finish File terminal.
+Length
+Yes	No	80	Specify the length (in bytes) of records when Record is Fixed Length Data is specified in Record definition. Records that are longer than this value cause an exception to be produced. This value must be in the range 1 byte through 104857600 bytes (100 MB). The default value is 80 bytes.
+Padding byte
+Yes	No	X'20'	When Record is Fixed Length Data is specified in Record definition, use the Padding byte property to specify the byte to be used when padding records to the specified length if they are shorter than this length. Specify this value as two hexadecimal digits. The default value is X'20'.
+Delimiter
+Yes	No	Broker System Line End	Specify the delimiter to be used if you specify Record is Delimited Data in Record definition. Select one of the following options:
+Broker System Line End specifies that a line end sequence of bytes is used as the delimiter, as appropriate for the file system on which the integration node is to run. For example, on Windows systems, the delimiter is a 'carriage-return, line-feed' pair (X'0D0A'); on UNIX systems, it is a single 'line-feed' byte (X'0A'); on z/OS systems, it is a 'newline' byte (X'15'). This value is the default.
+Custom Delimiter specifies that the explicit delimiter sequence defined in the Custom delimiter property is to be used to delimit records.
+Custom delimiter
+No	No	None	Specify the delimiter sequence of bytes to be used to delimit records when Custom Delimiter is specified in the Delimiter property. Specify this value as an even-numbered string of hexadecimal digits. The default value is X'0A' and the maximum length of the string is 16 bytes.
+Delimiter type
+Yes	No	Postfix	If you set the Record definition property to Record is Delimited Data, use Delimiter type to specify how the delimiter is to separate records. Select one of the following options:
+Postfix specifies that the delimiter is added after each record that is written. This value is the default.
+Infix specifies that the delimiter is inserted only between any two adjacent records.
+The FileOutput node Validation properties are described in the following table.
 
-        -- Start the loop to iterate over source XML elements
-        X: WHILE LASTMOVE(srcCursor) DO
-            -- Create the next sibling in the target
-            CREATE NEXTSIBLING OF trgCursor AS trgCursor;
-
-            -- Move to the next sibling in the source
-            MOVE srcCursor NEXTSIBLING;
-
-            -- Set the count value and increment
-            SET count = count + 1;
-
-            -- Break the loop after 10 elements
-            IF count = 10 THEN
-                LEAVE X;
-            END IF;
-        END WHILE;
-
-        -- Return true to indicate successful execution
-        RETURN TRUE;
-    END;
-END MODULE;
+For a full description of these properties, see Validation properties.
+Property
+M
+C
+Default
+Description
+mqsiapplybaroverride command property
+Validate
+No	Yes	Inherit	Specify whether validation takes place. Valid values are:
+None
+Content and Value
+Content
+Inherit
+validateMaster
+Failure action
+No	No	Exception	Specifies what happens if validation fails. You can set this property only if you set Validate to Content or Content and Value. Valid values are:
+User Trace
+Local Error Log
+Exception
+Exception List
