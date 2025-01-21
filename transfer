@@ -1,17 +1,45 @@
-DECLARE sourceCursor CURSOR FROM InputRoot;
-		DECLARE targetCursor CURSOR FROM InputRoot;
-		
+<items>
+    <item>
+        <id>1</id>
+        <name>Item One</name>
+        <price>10.00</price>
+    </item>
+    <item>
+        <id>2</id>
+        <name>Item Two</name>
+        <price>20.00</price>
+    </item>
+    <item>
+        <id>3</id>
+        <name>Item Three</name>
+        <price>30.00</price>
+    </item>
+    <item>
+        <id>4</id>
+        <name>Item Four</name>
+        <price>40.00</price>
+    </item>
+</items>
 
-		MOVE cursor FIRSTCHILD TYPE Name NAME InputRoot ;
-		DECLARE lineCount INTEGER 0;
-
-		WHILE LASTMOVE(sourceCursor) DO
-			SET targetCursor.ItemNumber = sourceCursor.item;
-			SET targetCursor.Description = sourceCursor.name;
-			SET targetCursor.Price = sourceCursor.prc;
-			SET targetCursor.Tax = sourceCursor.prc * 0.175;
-			SET targetCursor.quantity = 1;
-			CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
-			MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
-		END WHILE;
-	END;
+[
+    {
+        "id": 1,
+        "name": "Item One",
+        "price": 10.00
+    },
+    {
+        "id": 2,
+        "name": "Item Two",
+        "price": 20.00
+    },
+    {
+        "id": 3,
+        "name": "Item Three",
+        "price": 30.00
+    },
+    {
+        "id": 4,
+        "name": "Item Four",
+        "price": 40.00
+    }
+]
