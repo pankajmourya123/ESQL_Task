@@ -1,47 +1,47 @@
-Property
-M
-C
-Default
-Description
-Record definition
-Yes	No	Record is Whole File	Specify how the records are placed in the output file. Select one of the following options:
-Record is Whole File specifies that the file is to contain a single record. The file is finished immediately after the record is written; the FileOutput node does not wait for a message on the Finish File terminal. This value is the default.
-Record is Unmodified Data specifies that records are accumulated in a file with neither padding or delimiters applied. The file is finished only when a message is received on the Finish File terminal.
-Record is Fixed Length Data specifies that records are padded to a given length if necessary and accumulated in a file by concatenation. You specify this length in the Length property. If the record is longer than the value specified in Length, the node produces an exception. Use the Padding byte property to specify the byte to be used for padding the message to the required length. Records are added to this file until a message is received on the Finish File terminal.
-Record is Delimited Data to specify that records are separated by a delimiter and accumulated by concatenation. The delimiter is specified by the Delimiter, Custom delimiter, and Delimiter type properties. Records are added to this file until a message is received on the Finish File terminal.
-Length
-Yes	No	80	Specify the length (in bytes) of records when Record is Fixed Length Data is specified in Record definition. Records that are longer than this value cause an exception to be produced. This value must be in the range 1 byte through 104857600 bytes (100 MB). The default value is 80 bytes.
-Padding byte
-Yes	No	X'20'	When Record is Fixed Length Data is specified in Record definition, use the Padding byte property to specify the byte to be used when padding records to the specified length if they are shorter than this length. Specify this value as two hexadecimal digits. The default value is X'20'.
-Delimiter
-Yes	No	Broker System Line End	Specify the delimiter to be used if you specify Record is Delimited Data in Record definition. Select one of the following options:
-Broker System Line End specifies that a line end sequence of bytes is used as the delimiter, as appropriate for the file system on which the integration node is to run. For example, on Windows systems, the delimiter is a 'carriage-return, line-feed' pair (X'0D0A'); on UNIX systems, it is a single 'line-feed' byte (X'0A'); on z/OS systems, it is a 'newline' byte (X'15'). This value is the default.
-Custom Delimiter specifies that the explicit delimiter sequence defined in the Custom delimiter property is to be used to delimit records.
-Custom delimiter
-No	No	None	Specify the delimiter sequence of bytes to be used to delimit records when Custom Delimiter is specified in the Delimiter property. Specify this value as an even-numbered string of hexadecimal digits. The default value is X'0A' and the maximum length of the string is 16 bytes.
-Delimiter type
-Yes	No	Postfix	If you set the Record definition property to Record is Delimited Data, use Delimiter type to specify how the delimiter is to separate records. Select one of the following options:
-Postfix specifies that the delimiter is added after each record that is written. This value is the default.
-Infix specifies that the delimiter is inserted only between any two adjacent records.
-The FileOutput node Validation properties are described in the following table.
+CREATE COMPUTE MODULE Timepass_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
+		DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
+		DECLARE count INTEGER 0;      
+     
 
-For a full description of these properties, see Validation properties.
-Property
-M
-C
-Default
-Description
-mqsiapplybaroverride command property
-Validate
-No	Yes	Inherit	Specify whether validation takes place. Valid values are:
-None
-Content and Value
-Content
-Inherit
-validateMaster
-Failure action
-No	No	Exception	Specifies what happens if validation fails. You can set this property only if you set Validate to Content or Content and Value. Valid values are:
-User Trace
-Local Error Log
-Exception
-Exception List
+
+		X: WHILE LASTMOVE(srcCursor) DO
+
+		CREATE NEXTSIBLING OF trgCursor TYPE NameValue NAME  'element' VALUE 'tool';
+			
+CREATE NEXTSIBLING OF trgCursor;
+			SET trgCursor=srcCursor;
+
+			MOVE srcCursor NEXTSIBLING;           
+
+
+			SET count = count + 1;           
+
+
+			IF count = 10 THEN
+				LEAVE X;
+			END IF;
+		END WHILE;       
+
+
+		RETURN TRUE;
+	END;
+END MODULE;
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>BIP3113E: Exception detected in message flow Timepass (integration node TESTNODE_Pankaj.m) </faultstring>
+            <faultactor>http://localhost:7800/json</faultactor>
+            <detail>
+                <text>Exception. BIP2230E: Error detected whilst processing a message in node &apos;Timepass.Compute&apos;. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\SQLNodeLibrary\ImbComputeNode.cpp: 515: ImbComputeNode::evaluate: ComIbmComputeNode: Timepass#FCMComposite_1_3
+BIP2488E:  (&apos;.Timepass_Compute.Main&apos;, &apos;11.3&apos;) Error detected whilst executing the SQL statement &apos;&apos;CREATE NEXTSIBLING OF trgCursor TYPE NameValue NAMESPACE &apos;&apos; NAME &apos;element&apos; VALUE &apos;tool&apos;;&apos;&apos;. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlStatementGroup.cpp: 792: SqlStatementGroup::execute: : 
+BIP2333E: Error attaching field &apos;&apos;&apos;&apos; as a sibling of field &apos;&apos;(0x01000000:Name):Root&apos;&apos;, which has no parent. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\MessageServices\ImbParser.cpp: 1538: ImbSyntaxElement::createAfter: : </text>
+            </detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
