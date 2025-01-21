@@ -1,51 +1,35 @@
-
 CREATE COMPUTE MODULE Task_Compute
-	
- CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
 
-	
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		
-	
-	/*DECLARE myblob BLOB;
-	DECLARE mychar CHARACTER;
-	
-	SET myblob = InputRoot.BLOB.BLOB;
-			SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
-			
-			SET OutputRoot.BLOB.BLOB=mychar;*/
-			
-		
-		--SET OutputRoot=InputRoot;
-		
-		
-		  DECLARE lineCount INTEGER 0;
-        DECLARE currentLine REFERENCE NULL;
-        DECLARE outputLines REFERENCE NULL;
+    CREATE PROCEDURE CopyEntireMessage() 
+    BEGIN
+        -- Initialize variables
+        DECLARE lineCount INTEGER 0;
+        DECLARE currentLine REFERENCE TO InputRoot.BLOB.BLOB; -- Adjust based on your input structure
+        DECLARE outputLines BLOB; -- To store the output lines
 
-        -- Initialize the output message
-        SET OutputRoot = CAST('' AS BLOB CCSID 1208); -- Initialize as an empty BLOB
+        -- Initialize output as an empty BLOB
+        SET outputLines = CAST('' AS BLOB CCSID 1208); 
 
-        -- Loop through the input message lines
-        DECLARE inputLines REFERENCE InputRoot.BLOB.BLOB.Document.Line; -- Adjust based on your input structure
-
-        FOR currentLine IN inputLines DO
+        -- Traverse through the input lines
+        WHILE LASTMOVE(currentLine) DO
             IF lineCount < 10 THEN
                 -- Append the current line to the output
-                SET outputLines = CAST(COALESCE(outputLines, '') || CAST(currentLine AS CHAR CCSID 1208) || CHAR(10) AS BLOB CCSID 1208);
+                SET outputLines = outputLines || currentLine || CAST(CHAR(10) AS BLOB CCSID 1208); 
                 SET lineCount = lineCount + 1;
             ELSE
-                LEAVE; -- Exit the loop after 10 lines
+                LEAVE; -- Exit the loop after processing 10 lines
             END IF;
-        END FOR;
+            MOVE NEXT currentLine; -- Move to the next line
+        END WHILE;
 
         -- Set the output root to the constructed output
         SET OutputRoot.BLOB.BLOB = outputLines;
-	END;
+    END;
+
 END MODULE;
