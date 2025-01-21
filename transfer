@@ -1,27 +1,35 @@
 CREATE COMPUTE MODULE Timepass_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
-		DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
-		DECLARE count INTEGER 0;  
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        -- Declare cursors pointing to the root elements of the input and output message
+        DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
+        DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
+        DECLARE count INTEGER DEFAULT 0;
 
+        -- Check if the root element in OutputRoot is valid before proceeding
+        IF trgCursor IS NULL THEN
+            CREATE LASTCHILD OF OutputRoot.XMLNSC AS trgCursor;
+        END IF;
 
-		
+        -- Loop through the source message and copy elements to the target message
+        X: WHILE LASTMOVE(srcCursor) DO
 
-		X: WHILE LASTMOVE(srcCursor) DO            
+            -- Create a sibling for trgCursor in OutputRoot, using the REPEAT clause for repetition
+            CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
 
+            -- Move to the next sibling in the source structure
+            MOVE srcCursor NEXTSIBLING;
 
-			CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
+            -- Increment the counter
+            SET count = count + 1;
 
+            -- Exit the loop after processing 10 elements
+            IF count = 10 THEN
+                LEAVE X;
+            END IF;
+        END WHILE;
 
-			MOVE srcCursor NEXTSIBLING;
-			SET count = count + 1;
-
-			IF count = 10 THEN
-				LEAVE X;
-			END IF;
-		END WHILE;
-
-		RETURN TRUE;
-	END;
+        -- Return TRUE to indicate successful processing
+        RETURN TRUE;
+    END;
 END MODULE;
