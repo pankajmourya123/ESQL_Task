@@ -1,15 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <SOAP-ENV:Body>
-        <SOAP-ENV:Fault>
-            <faultcode>SOAP-ENV:Server</faultcode>
-            <faultstring>BIP3113E: Exception detected in message flow Timepass (integration node TESTNODE_Pankaj.m) </faultstring>
-            <faultactor>http://localhost:7800/json</faultactor>
-            <detail>
-                <text>Exception. BIP2230E: Error detected whilst processing a message in node &apos;Timepass.Compute&apos;. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\SQLNodeLibrary\ImbComputeNode.cpp: 515: ImbComputeNode::evaluate: ComIbmComputeNode: Timepass#FCMComposite_1_3
-BIP2488E:  (&apos;.Timepass_Compute.Main&apos;, &apos;12.4&apos;) Error detected whilst executing the SQL statement &apos;&apos;CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;&apos;&apos;. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlStatementGroup.cpp: 792: SqlStatementGroup::execute: : 
-BIP2333E: Error attaching field &apos;&apos;&apos;&apos; as a sibling of field &apos;&apos;(0x01000000:Name):Root&apos;&apos;, which has no parent. : F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\MessageServices\ImbParser.cpp: 1538: ImbSyntaxElement::createAfter: : </text>
-            </detail>
-        </SOAP-ENV:Fault>
-    </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
+CREATE COMPUTE MODULE Task_Compute
+
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
+
+    CREATE PROCEDURE CopyEntireMessage()
+    BEGIN        
+
+        DECLARE srcCursor REFERENCE TO InputRoot;
+        DECLARE trgCursor REFERENCE TO OutputRoot;
+        DECLARE count INTEGER  DEFAULT 0;
+
+        -- Outer loop to iterate through the source message
+        X: WHILE LASTMOVE(srcCursor) DO
+
+            -- Move to the first child of the source cursor
+            MOVE srcCursor FIRSTCHILD;
+
+            -- Ensure trgCursor is pointing to a valid field with a parent before creating a sibling
+            IF trgCursor IS NOT NULL THEN
+                SET trgCursor = srcCursor;  -- Copy the field content
+
+                -- Create a new sibling in the target structure only if trgCursor has a valid parent
+                IF trgCursor.PARENT IS NOT NULL THEN
+                    CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
+                END IF;
+
+                -- Move to the next sibling in the source structure
+                MOVE srcCursor NEXTSIBLING;
+
+                -- Increment the counter
+                SET count = count + 1;
+
+                -- Exit the loop when the count reaches 10
+                IF count = 10 THEN
+                    LEAVE X;
+                END IF;
+            END IF;
+
+        END WHILE;
+
+    END;
+
+END MODULE;
