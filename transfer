@@ -1,47 +1,27 @@
-CREATE COMPUTE MODULE Task_Compute
+CREATE COMPUTE MODULE Timepass_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root;
+		DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC.root;
+		DECLARE count INTEGER 0;  
 
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL CopyEntireMessage();
-        RETURN TRUE;
-    END;
 
-    CREATE PROCEDURE CopyEntireMessage()
-    BEGIN        
+		
 
-        DECLARE srcCursor REFERENCE TO InputRoot;
-        DECLARE trgCursor REFERENCE TO OutputRoot;
-        DECLARE count INTEGER  DEFAULT 0;
+		X: WHILE LASTMOVE(srcCursor) DO            
 
-        -- Outer loop to iterate through the source message
-        X: WHILE LASTMOVE(srcCursor) DO
 
-            -- Move to the first child of the source cursor
-            MOVE srcCursor FIRSTCHILD;
+			CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
 
-            -- Ensure trgCursor is pointing to a valid field with a parent before creating a sibling
-            IF trgCursor IS NOT NULL THEN
-                SET trgCursor = srcCursor;  -- Copy the field content
 
-                -- Create a new sibling in the target structure only if trgCursor has a valid parent
-                IF trgCursor.PARENT IS NOT NULL THEN
-                    CREATE NEXTSIBLING OF trgCursor AS trgCursor REPEAT;
-                END IF;
+			MOVE srcCursor NEXTSIBLING;
+			SET count = count + 1;
 
-                -- Move to the next sibling in the source structure
-                MOVE srcCursor NEXTSIBLING;
+			IF count = 10 THEN
+				LEAVE X;
+			END IF;
+		END WHILE;
 
-                -- Increment the counter
-                SET count = count + 1;
-
-                -- Exit the loop when the count reaches 10
-                IF count = 10 THEN
-                    LEAVE X;
-                END IF;
-            END IF;
-
-        END WHILE;
-
-    END;
-
+		RETURN TRUE;
+	END;
 END MODULE;
