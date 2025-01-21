@@ -1,307 +1,51 @@
-CREATE COMPUTE MODULE datatypes_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		--CALL BooleanDatatype();
-		--CALL DateDatatype();
-		--CALL Time2();
-		--CALL interval5();
-		--CALL null1();
-		--CALL numericDECIMAL();
-		--CALL numericFLOAT();
-		--CALL numericInteger();
-		--CALL ReferenceExm();
-		CALL rowdatatype();
 
+CREATE COMPUTE MODULE Task_Compute
+	
+ CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL CopyEntireMessage();
 		RETURN TRUE;
 	END;
 
-	CREATE PROCEDURE BooleanDatatype()
-	BEGIN
-
-		DECLARE boolvar BOOLEAN;
-		SET boolvar = FALSE;
-		DECLARE boolvar1 BOOLEAN;
-		SET boolvar1 = TRUE;
-		DECLARE boolvar2 BOOLEAN;
-		SET boolvar2 = NULL;
-		DECLARE defaultbool BOOLEAN;
-
-		SET OutputRoot.JSON.Data.MESSAGE1 = boolvar;
-		SET OutputRoot.JSON.Data.MESSAGE2 = boolvar1;
-		SET OutputRoot.JSON.Data.MESSAGE3 = boolvar2;
-		SET OutputRoot.JSON.Data.Defaultvalue = boolvar1;
-	END;
-
-	CREATE PROCEDURE DateDatatype()
-	BEGIN
-		DECLARE Deafaultvalue DATE;
-		DECLARE mydate DATE;
-		SET mydate = DATE '2000-02-29';
-		SET Deafaultvalue = DATE '2000-01-01';
-		SET OutputRoot.JSON.Data.MESSAGE1 = mydate;
-		SET OutputRoot.JSON.Data.MESSAGE2 = Deafaultvalue;
-	END;
-
-	CREATE PROCEDURE Time2()
-	BEGIN
-		DECLARE DeTime TIME;
-		DECLARE MyTime TIME;
-		SET MyTime = TIME '11:49:23.656';
-
-		DECLARE MyGetGmttime GMTTIME;
-		SET MyGetGmttime = GMTTIME '11:49:23.656';
-
-		DECLARE MyTimeStamp TIMESTAMP;
-		SET MyTimeStamp = TIMESTAMP '1999-12-31 23:59:59';
-
-		DECLARE MyGetGMTTimeStamp GMTTIMESTAMP;
-		SET MyGetGMTTimeStamp = GMTTIMESTAMP '1999-12-31 23:59:59.999999';
-
-		SET OutputRoot.JSON.Data.MESSAGE2 = DeTime;
-		SET OutputRoot.JSON.Data.MESSAGE1 = MyTime;
-		SET OutputRoot.JSON.Data.MyGetGmttime = MyGetGmttime;
-		SET OutputRoot.JSON.Data.MyTimeStamp = MyTimeStamp;
-		SET OutputRoot.JSON.Data.MyGetGMTTimeStamp = MyGetGMTTimeStamp;
-		SET OutputRoot.JSON.Data.myTimestamp = CURRENT_TIMESTAMP;
-	END;
-
-	CREATE PROCEDURE interval5()
-	BEGIN
-		DECLARE myTimestamp TIMESTAMP;
-		SET myTimestamp = CURRENT_TIMESTAMP;
-
-		DECLARE i1 INTERVAL;
-		DECLARE i2 INTERVAL;
-		DECLARE i3 INTERVAL;
-		DECLARE i4 INTERVAL;
-		DECLARE i5 INTERVAL;
-		DECLARE i6 INTERVAL;
-		DECLARE i7 INTERVAL;
-		DECLARE i8 INTERVAL;
-
-		SET i1 = INTERVAL '10' YEAR; -- 10 years
-		SET i2 = INTERVAL '-5' YEAR; -- -5 years (5 years in the past)
-		SET i3 = INTERVAL '2-06' YEAR TO MONTH; -- 2 years and 6 months
-		SET i4 = INTERVAL '30' DAY; -- 30 days
-		SET i5 = INTERVAL '1 12' DAY TO HOUR; -- 1 day and 12 hours
-		SET i6 = INTERVAL '1:30' HOUR TO MINUTE; -- 1 hour and 30 minutes
-		SET i7 = INTERVAL '45:15' MINUTE TO SECOND; -- 45 minutes and 15 seconds
-		SET i8 = INTERVAL '3600' SECOND; -- 3600 seconds (1 hour)
-		SET OutputRoot.JSON.Data.IntervalMessage= myTimestamp;
-		SET myTimestamp = myTimestamp + i1;
-
-		SET OutputRoot.JSON.Data.IntervalMessage1= myTimestamp ;
-
-		DECLARE i9 INTERVAL;
-		SET i9 = CAST(i4 AS INTERVAL DAY TO HOUR);
-		SET OutputRoot.JSON.Data.IntervalMessage9=i9;
-	END;
-
-
-	CREATE PROCEDURE null1()
-	BEGIN
-		/* DECLARE NameField REFERENCE TO InputRoot.JSON.Data.Name;
-		IF NameField IS NOT NULL THEN
-		SET OutputRoot.JSON.Data.Name = InputRoot.JSON.Data.Name;
-		END IF;*/
-		-- Incorrect way (deletes the field)
-		--SET OutputRootJSON.Data.Name = NULL;
-		-- Correct way (assigns a null value)
-		SET OutputRoot.JSON.Data.Name = NULL;
-	END;
-
-	CREATE PROCEDURE numericDECIMAL()
-	BEGIN
-		/*Precision refers to the total number of digits that can be stored,
-		while scale refers to the number of digits that can be stored to the
-		right of the decimal point.*/
-		/*DECLARE num1 DECIMAL '123.12';
-		DECLARE num2 DECIMAL '789.123';
-		DECLARE sum DECIMAL num1 + num2;
-		DECLARE difference DECIMAL num2 - num1;
-		DECLARE product DECIMAL num1 * num2;
-		DECLARE quotient DECIMAL num2 / num1;
-		SET OutputRoot.JSON.Data.add=sum;
-		SET OutputRoot.JSON.Data.difference=difference;
-		SET OutputRoot.JSON.Data.product=product;
-		SET OutputRoot.JSON.Data.quotient=quotient;*/
-		/* DECLARE a DECIMAL '1.23456789';
-		DECLARE b DECIMAL '2.1';
-		DECLARE result_add DECIMAL a + b;
-		DECLARE result_mul DECIMAL a * b;
-		SET OutputRoot.JSON.Data.result_add=result_add;
-		SET OutputRoot.JSON.Data.result_mul=result_mul;*/
-		/*DECLARE c DECIMAL '1.555';
-		DECLARE d DECIMAL '1.565';
-		DECLARE result_round_add DECIMAL c + d;
-		DECLARE result_round_mul DECIMAL c * d;
-		SET OutputRoot.JSON.Data.result_round_add=result_round_add;
-		SET OutputRoot.JSON.Data.result_round_mul=result_round_mul;*/
-		-- Using decimal literals
-		--DECLARE literal1 DECIMAL '12345'; -- Type: INTEGER
-		--DECLARE literal2 DECIMAL '123.45'; -- Type: DECIMAL
-		--DECLARE literal3 DECIMAL '123e2'; -- Type: DECIMAL (12300)
-		-- Special values
-		--DECLARE nan_value DECIMAL 'NAN'; -- Not a number
-		--DECLARE inf_value DECIMAL 'INF'; -- Infinity
-		/*we cannot print nan and infinity */
-		/* SET OutputRoot.JSON.Data.nan_value=nan_value;
-		SET OutputRoot.JSON.Data.inf_value=inf_value; */
-		-- Handling special cases
-		DECLARE max_value DECIMAL 'MAX';
-		DECLARE min_value DECIMAL 'MIN';
-
-		SET OutputRoot.JSON.Data.max_value=max_value;
-		SET OutputRoot.JSON.Data.min_value=min_value;
-
-	END;
-
-	CREATE PROCEDURE numericFLOAT()
-	BEGIN
-		/*DECLARE floatValue1 FLOAT;
-		DECLARE floatValue2 FLOAT;
-		DECLARE floatValue3 FLOAT;
-		DECLARE intValue INTEGER;
-		DECLARE intValue2 INTEGER;
-		DECLARE intValue3 INTEGER;
-		DECLARE characterValue CHARACTER;
-		DECLARE characterValue2 CHARACTER;
-		DECLARE characterValue3 CHARACTER;
-		DECLARE decimalValue DECIMAL;
-		DECLARE decimalValue2 DECIMAL;
-		DECLARE decimalValue3 DECIMAL;
-		-- Set float values
-		SET floatValue1 = 123.456;
-		SET floatValue2 = 1.234e2;
-		SET floatValue3 = 9876543210.12345;
-		-- Set output for float values
-		SET OutputRoot.JSON.Data.floatValue1 = floatValue1;
-		SET OutputRoot.JSON.Data.floatValue2 = floatValue2;
-		SET OutputRoot.JSON.Data.floatValue3 = floatValue3;
-		-- Cast floatValue1 to INTEGER
-		SET intValue = CAST(floatValue1 AS INTEGER);
-		SET OutputRoot.JSON.Data.intValue = intValue;
-		SET intValue2=CAST(floatValue2 AS INTEGER);
-		SET OutputRoot.JSON.Data.intValue2=intValue2;
-		SET intValue3=CAST(floatValue3 AS INTEGER);
-		SET OutputRoot.JSON.Data.intValue3=intValue3;
-		-- Cast floatValue1 to DECIMAL
-		SET decimalValue = CAST(floatValue1 AS DECIMAL);
-		SET OutputRoot.JSON.Data.decimalValue = decimalValue;
-		SET decimalValue2 = CAST(floatValue2 AS DECIMAL);
-		SET OutputRoot.JSON.Data.decimalValue2 = decimalValue2;
-		SET decimalValue3 = CAST(floatValue3 AS DECIMAL);
-		SET OutputRoot.JSON.Data.decimalValue3 = decimalValue3;
-		-- Cast floatValue1 to CHARACTER
-		SET characterValue = CAST(floatValue1 AS CHARACTER);
-		SET OutputRoot.JSON.Data.characterValue = characterValue;
-		SET characterValue2= CAST(floatValue2 AS CHARACTER);
-		SET OutputRoot.JSON.Data.characterValue2= characterValue2;
-		SET characterValue3= CAST(floatValue3 AS CHARACTER);
-		SET OutputRoot.JSON.Data.characterValue3= characterValue3;
-		-- Maximum and Minimum FLOAT values
-		DECLARE MaximumFloat FLOAT;
-		SET MaximumFloat = 1.7E+308;
-		SET OutputRoot.JSON.Data.MaximumFloat = MaximumFloat;
-		DECLARE MinimumFloat FLOAT;
-		SET MinimumFloat = -1.7E-308;
-		SET OutputRoot.JSON.Data.MinimumFloat = MinimumFloat;*/
-
-
-
-
-	END;
-
-	CREATE PROCEDURE numericInteger()
-	BEGIN
-		DECLARE num1 INTEGER;
-		SET num1 = 90;
-		SET OutputRoot.JSON.Data.num1 = num1;
-		-- Declare and assign a negative integer
-
-		DECLARE num2 INTEGER;
-		SET num2 = -90;
-		SET OutputRoot.JSON.Data.num2 = num2;
-		-- Declare and assign a valid hexadecimal integer
-
-		DECLARE myHexInteger INTEGER;
-		SET myHexInteger = 0x1234abcd;
-		SET OutputRoot.JSON.Data.myHexInteger = myHexInteger;
-		-- Declare and assign the maximum INTEGER value
-
-		DECLARE myMaxInteger INTEGER;
-		SET myMaxInteger = 9223372036854775807;
-		SET OutputRoot.JSON.Data.myMaxInteger = myMaxInteger;
-		-- Declare and assign the minimum INTEGER value
-
-
-		DECLARE myNegativeInteger INTEGER;
-		SET myNegativeInteger = -9223372036854775808;
-		SET OutputRoot.JSON.Data.myNegativeInteger = myNegativeInteger;
-		-- Declare and assign a large decimal value
-
-		DECLARE myDecimalValue DECIMAL;
-		SET myDecimalValue = 12345678901234567890;
-		SET OutputRoot.JSON.Data.myDecimalValue = myDecimalValue;
-
-	END;
-	CREATE PROCEDURE ReferenceExm()
-	BEGIN
-		DECLARE inputReference Reference TO InputRoot.JSON.Data;
-		DECLARE outputReference Reference TO OutputRoot.JSON.Data;
-
-		DECLARE STR CHARACTER;
-		SET STR ='pankaj';
-
-
-		SET outputReference.name=inputReference.text;
-		SET outputReference.nameSTR=STR;
-	END;
-
-
-	CREATE PROCEDURE rowdatatype()
-	BEGIN
-		DECLARE ChocolateData ROW;
-		DECLARE BiscuitData ROW;
-		DECLARE FruitData ROW;
-
-
-
-		SET ChocolateData.PartNumber = 1;
-		SET ChocolateData.Description = 'Chocolate bar';
-		SET ChocolateData.Price = 0.30;
-
-		SET BiscuitData.PartNumber = 2;
-		SET BiscuitData.Description = 'Biscuit';
-		SET BiscuitData.Price = 0.35;
-
-		SET FruitData.PartNumber = 3;
-		SET FruitData.Description = 'Fruit';
-		SET FruitData.Price = 0.42;
-		/*DECLARE ProductList LIST;
-		SET ProductList[]=LIST{ChocolateData,BiscuitData,FruitData};
-		SET OutputRoot.XMLNSC.Data.RESULT[]=ProductList[];*/
-
-
-		SET OutputRoot.XMLNS.Data.ProductsList[] = LIST{ChocolateData,
-		BiscuitData,
-		FruitData};
-		/*DECLARE SelectedProduct ROW;
-		-- Select a product from the list (for example, the second product)
-		SET SelectedProduct = SELECT * FROM ProductsList WHERE PartNumber = 2;
-		-- Output the selected product to the OutputRoot
-		SET OutputRoot.XMLNSC.SelectedProduct.PartNumber = SelectedProduct.PartNumber;
-		SET OutputRoot.XMLNSC.SelectedProduct.Description = SelectedProduct.Description;
-		SET OutputRoot.XMLNSC.SelectedProduct.Price = SelectedProduct.Price; */
-
-		DECLARE count INTERGER 1;
-		WHILE count <=CARDINALITY(ProductsList)DO
-			DECLARE curritem ROW;
-			SET curritem =ProductsList[count];
-			SET OutputRoot.XMLNS.Data=curritem;
-			SET count=count+1;
-		END WHILE;
-	END;
 	
 
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+	
+	/*DECLARE myblob BLOB;
+	DECLARE mychar CHARACTER;
+	
+	SET myblob = InputRoot.BLOB.BLOB;
+			SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
+			
+			SET OutputRoot.BLOB.BLOB=mychar;*/
+			
+		
+		--SET OutputRoot=InputRoot;
+		
+		
+		  DECLARE lineCount INTEGER 0;
+        DECLARE currentLine REFERENCE NULL;
+        DECLARE outputLines REFERENCE NULL;
+
+        -- Initialize the output message
+        SET OutputRoot = CAST('' AS BLOB CCSID 1208); -- Initialize as an empty BLOB
+
+        -- Loop through the input message lines
+        DECLARE inputLines REFERENCE InputRoot.BLOB.BLOB.Document.Line; -- Adjust based on your input structure
+
+        FOR currentLine IN inputLines DO
+            IF lineCount < 10 THEN
+                -- Append the current line to the output
+                SET outputLines = CAST(COALESCE(outputLines, '') || CAST(currentLine AS CHAR CCSID 1208) || CHAR(10) AS BLOB CCSID 1208);
+                SET lineCount = lineCount + 1;
+            ELSE
+                LEAVE; -- Exit the loop after 10 lines
+            END IF;
+        END FOR;
+
+        -- Set the output root to the constructed output
+        SET OutputRoot.BLOB.BLOB = outputLines;
+	END;
 END MODULE;
