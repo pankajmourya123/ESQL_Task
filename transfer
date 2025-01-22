@@ -1,30 +1,50 @@
-CREATE COMPUTE MODULE Timepass_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Initialize references
-        DECLARE srcCursor REFERENCE TO InputRoot.XMLNSC.root.element[1]; -- Start at the first element
-        DECLARE trgCursor REFERENCE TO OutputRoot.XMLNSC;
+Yeh options aapko IBM Integration Bus (IIB) mein CSV message model create karte waqt diye jate hain. Aapko CSV data ko parse (interpret), serialize (convert to a specific format), aur validate karne ke liye ek message model ki zarurat hoti hai. Yeh model aapko data ko sahi tarike se handle karne mein madad karta hai, aur aapke integration applications ki development ko speed up karta hai. Chaliye, in options ko detail mein samjhte hain:
 
-        -- Initialize OutputRoot structure
-        CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNSC') NAME 'root';
+1. Create a DFDL schema file using this wizard to guide you
 
-        -- Start processing elements
-        DECLARE count INTEGER 0;
-        WHILE LASTMOVE(srcCursor) DO
-            -- Create a new element in OutputRoot
-            CREATE LASTCHILD OF trgCursor NAME 'element';
-            SET trgCursor.element.field = srcCursor.field;
+Explanation: Yeh option aapko ek DFDL schema generate karne ke liye ek wizard provide karta hai jo aapko CSV data ke liye schema model karne mein madad karega.
 
-            -- Move to the next sibling in the input
-            MOVE srcCursor NEXTSIBLING;
+Use Case: Agar aap CSV data ko model karna chahte hain aur aapko schema ke liye guidance ki zarurat hai, toh yeh option best hai. Yeh wizard automatically aapka schema generate karega based on your CSV data structure.
 
-            -- Increment count and break if 10 elements are processed
-            SET count = count + 1;
-            IF count = 10 THEN
-                LEAVE;
-            END IF;
-        END WHILE;
+When to use: Jab aapko DFDL schema banate waqt detailed guidance chahiye, aur aap initial model banane ke liye wizard ka use karna chahte hain.
 
-        RETURN TRUE;
-    END;
-END MODULE;
+
+2. Create an empty DFDL schema file, I will model my data using the DFDL schema editor
+
+Explanation: Yeh option ek empty DFDL schema file create karta hai, jisme aap manually apne CSV data ka model define karenge using the DFDL schema editor.
+
+Use Case: Agar aapko schema ka control khud rakhna hai aur aap detailed editing karna chahte hain, toh aap yeh option choose kar sakte hain. Isme aap apne data ko manually configure kar sakte hain.
+
+When to use: Jab aapko schema ka full control chahiye aur aap apne data ko manually model karna chahte hain.
+
+
+3. Import or replace the IBM supplied DFDL schema property defaults for CSV
+
+Explanation: IBM ne jo DFDL schema properties default ke liye provide ki hai, unko import karne ya replace karne ka option. Isse aap already predefined properties ka use kar sakte hain jo IBM ne CSV data ke liye banayi hain.
+
+Use Case: Agar aap chahte hain ki aapko manually schema create na karna pade aur aap IBM ke default settings ka use karke apne CSV data ko model karein, toh yeh option best hai.
+
+When to use: Jab aapko quickly schema generate karna ho aur aap predefined IBM defaults ko use karne ke liye comfortable hain.
+
+
+In options ka use case:
+
+Wizard-based approach: Agar aapko guidance chahiye ya aap beginner hain toh DFDL schema wizard use kar sakte hain. Yeh aapko step-by-step help karega.
+
+Manual approach: Agar aapko full control chahiye apne data ka model karne ka, toh empty DFDL schema file create karke manually editing kar sakte hain.
+
+Quick import: Agar aap chahte hain ki time save ho aur predefined defaults use ho, toh IBM supplied DFDL schema import kar sakte hain.
+
+
+Example:
+
+Agar aapke paas ek CSV file hai jisme fields like ID, Name, aur Age hain, toh aap in options ka use kar sakte hain:
+
+Agar aap chahte hain ki wizard aapka schema banaye, toh first option choose karenge.
+
+Agar aap manually schema likhna chahte hain, toh second option choose karenge.
+
+Agar IBM ke defaults ko directly apply karna chahte hain, toh third option use karenge.
+
+
+Aap in options ka use kar ke apne CSV data ko model kar sakte hain, jisse aapko parsing aur validation process smooth ho jayega.
