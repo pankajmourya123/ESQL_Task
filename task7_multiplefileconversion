@@ -1,0 +1,37 @@
+
+
+
+
+
+
+
+
+CREATE COMPUTE MODULE tsttt_Compute
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage()
+	BEGIN
+
+		DECLARE count INTEGER;
+		SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
+		DECLARE i INTEGER 1;
+
+		
+		WHILE i <= count DO
+			SET OutputRoot.XMLNS.ROOT.student[i].name = InputRoot.DFDL.test.record[i].name;
+			SET OutputRoot.XMLNS.ROOT.student[i].class = InputRoot.DFDL.test.record[i].class;
+			SET OutputRoot.XMLNS.ROOT.student[i].roll_no = InputRoot.DFDL.test.record[i].roll_no;
+			
+			
+			 
+			 SET i = i + 1;
+		
+		END WHILE;
+	END;
+
+END MODULE;
