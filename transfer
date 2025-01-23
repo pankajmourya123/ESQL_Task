@@ -1,34 +1,42 @@
+
+
+
+
 CREATE COMPUTE MODULE tsttt_Compute
 
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL CopyEntireMessage();
-        RETURN TRUE;
-    END;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
 
-    CREATE PROCEDURE CopyEntireMessage() 
-    BEGIN
-        DECLARE count INTEGER;
-        SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
+	CREATE PROCEDURE CopyEntireMessage()
+	BEGIN
+		DECLARE count INTEGER;
+		DECLARE count2 INTEGER;
+		SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
 
-        -- Assign header fields to the OutputRoot
-        SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.header.name;
-        SET OutputRoot.XMLNS.ROOT.class = InputRoot.DFDL.test.header.class;
-        SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;
 
-        -- Create the 'records' element in OutputRoot
-        CREATE LASTCHILD OF OutputRoot.XMLNS.ROOT AS records NAME 'records';
+		SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.header.name;
+		SET OutputRoot.XMLNS.ROOT.class = InputRoot.DFDL.test.header.class;
+		SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;        
 
-        DECLARE i INTEGER 1; 
-        WHILE i <= count DO
-            -- Create a new record under 'records'
-            CREATE LASTCHILD OF records AS newRecord NAME 'record';
-            SET newRecord.name = InputRoot.DFDL.test.record[i].name;
-            SET newRecord.class = InputRoot.DFDL.test.record[i].class;
-            SET newRecord.age = InputRoot.DFDL.test.record[i].age;
+		DECLARE i INTEGER 1;
+	
+		WHILE i <= count DO
 
-            SET i = i + 1;
-        END WHILE;
-    END;
+			
+			SET count2 = CARDINALITY(InputRoot.DFDL.test.record[i]);
+				WHILE j <= count2 DO
+					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].name;
+					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].class;
+					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].age;
+					SET j = j + 1;
+					END WHILE;
+			
+			SET i = i + 1;
+			
+		END WHILE;
+	END;
 
 END MODULE;
