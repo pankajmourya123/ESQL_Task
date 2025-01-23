@@ -1,37 +1,38 @@
-CREATE COMPUTE MODULE tsttt_Compute
+CREATE PROCEDURE ConvertToXML() RETURNS BOOLEAN
+BEGIN
+    -- Declare a reference to the input and output
+    DECLARE refInput REFERENCE TO InputRoot.BLOB.BLOB;
+    DECLARE refOutput REFERENCE TO OutputRoot.XMLNSC.Records;
 
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+    -- Initialize the output structure
+    CREATE FIELD OutputRoot.XMLNSC.Records;
 
-	CREATE PROCEDURE CopyEntireMessage()
-	BEGIN
-		-- Count the number of records in InputRoot
-		DECLARE count INTEGER;
-		SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
+    -- Parse the input text data
+    DECLARE inputString CHAR;
+    SET inputString = CAST(refInput AS CHAR CCSID 1208);
 
-		-- Map header fields to OutputRoot
-		SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.header.name;
-		SET OutputRoot.XMLNS.ROOT.class = InputRoot.DFDL.test.header.class;
-		SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;
+    -- Split the input into rows
+    DECLARE rows LIST;
+    SET rows = STRINGTOLIST(inputString, '\n');
 
-		-- Create the 'records' container in OutputRoot
-		CREATE LASTCHILD OF OutputRoot.XMLNS.ROOT AS records NAME 'records';
+    -- Skip the header row and process each data row
+    DECLARE i INT 1;
+    WHILE i <= LISTSIZE(rows) DO
+        -- Split each row into columns (Name, Class, Age)
+        IF i > 1 THEN
+            DECLARE rowValues LIST;
+            SET rowValues = STRINGTOLIST(LISTTOSTRING(rows[i]), ' ');
 
-		-- Process each record and add it to OutputRoot
-		DECLARE i INTEGER 1;
-		WHILE i <= count DO
-			-- Create a new record under 'records'
-			CREATE LASTCHILD OF records AS newRecord NAME 'record';
-			SET newRecord.name = InputRoot.DFDL.test.record[i].name;
-			SET newRecord.class = InputRoot.DFDL.test.record[i].class;
-			SET newRecord.age = InputRoot.DFDL.test.record[i].age;
+            -- Add a new Record in the output XML
+            CREATE FIELD refOutput.Record;
+            DECLARE refRecord REFERENCE TO refOutput.Record[LASTCHILD];
 
-			-- Increment loop counter
-			SET i = i + 1;
-		END WHILE;
-	END;
+            CREATE FIELD refRecord.Name VALUE TRIM(rowValues[1]);
+            CREATE FIELD refRecord.Class VALUE TRIM(rowValues[2]);
+            CREATE FIELD refRecord.Age VALUE TRIM(rowValues[3]);
+        END IF;
+        SET i = i + 1;
+    END WHILE;
 
-END MODULE;
+    RETURN TRUE;
+END;
