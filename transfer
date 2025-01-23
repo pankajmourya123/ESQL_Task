@@ -1,6 +1,5 @@
-Syntax error. Valid options include: identifier ) } ] , || / = >= > <= < - <> ( . + ; * AFTER AND AS BEFORE BEGIN CALL CASE CATALOG CREATE DAY DECLARE DEFAULT DELETE DO DOMAIN ELSE ELSEIF END ESCAPE EXCEPTION FOR FROM HOUR IDENTIFIER IDENTITY IF IN INSERT INTO IS ITERATE LEAVE LIKE LOOP MINUTE MODE MONTH NOT OR REPEAT RETURN SECOND THEN TO UNTIL VALUES WHEN WHERE WHILE YEAR
-
 CREATE COMPUTE MODULE tsttt_Compute
+
     CREATE FUNCTION Main() RETURNS BOOLEAN
     BEGIN
         CALL CopyEntireMessage();
@@ -11,22 +10,25 @@ CREATE COMPUTE MODULE tsttt_Compute
     BEGIN
         DECLARE count INTEGER;
         SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
-        
-       
+
+        -- Assign header fields to the OutputRoot
         SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.header.name;
         SET OutputRoot.XMLNS.ROOT.class = InputRoot.DFDL.test.header.class;
         SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;
 
-         DECLARE records REFERENCE TO OutputRoot.XMLNS.ROOT.records[];
+        -- Create the 'records' element in OutputRoot
+        CREATE LASTCHILD OF OutputRoot.XMLNS.ROOT AS records NAME 'records';
 
-       DECLARE i INTEGER 1; 
+        DECLARE i INTEGER 1; 
         WHILE i <= count DO
-           
-            DECLARE newRecord REFERENCE TO records[i];
+            -- Create a new record under 'records'
+            CREATE LASTCHILD OF records AS newRecord NAME 'record';
             SET newRecord.name = InputRoot.DFDL.test.record[i].name;
             SET newRecord.class = InputRoot.DFDL.test.record[i].class;
             SET newRecord.age = InputRoot.DFDL.test.record[i].age;
+
             SET i = i + 1;
         END WHILE;
     END;
+
 END MODULE;
