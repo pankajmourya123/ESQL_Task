@@ -1,7 +1,3 @@
-
-
-
-
 CREATE COMPUTE MODULE tsttt_Compute
 
 	CREATE FUNCTION Main() RETURNS BOOLEAN
@@ -12,30 +8,29 @@ CREATE COMPUTE MODULE tsttt_Compute
 
 	CREATE PROCEDURE CopyEntireMessage()
 	BEGIN
+		-- Count the number of records in InputRoot
 		DECLARE count INTEGER;
-		DECLARE count2 INTEGER;
 		SET count = CARDINALITY(InputRoot.DFDL.test.record[]);
 
-
+		-- Map header fields to OutputRoot
 		SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.header.name;
 		SET OutputRoot.XMLNS.ROOT.class = InputRoot.DFDL.test.header.class;
-		SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;        
+		SET OutputRoot.XMLNS.ROOT.age = InputRoot.DFDL.test.header.age;
 
+		-- Create the 'records' container in OutputRoot
+		CREATE LASTCHILD OF OutputRoot.XMLNS.ROOT AS records NAME 'records';
+
+		-- Process each record and add it to OutputRoot
 		DECLARE i INTEGER 1;
-	
 		WHILE i <= count DO
+			-- Create a new record under 'records'
+			CREATE LASTCHILD OF records AS newRecord NAME 'record';
+			SET newRecord.name = InputRoot.DFDL.test.record[i].name;
+			SET newRecord.class = InputRoot.DFDL.test.record[i].class;
+			SET newRecord.age = InputRoot.DFDL.test.record[i].age;
 
-			
-			SET count2 = CARDINALITY(InputRoot.DFDL.test.record[i]);
-				WHILE j <= count2 DO
-					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].name;
-					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].class;
-					SET OutputRoot.XMLNS.ROOT.name = InputRoot.DFDL.test.record[i].age;
-					SET j = j + 1;
-					END WHILE;
-			
+			-- Increment loop counter
 			SET i = i + 1;
-			
 		END WHILE;
 	END;
 
