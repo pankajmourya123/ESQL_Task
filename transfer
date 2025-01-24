@@ -1,38 +1,63 @@
-CREATE PROCEDURE ConvertToXML() RETURNS BOOLEAN
-BEGIN
-    -- Declare a reference to the input and output
-    DECLARE refInput REFERENCE TO InputRoot.BLOB.BLOB;
-    DECLARE refOutput REFERENCE TO OutputRoot.XMLNSC.Records;
+OUTWARD FLOW
 
-    -- Initialize the output structure
-    CREATE FIELD OutputRoot.XMLNSC.Records;
+CBS -------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/    -------------> /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N06/ ------------> IIBWB.TO.CBSI43.DONE  ------> /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/-----------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/ 
+    cbs bhejega                                         UFM KA KAAM HAI                                                                             UFM KA KAAM HAI                                                                                     SFTP KE THROUGH
+														
+														
+CSB apne outward path pe rakhega aur yeh ouward path ko ufm continously watch karta rahta hai jsie hi koi nayii file is path  
+ufm usse apne path raktha hai phir apne path voo usee desire queue mai dalta hai phir is queue se iib data uthata hai aur apana
+ kaam kaarta hai , usse file ko is path rakhta  /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/  phir yaha sfms sftp through
+ apne path le leta hai  /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/-----------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/ 
+ 
+ 
+ 
+ 
+INWARD FLOW        
 
-    -- Parse the input text data
-    DECLARE inputString CHAR;
-    SET inputString = CAST(refInput AS CHAR CCSID 1208);
 
-    -- Split the input into rows
-    DECLARE rows LIST;
-    SET rows = STRINGTOLIST(inputString, '\n');
 
-    -- Skip the header row and process each data row
-    DECLARE i INT 1;
-    WHILE i <= LISTSIZE(rows) DO
-        -- Split each row into columns (Name, Class, Age)
-        IF i > 1 THEN
-            DECLARE rowValues LIST;
-            SET rowValues = STRINGTOLIST(LISTTOSTRING(rows[i]), ' ');
-
-            -- Add a new Record in the output XML
-            CREATE FIELD refOutput.Record;
-            DECLARE refRecord REFERENCE TO refOutput.Record[LASTCHILD];
-
-            CREATE FIELD refRecord.Name VALUE TRIM(rowValues[1]);
-            CREATE FIELD refRecord.Class VALUE TRIM(rowValues[2]);
-            CREATE FIELD refRecord.Age VALUE TRIM(rowValues[3]);
-        END IF;
-        SET i = i + 1;
-    END WHILE;
-
-    RETURN TRUE;
-END;
+SFMS                                  IIB                              CBS 
+ 
+ 
+ 
+ 
+ 
+ DR DRILL   (ufm wala)
+ sabse phele hum check kearenge ki hamare server kinte banks hai yeh check karne ke liye humai yeh dekhna hogaa ki hamare csb outward ke file mai kitne bank hai 
+ 
+ case 1 :: 1 server 1 bank   1 dr          ismai hum dc se hatke dr pe lejayenge matlab cbs_dc floder nahi banega
+ case 2 :: 1 server  mutiple banks   1 dr  ismai kya hota hai ek dc matlab  server pe mutiple bank run ho rahe aur humai
+                                           ek particular bank ko hi dc se hatana isyle hum kya karenge us bank ko dc se band
+										   karedenge matlab dc floder mai comment kar denge aur cbs_dr ke outward file srif 
+										   vahi bank rakhenge jo humne dc mai band kiya tha (comment kiya tha);
+ 
+ case 3 :: 1 server mutiple banks    2 dr 
+ 
+ 
+ 
+ 
+ 
+ DR DRILL (SFTP)
+ ismai kya karenge ki gateway mai jayenge aur check katrenge konsi bank ka dr drill hai aur usse
+ bank ko open karenge mai usse user web interface open karenge rigth click karke ab apne application mai
+ fileno6/no7 ke porperties ko open karenge aur uska cis dekhnenge phir policy mai jaake ftserver mai jaake 
+ use bank ka congiurable service open karenge aur naya ip dalenge aur application phir se deploy karenge aur policy implente karene ke hum mqsidbparams command exexcute karenge
+ 
+ mqsisetdbparms DUMMYBROKER -n ftp::DUMMYFTP -u dummy\\user -p abcdef  
+ 
+ 
+ ab yaha par humne nor/no7 ke node ya message bolsakte usko hi kiya aur baaki n10 aur rtgs aur inward dono humai karnga hoga but hum  mqsisetdbparms DUMMYBROKER -n ftp::DUMMYFTP -u dummy\\user -p abcdef 
+ yaha par appsid se jab hum command exexute toh usee bank saare node yaa pe reflect hogaa 
+ 
+ 
+ 
+ testing 
+ agar hum neft outward ke code mai change kar rahe hai toh kya uska effect rtgs outward pe dikhega kya?
+ nahi kyunki hamare iib mai 3 application hote 
+ 1. neft outward
+ 2. rtgs outward
+ 3. neft /rtgs inward 
+ 
+ aur jab hum neft outward mai change KAR rahe toh uska effect neft/rtgs inward pe dikega   but rtgs ne nahi dekhiga 
+ 
+ 
