@@ -1,26 +1,30 @@
-CREATE PROCEDURE CopyEntireMessage() 
-BEGIN
-    -- Ensure exceptions exist before accessing
-    IF EXISTS(InputExceptionList.*[1]) THEN
-        -- Get first exception
-        DECLARE start REFERENCE TO InputExceptionList.*[1];
-        SET OutputRoot.JSON.Data.errnumber = start.Number;
-        SET OutputRoot.JSON.Data.text = start.Text;
 
-        -- Check if more exceptions exist
-        DECLARE total INTEGER DEFAULT CARDINALITY(InputExceptionList.*[]);
-        SET OutputRoot.JSON.Data.total = total;
 
-        -- Loop through all exceptions if multiple exist
-        DECLARE i INTEGER DEFAULT 1;
-        WHILE i <= total DO
-            DECLARE exception REFERENCE TO InputExceptionList.*[i];
-            SET OutputRoot.JSON.Data.Exceptions[i].Number = exception.Number;
-            SET OutputRoot.JSON.Data.Exceptions[i].Text = exception.Text;
-            SET i = i + 1;
-        END WHILE;
-    ELSE
-        -- If no exception, return default message
-        SET OutputRoot.JSON.Data.message = 'No exceptions found';
-    END IF;
-END;
+CREATE COMPUTE MODULE TaskMultithreding_Compute
+	DECLARE shrvar Shared CHARACTER ;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	
+
+	
+	CREATE PROCEDURE CopyEntireMessage() BEGIN ATOMIC
+		
+		
+DECLARE xmlAsBlob BLOB ASBITSTREAM(InputRoot.XMLNSC CCSID 1208);
+DECLARE xmlAsChar CHAR CAST(xmlAsBlob AS CHAR CCSID 1208);
+
+
+
+DECLARE xmlAsJSON BLOB ASBITSTREAM(InputRoot.JSON.Data CCSID 1208);
+DECLARE JSONAsChar CHAR CAST(xmlAsJSON AS CHAR CCSID 1208);
+
+SET  shrvar = shrvar||xmlAsChar||JSONAsChar;
+
+		
+	END;
+END MODULE;
