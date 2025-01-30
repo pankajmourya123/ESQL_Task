@@ -1,105 +1,63 @@
--- Accessing Integration Node Properties in ESQL
-CREATE COMPUTE MODULE IntegrationNodePropertiesDemo
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Declare variables for storing properties
-        DECLARE BrokerName CHARACTER;
-        DECLARE BrokerUserId CHARACTER;
-        DECLARE BrokerVersion CHARACTER;
-        DECLARE ExecutionGroupLabel CHARACTER;
-        DECLARE ExecutionGroupName CHARACTER;
-        DECLARE Family CHARACTER;
-        DECLARE ProcessId INTEGER;
-        DECLARE QueueManagerName CHARACTER;
-        DECLARE WorkPath CHARACTER;
+CREATE COMPUTE MODULE flow1_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
 
-        -- Access Integration Node Properties
-        SET BrokerName = BROKERNAME;
-        SET BrokerUserId = SYSTEM.USERID;
-        SET BrokerVersion = BROKERVERSION;
-        SET ExecutionGroupLabel = EXECUTIONGROUPNAME;
-        SET ExecutionGroupName = SYSTEM.EXECUTIONGROUPUUID;
-        SET Family = SYSTEM.PLATFORM;
-        SET ProcessId = SYSTEM.PROCESSID;
-        SET QueueManagerName = QUEUEMANAGERNAME;
-        SET WorkPath = SYSTEM.WORKPATH;
 
-        -- Trace Integration Node Properties
-        CALL LogTrace('Integration Node Properties:',
-            'BrokerName: ' || BrokerName || ', ' ||
-            'BrokerUserId: ' || BrokerUserId || ', ' ||
-            'BrokerVersion: ' || BrokerVersion || ', ' ||
-            'ExecutionGroupLabel: ' || ExecutionGroupLabel || ', ' ||
-            'ExecutionGroupName: ' || ExecutionGroupName || ', ' ||
-            'Family: ' || Family || ', ' ||
-            'ProcessId: ' || ProcessId || ', ' ||
-            'QueueManagerName: ' || QueueManagerName || ', ' ||
-            'WorkPath: ' || WorkPath);
 
-        -- Declare variables for Flow Properties
-        DECLARE AdditionalInstances INTEGER;
-        DECLARE CommitCount INTEGER;
-        DECLARE CommitInterval INTEGER;
-        DECLARE CoordinatedTransaction BOOLEAN;
-        DECLARE MessageFlowLabel CHARACTER;
-        DECLARE ApplicationLabel CHARACTER;
-        DECLARE LibraryLabel CHARACTER;
-        DECLARE MaximumRateMsgsPerSec INTEGER;
-        DECLARE NotificationThresholdMsgsPerSec INTEGER;
-        DECLARE WlmPolicy CHARACTER;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
 
-        -- Access Flow Properties
-        SET AdditionalInstances = FLOW.ADDITIONALINSTANCES;
-        SET CommitCount = FLOW.COMMITCOUNT;
-        SET CommitInterval = FLOW.COMMITINTERVAL;
-        SET CoordinatedTransaction = FLOW.COORDINATEDTRANSACTION;
-        SET MessageFlowLabel = FLOW.MESSAGEFLOWNAME;
-        SET ApplicationLabel = FLOW.APPLICATIONNAME;
-        SET LibraryLabel = FLOW.LIBRARYNAME;
-        SET MaximumRateMsgsPerSec = FLOW.MAXIMUMRATEMSGSPERSEC;
-        SET NotificationThresholdMsgsPerSec = FLOW.NOTIFICATIONTHRESHOLDMSGSPERSEC;
-        SET WlmPolicy = FLOW.WLMPOLICY;
+		DECLARE BrokerName CHARACTER;
+		DECLARE BrokerUserId CHARACTER;
+		DECLARE BrokerVersion CHARACTER;
+		DECLARE BrokerDataSource CHARACTER;
 
-        -- Trace Flow Properties
-        CALL LogTrace('Flow Properties:',
-            'AdditionalInstances: ' || AdditionalInstances || ', ' ||
-            'CommitCount: ' || CommitCount || ', ' ||
-            'CommitInterval: ' || CommitInterval || ', ' ||
-            'CoordinatedTransaction: ' || CoordinatedTransaction || ', ' ||
-            'MessageFlowLabel: ' || MessageFlowLabel || ', ' ||
-            'ApplicationLabel: ' || ApplicationLabel || ', ' ||
-            'LibraryLabel: ' || LibraryLabel || ', ' ||
-            'MaximumRateMsgsPerSec: ' || MaximumRateMsgsPerSec || ', ' ||
-            'NotificationThresholdMsgsPerSec: ' || NotificationThresholdMsgsPerSec || ', ' ||
-            'WlmPolicy: ' || WlmPolicy);
+		executionGroupLabel
+		QueueManagerName
+		NodeLabel
+		MessageFlowLabel
+		ApplicationLabel
+		LibraryLabel
+		ExecutionGroupName
+		Family
+		ProcessId (Integer)
+		QueueManagerName (Character)
+		WorkPath (Character)
 
-        -- Declare variables for Node Properties
-        DECLARE DataSource CHARACTER;
-        DECLARE DataSourceUserId CHARACTER;
-        DECLARE MessageOptions BIGINT;
-        DECLARE NodeLabel CHARACTER;
-        DECLARE NodeType CHARACTER;
-        DECLARE ThrowExceptionOnDatabaseError BOOLEAN;
-        DECLARE TransactionType CHARACTER;
-        DECLARE TreatWarningsAsErrors BOOLEAN;
+		Flow properties
 
-        -- Access Node Properties
-        SET NodeLabel = NODELABEL;
-        SET NodeType = SYSTEM.NODENAME;
-        -- Other Node Properties not directly accessible via ESQL
+		AdditionalInstances (Integer)
+		CommitCount (Integer)
+		CommitInterval (Integer)
+		CoordinatedTransaction (Boolean)
+		MessageFlowLabel (Character)
+		ApplicationLabel (Character)
+		LibraryLabel (Character)
+		MaximumRateMsgsPerSec (Integer)
+		NotificationThresholdMsgsPerSec (Integer)
+		WlmPolicy (Character)
 
-        -- Trace Node Properties
-        CALL LogTrace('Node Properties:',
-            'NodeLabel: ' || NodeLabel || ', ' ||
-            'NodeType: ' || NodeType);
+		Table 4. Node properties
 
-        RETURN TRUE;
-    END;
+		DataSource (Character)
+		DataSourceUserId (Character)
+		MessageOptions (Integer 64-bit)1
+		NodeLabel (Character)
+		ThrowExceptionOnDatabaseError (Boolean)1
+		TransactionType (Character)1
+		TreatWarningsAsErrors (Boolean)1
+
+		SET BrokerName = BrokerName;
+		SET BrokerUserId = BrokerUserId;
+		SET BrokerVersion = BrokerVersion;
+		SET BrokerDataSource = BrokerDataSource;		
+
+
+		SET OutputRoot.JSON.Data.Brkname='BrokerName';
+
+		SET OutputRoot.JSON.Data.BrokerVersion=BrokerVersion;
+
+	END;
 END MODULE;
-
--- Logging Procedure
-CREATE PROCEDURE LogTrace(IN logTitle CHARACTER, IN logContent CHARACTER)
-BEGIN
-    -- This logs the trace details to the console or a log file
-    TRACE SEVERITY NORMAL MESSAGE logTitle || ' ' || logContent;
-END;
