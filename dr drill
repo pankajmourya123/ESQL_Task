@@ -31,9 +31,23 @@ SFMS                                  IIB                              CBS
 										   karedenge matlab dc floder mai comment kar denge aur cbs_dr ke outward file srif 
 										   vahi bank rakhenge jo humne dc mai band kiya tha (comment kiya tha);
  
- case 3 :: 1 server mutiple banks    2 dr 
- 
- 
+ case 3 :: 1 server mutiple banks    2 dr ismai hum ek dc floder banayenge jismai hum dono bank jo ki hii dc server pe hai usse bank ko comment karenge phir uske baad 
+                                     ek parenty dr floder banaynge jismai bank1_dr floder mai cdb outward mai bank1 dc se utha kar dr pe run karvayege aur aur baaki floder mai queuename cbsdr kar denge 
+                                     aur iib floder mai bhi saare file mai cbsdr kare denge 
+                                     ab dusre banke ke liye haum dr floder mai ek bank2_dr floder banayenge aur cbd outward flow yeh bank2 run karvenage aur baaki sab floder queuename cbsdr1 qeue naame denge 
+                                      aur iib floder mai bank2 saerch karenge aur aur queuenaam  cbsdr1 karendenge har file mai inward ke 
+
+yaha pe problem kya hai jab hum ek server pe mutiple banks aur multiple banko ka dr hai smjho 2 banko ka dr hai toh humai yeh do bank dr ke time 2 alag alag server pe le jana hota for example 155,156,
+ab yaha pe bank 1 queue name aur bank2  ka queue name same de toh lafda hogaa 
+bank1 155                                       |    bank2 156 
+iib                              cbs            |   iib                cbs  
+outward                          outward        |   outward            outward
+path1                           path1           | path1                path1
+queue.outward                   queue.outward   |    queue.outward       queue.outward     
+path2                           path2           |   path2                 path2   
+
+ab yaha pe kya hogaa agar 155 waala bank path1 se queue1 daalga aur posssibilty hai voo bank2 156 path2 daal de kyu dono ka queue naam same hai aur 155 wale  bank ko 156 waale bank ka path milega hi nahi toh phir lafdaa hogaa
+isyle hum 2 queue use karenge cbsdr cbsdr1 
  
  
  
