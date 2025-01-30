@@ -1,30 +1,20 @@
+CREATE COMPUTE MODULE TaskMultithreading_Compute
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
+    CREATE PROCEDURE CopyEntireMessage() BEGIN ATOMIC
+        -- Convert XML to CHAR
+        DECLARE xmlAsBlob BLOB ASBITSTREAM(InputRoot.XMLNSC CCSID 1208);
+        DECLARE xmlAsChar CHAR CAST(xmlAsBlob AS CHAR CCSID 1208);
 
-CREATE COMPUTE MODULE TaskMultithreding_Compute
-	DECLARE shrvar Shared CHARACTER ;
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+        -- Convert JSON to CHAR
+        DECLARE xmlAsJSON BLOB ASBITSTREAM(InputRoot.JSON.Data CCSID 1208);
+        DECLARE JSONAsChar CHAR CAST(xmlAsJSON AS CHAR CCSID 1208);
 
-	
-
-	
-	CREATE PROCEDURE CopyEntireMessage() BEGIN ATOMIC
-		
-		
-DECLARE xmlAsBlob BLOB ASBITSTREAM(InputRoot.XMLNSC CCSID 1208);
-DECLARE xmlAsChar CHAR CAST(xmlAsBlob AS CHAR CCSID 1208);
-
-
-
-DECLARE xmlAsJSON BLOB ASBITSTREAM(InputRoot.JSON.Data CCSID 1208);
-DECLARE JSONAsChar CHAR CAST(xmlAsJSON AS CHAR CCSID 1208);
-
-SET  shrvar = shrvar||xmlAsChar||JSONAsChar;
-
-		
-	END;
+        -- Use Environment Variable Instead of Shared Variable
+        SET Environment.Variables.ConcatData = COALESCE(Environment.Variables.ConcatData, '') || xmlAsChar || JSONAsChar;
+    END;
 END MODULE;
