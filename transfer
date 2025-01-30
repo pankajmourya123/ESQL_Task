@@ -1,63 +1,42 @@
 CREATE COMPUTE MODULE flow1_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
+    CREATE PROCEDURE CopyEntireMessage() BEGIN
+        -- Assign values directly to OutputRoot without extra variables
+        SET OutputRoot.JSON.Data.BrokerName = BrokerName;
+        SET OutputRoot.JSON.Data.BrokerUserId = BrokerUserId;
+        SET OutputRoot.JSON.Data.BrokerVersion = BrokerVersion;
+        SET OutputRoot.JSON.Data.BrokerDataSource = BrokerDataSource;
+        SET OutputRoot.JSON.Data.ExecutionGroupLabel = executionGroupLabel;
+        SET OutputRoot.JSON.Data.QueueManagerName = QueueManagerName;
+        SET OutputRoot.JSON.Data.NodeLabel = NodeLabel;
+        SET OutputRoot.JSON.Data.MessageFlowLabel = MessageFlowLabel;
+        SET OutputRoot.JSON.Data.ApplicationLabel = ApplicationLabel;
+        SET OutputRoot.JSON.Data.LibraryLabel = LibraryLabel;
+        SET OutputRoot.JSON.Data.ExecutionGroupName = ExecutionGroupName;
+        SET OutputRoot.JSON.Data.Family = Family;
+        SET OutputRoot.JSON.Data.ProcessId = ProcessId;
+        SET OutputRoot.JSON.Data.WorkPath = WorkPath;
+        
+        -- Flow Properties
+        SET OutputRoot.JSON.Data.AdditionalInstances = AdditionalInstances;
+        SET OutputRoot.JSON.Data.CommitCount = CommitCount;
+        SET OutputRoot.JSON.Data.CommitInterval = CommitInterval;
+        SET OutputRoot.JSON.Data.CoordinatedTransaction = CoordinatedTransaction;
+        SET OutputRoot.JSON.Data.MaximumRateMsgsPerSec = MaximumRateMsgsPerSec;
+        SET OutputRoot.JSON.Data.NotificationThresholdMsgsPerSec = NotificationThresholdMsgsPerSec;
+        SET OutputRoot.JSON.Data.WlmPolicy = WlmPolicy;
 
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-
-		DECLARE BrokerName CHARACTER;
-		DECLARE BrokerUserId CHARACTER;
-		DECLARE BrokerVersion CHARACTER;
-		DECLARE BrokerDataSource CHARACTER;
-
-		executionGroupLabel
-		QueueManagerName
-		NodeLabel
-		MessageFlowLabel
-		ApplicationLabel
-		LibraryLabel
-		ExecutionGroupName
-		Family
-		ProcessId (Integer)
-		QueueManagerName (Character)
-		WorkPath (Character)
-
-		Flow properties
-
-		AdditionalInstances (Integer)
-		CommitCount (Integer)
-		CommitInterval (Integer)
-		CoordinatedTransaction (Boolean)
-		MessageFlowLabel (Character)
-		ApplicationLabel (Character)
-		LibraryLabel (Character)
-		MaximumRateMsgsPerSec (Integer)
-		NotificationThresholdMsgsPerSec (Integer)
-		WlmPolicy (Character)
-
-		Table 4. Node properties
-
-		DataSource (Character)
-		DataSourceUserId (Character)
-		MessageOptions (Integer 64-bit)1
-		NodeLabel (Character)
-		ThrowExceptionOnDatabaseError (Boolean)1
-		TransactionType (Character)1
-		TreatWarningsAsErrors (Boolean)1
-
-		SET BrokerName = BrokerName;
-		SET BrokerUserId = BrokerUserId;
-		SET BrokerVersion = BrokerVersion;
-		SET BrokerDataSource = BrokerDataSource;		
-
-
-		SET OutputRoot.JSON.Data.Brkname='BrokerName';
-
-		SET OutputRoot.JSON.Data.BrokerVersion=BrokerVersion;
-
-	END;
+        -- Node Properties
+        SET OutputRoot.JSON.Data.DataSource = DataSource;
+        SET OutputRoot.JSON.Data.DataSourceUserId = DataSourceUserId;
+        SET OutputRoot.JSON.Data.MessageOptions = MessageOptions;
+        SET OutputRoot.JSON.Data.ThrowExceptionOnDatabaseError = ThrowExceptionOnDatabaseError;
+        SET OutputRoot.JSON.Data.TransactionType = TransactionType;
+        SET OutputRoot.JSON.Data.TreatWarningsAsErrors = TreatWarningsAsErrors;
+    END;
 END MODULE;
