@@ -1,42 +1,113 @@
-CREATE COMPUTE MODULE flow1_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL CopyEntireMessage();
-        RETURN TRUE;
-    END;
+DECLARE num1 INTEGER 10;
+DECLARE num2 INTEGER 20;
 
-    CREATE PROCEDURE CopyEntireMessage() BEGIN
-        -- Assign values directly to OutputRoot without extra variables
-        SET OutputRoot.JSON.Data.BrokerName = BrokerName;
-        SET OutputRoot.JSON.Data.BrokerUserId = BrokerUserId;
-        SET OutputRoot.JSON.Data.BrokerVersion = BrokerVersion;
-        SET OutputRoot.JSON.Data.BrokerDataSource = BrokerDataSource;
-        SET OutputRoot.JSON.Data.ExecutionGroupLabel = executionGroupLabel;
-        SET OutputRoot.JSON.Data.QueueManagerName = QueueManagerName;
-        SET OutputRoot.JSON.Data.NodeLabel = NodeLabel;
-        SET OutputRoot.JSON.Data.MessageFlowLabel = MessageFlowLabel;
-        SET OutputRoot.JSON.Data.ApplicationLabel = ApplicationLabel;
-        SET OutputRoot.JSON.Data.LibraryLabel = LibraryLabel;
-        SET OutputRoot.JSON.Data.ExecutionGroupName = ExecutionGroupName;
-        SET OutputRoot.JSON.Data.Family = Family;
-        SET OutputRoot.JSON.Data.ProcessId = ProcessId;
-        SET OutputRoot.JSON.Data.WorkPath = WorkPath;
-        
-        -- Flow Properties
-        SET OutputRoot.JSON.Data.AdditionalInstances = AdditionalInstances;
-        SET OutputRoot.JSON.Data.CommitCount = CommitCount;
-        SET OutputRoot.JSON.Data.CommitInterval = CommitInterval;
-        SET OutputRoot.JSON.Data.CoordinatedTransaction = CoordinatedTransaction;
-        SET OutputRoot.JSON.Data.MaximumRateMsgsPerSec = MaximumRateMsgsPerSec;
-        SET OutputRoot.JSON.Data.NotificationThresholdMsgsPerSec = NotificationThresholdMsgsPerSec;
-        SET OutputRoot.JSON.Data.WlmPolicy = WlmPolicy;
+-- Greater than
+IF num1 > num2 THEN
+    SET OutputRoot.JSON.Data.Result = 'num1 is greater than num2';
+ELSE
+    SET OutputRoot.JSON.Data.Result = 'num1 is not greater than num2';
+END IF;
 
-        -- Node Properties
-        SET OutputRoot.JSON.Data.DataSource = DataSource;
-        SET OutputRoot.JSON.Data.DataSourceUserId = DataSourceUserId;
-        SET OutputRoot.JSON.Data.MessageOptions = MessageOptions;
-        SET OutputRoot.JSON.Data.ThrowExceptionOnDatabaseError = ThrowExceptionOnDatabaseError;
-        SET OutputRoot.JSON.Data.TransactionType = TransactionType;
-        SET OutputRoot.JSON.Data.TreatWarningsAsErrors = TreatWarningsAsErrors;
-    END;
-END MODULE;
+-- Less than
+IF num1 < num2 THEN
+    SET OutputRoot.JSON.Data.LessThan = 'num1 is less than num2';
+END IF;
+
+-- Greater than or equal to
+IF num1 >= num2 THEN
+    SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is greater than or equal to num2';
+ELSE
+    SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is not greater than or equal to num2';
+END IF;
+
+-- Less than or equal to
+IF num1 <= num2 THEN
+    SET OutputRoot.JSON.Data.LessEqual = 'num1 is less than or equal to num2';
+END IF;
+
+-- Equal to
+IF num1 = num2 THEN
+    SET OutputRoot.JSON.Data.Equal = 'num1 is equal to num2';
+ELSE
+    SET OutputRoot.JSON.Data.Equal = 'num1 is not equal to num2';
+END IF;
+
+-- Not equal to
+IF num1 <> num2 THEN
+    SET OutputRoot.JSON.Data.NotEqual = 'num1 is not equal to num2';
+END IF;
+DECLARE date1 DATE '2023-01-01';
+DECLARE date2 DATE '2024-01-01';
+
+-- Comparing dates
+IF date1 < date2 THEN
+    SET OutputRoot.JSON.Data.DateComparison = 'date1 is before date2';
+END IF;
+
+IF date1 > date2 THEN
+    SET OutputRoot.JSON.Data.DateComparison = 'date1 is after date2';
+END IF;
+
+-- Comparing timestamps
+DECLARE ts1 TIMESTAMP '2023-01-01 10:30:00';
+DECLARE ts2 TIMESTAMP '2023-01-01 12:00:00';
+
+IF ts1 < ts2 THEN
+    SET OutputRoot.JSON.Data.TimestampComparison = 'ts1 is earlier than ts2';
+END IF;
+
+DECLARE interval1 INTERVAL '10' DAY;
+DECLARE interval2 INTERVAL '15' DAY;
+
+IF interval1 < interval2 THEN
+    SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is shorter than interval2';
+ELSE
+    SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is longer or equal to interval2';
+END IF;
+
+DECLARE str1 CHARACTER 'ABD';
+DECLARE str2 CHARACTER 'ABC';
+
+-- Greater than (Lexicographic comparison)
+IF str1 > str2 THEN
+    SET OutputRoot.JSON.Data.StringComparison = 'str1 is greater than str2';
+END IF;
+
+-- Less than
+IF str1 < str2 THEN
+    SET OutputRoot.JSON.Data.StringComparison = 'str1 is less than str2';
+END IF;
+
+-- Equal to
+IF str1 = str2 THEN
+    SET OutputRoot.JSON.Data.StringComparison = 'str1 is equal to str2';
+ELSE
+    SET OutputRoot.JSON.Data.StringComparison = 'str1 is not equal to str2';
+END IF;
+DECLARE var1 INTEGER NULL;
+DECLARE var2 INTEGER 10;
+
+IF var1 = var2 THEN
+    SET OutputRoot.JSON.Data.NullComparison = 'var1 is equal to var2';
+ELSE
+    SET OutputRoot.JSON.Data.NullComparison = 'var1 is NULL or not equal to var2';
+END IF;
+DECLARE List1 LIST;
+DECLARE List2 LIST;
+DECLARE Row1 ROW;
+DECLARE Row2 ROW;
+
+SET List1[] = (1, 2, 3);
+SET List2[] = (1, 2, 3);
+SET Row1 = ROW(1 AS ID, 'John' AS Name);
+SET Row2 = ROW(1 AS ID, 'John' AS Name);
+
+-- Compare Lists
+IF List1 = List2 THEN
+    SET OutputRoot.JSON.Data.ListComparison = 'Lists are equal';
+END IF;
+
+-- Compare Rows
+IF Row1 = Row2 THEN
+    SET OutputRoot.JSON.Data.RowComparison = 'Rows are equal';
+END IF;
