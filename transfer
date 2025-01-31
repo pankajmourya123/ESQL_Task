@@ -1,113 +1,50 @@
-DECLARE num1 INTEGER 10;
-DECLARE num2 INTEGER 20;
 
--- Greater than
-IF num1 > num2 THEN
-    SET OutputRoot.JSON.Data.Result = 'num1 is greater than num2';
-ELSE
-    SET OutputRoot.JSON.Data.Result = 'num1 is not greater than num2';
-END IF;
+	CREATE PROCEDURE List_Rows_comparisons() BEGIN
 
--- Less than
-IF num1 < num2 THEN
-    SET OutputRoot.JSON.Data.LessThan = 'num1 is less than num2';
-END IF;
 
--- Greater than or equal to
-IF num1 >= num2 THEN
-    SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is greater than or equal to num2';
-ELSE
-    SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is not greater than or equal to num2';
-END IF;
+		DECLARE ChocolateData ROW;
+		DECLARE BiscuitData ROW;
+		DECLARE FruitData ROW;
 
--- Less than or equal to
-IF num1 <= num2 THEN
-    SET OutputRoot.JSON.Data.LessEqual = 'num1 is less than or equal to num2';
-END IF;
+		SET ChocolateData.PartNumber = 1;
+		SET ChocolateData.Description = 'Chocolate bar';
+		SET ChocolateData.Price = 0.30;
 
--- Equal to
-IF num1 = num2 THEN
-    SET OutputRoot.JSON.Data.Equal = 'num1 is equal to num2';
-ELSE
-    SET OutputRoot.JSON.Data.Equal = 'num1 is not equal to num2';
-END IF;
+		SET BiscuitData.PartNumber = 2;
+		SET BiscuitData.Description = 'Biscuit';
+		SET BiscuitData.Price = 0.35;
 
--- Not equal to
-IF num1 <> num2 THEN
-    SET OutputRoot.JSON.Data.NotEqual = 'num1 is not equal to num2';
-END IF;
-DECLARE date1 DATE '2023-01-01';
-DECLARE date2 DATE '2024-01-01';
+		SET FruitData.PartNumber = 3;
+		SET FruitData.Description = 'Fruit';
+		SET FruitData.Price = 0.42;
 
--- Comparing dates
-IF date1 < date2 THEN
-    SET OutputRoot.JSON.Data.DateComparison = 'date1 is before date2';
-END IF;
+		
+		/*IF ChocolateData=BiscuitData THEN
+			SET OutputRoot.JSON.Data.RowComparison='ChocolateData is equal to BiscuitData';
+		ELSEIF ChocolateData<>BiscuitData THEN
+			SET OutputRoot.JSON.Data.RowComparison='ChocolateData is NOT equal to BiscuitData';
+		ELSE
+			SET OutputRoot.JSON.Data.RowComparison='KHUCH NAHI';
+		END IF;*/
 
-IF date1 > date2 THEN
-    SET OutputRoot.JSON.Data.DateComparison = 'date1 is after date2';
-END IF;
 
--- Comparing timestamps
-DECLARE ts1 TIMESTAMP '2023-01-01 10:30:00';
-DECLARE ts2 TIMESTAMP '2023-01-01 12:00:00';
 
-IF ts1 < ts2 THEN
-    SET OutputRoot.JSON.Data.TimestampComparison = 'ts1 is earlier than ts2';
-END IF;
+		SET OutputRoot.XMLNS.Data.ProductList[] = LIST{ChocolateData, BiscuitData, FruitData};
 
-DECLARE interval1 INTERVAL '10' DAY;
-DECLARE interval2 INTERVAL '15' DAY;
+		DECLARE prdlist REFERENCE TO OutputRoot.XMLNS.Data.ProductList[];
+		SET OutputRoot.JSON.Data.len1=prdlist[1];
+		/*DECLARE len INTEGER;
+		SET len=CARDINALITY(OutputRoot.XMLNS.Data.ProductList.*[]);
+		SET OutputRoot.JSON.Data.len=len;*/
+		
+		/* DECLARE i INTEGER;
+		SET i = 1;
+		X : LOOP
+		IF i>= 4 THEN
+		LEAVE X;
+		END IF;
+		SET i = i + 1;
+		END LOOP X;*/
 
-IF interval1 < interval2 THEN
-    SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is shorter than interval2';
-ELSE
-    SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is longer or equal to interval2';
-END IF;
 
-DECLARE str1 CHARACTER 'ABD';
-DECLARE str2 CHARACTER 'ABC';
-
--- Greater than (Lexicographic comparison)
-IF str1 > str2 THEN
-    SET OutputRoot.JSON.Data.StringComparison = 'str1 is greater than str2';
-END IF;
-
--- Less than
-IF str1 < str2 THEN
-    SET OutputRoot.JSON.Data.StringComparison = 'str1 is less than str2';
-END IF;
-
--- Equal to
-IF str1 = str2 THEN
-    SET OutputRoot.JSON.Data.StringComparison = 'str1 is equal to str2';
-ELSE
-    SET OutputRoot.JSON.Data.StringComparison = 'str1 is not equal to str2';
-END IF;
-DECLARE var1 INTEGER NULL;
-DECLARE var2 INTEGER 10;
-
-IF var1 = var2 THEN
-    SET OutputRoot.JSON.Data.NullComparison = 'var1 is equal to var2';
-ELSE
-    SET OutputRoot.JSON.Data.NullComparison = 'var1 is NULL or not equal to var2';
-END IF;
-DECLARE List1 LIST;
-DECLARE List2 LIST;
-DECLARE Row1 ROW;
-DECLARE Row2 ROW;
-
-SET List1[] = (1, 2, 3);
-SET List2[] = (1, 2, 3);
-SET Row1 = ROW(1 AS ID, 'John' AS Name);
-SET Row2 = ROW(1 AS ID, 'John' AS Name);
-
--- Compare Lists
-IF List1 = List2 THEN
-    SET OutputRoot.JSON.Data.ListComparison = 'Lists are equal';
-END IF;
-
--- Compare Rows
-IF Row1 = Row2 THEN
-    SET OutputRoot.JSON.Data.RowComparison = 'Rows are equal';
-END IF;
+	END;
