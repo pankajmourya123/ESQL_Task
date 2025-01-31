@@ -84,3 +84,33 @@ SET OutputRoot.XMLNSC.Top.Result14 = result14;
 DECLARE result15 BOOLEAN;
 SET result15 = companyName2 LIKE 'IBM$_Corp' ESCAPE '$'; -- TRUE
 SET OutputRoot.XMLNSC.Top.Result15 = result15;
+{
+  "InputRoot": {
+    "XMLNSC": {
+      "Top": {
+        "Orders": [
+          {
+            "OrderID": 1,
+            "Product": "Laptop",
+            "Quantity": 5
+          },
+          {
+            "OrderID": 2,
+            "Product": "Mouse",
+            "Quantity": 15
+          },
+          {
+            "OrderID": 3,
+            "Product": "Keyboard",
+            "Quantity": 8
+          },
+          {
+            "OrderID": 4,
+            "Product": "Monitor",
+            "Quantity": 20
+          }
+        ]
+      }
+    }
+  }
+}
