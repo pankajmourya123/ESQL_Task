@@ -1,3 +1,4 @@
+Compute Mode defines how the message tree is handled when passing through a Compute Node in IBM Integration Bus (IIB) or App Connect Enterprise (ACE). It determines which parts of the message tree are propagated to the next node.
 Compute Mode in ESQL
 
 1. All (Default) Mode
