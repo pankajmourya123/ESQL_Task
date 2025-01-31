@@ -1,54 +1,221 @@
-Compute Mode defines how the message tree is handled when passing through a Compute Node in IBM Integration Bus (IIB) or App Connect Enterprise (ACE). It determines which parts of the message tree are propagated to the next node.
-Compute Mode in ESQL
+BIP2087E: Integration node 'test' was unable to process the internal configuration message. 
 
-1. All (Default) Mode
+The entire internal configuration message failed to be processed successfully. 
 
-All parts of the message (InputRoot, LocalEnvironment, Environment, and ExceptionList) are copied and available for modification.
+Use the messages following this message to determine the reasons for the failure. If the problem cannot be resolved after reviewing these messages, contact your IBM Support center. Enabling service trace may help determine the cause of the failure.
 
-Changes to any part of the message tree will be reflected in the output.
+BIP4041E: Integration server 'default' received an administration request that encountered an exception. 
 
+While attempting to process an administration request, an exception was encountered. No updates have been made to the configuration of the integration server. 
 
-2. Message Mode
+Review related error messages to determine why the administration request failed.
 
-Only the InputRoot (actual message content) is copied.
+BIP2935E: (.flow1_Compute.List_Rows_comparisons, 33.42) : An expression which evaluates to a scalar variable or a field is required here. 
 
-LocalEnvironment, Environment, and ExceptionList are not available.
+ The expression supplying the parameter must evaluate to a value of a suitable type. The given expression cannot possibly do so. 
 
-Used when modifications are needed only in the message body.
+Correct the syntax of your ESQL expression in node '.flow1_Compute.List_Rows_comparisons', around line and column '33.42', then redeploy the message flow.
 
-
-3. LocalEnvironment and Message Mode
-
-Both InputRoot and LocalEnvironment are copied.
-
-Environment and ExceptionList are not available.
-
-Useful when routing decisions depend on transport headers (like HTTP headers, MQMD headers, etc.).
+BIP2871I: The request made by user 'CEDGE\Pankaj.m' to 'deploy' the resource 'C:/Users/pankaj.m/IBM/IIBT10/workspace/GeneratedBarFiles/app90project.generated.bar' of type 'BAR' on parent 'default' of type 'ExecutionGroup' has the status of 'FAILED'.
 
 
-4. Environment Mode
-
-Only the Environment tree is copied.
-
-The message (InputRoot) is not available.
-
-Used when handling metadata without modifying the actual message.
 
 
-5. LocalEnvironment Mode
-
-Only LocalEnvironment is copied.
-
-Message (InputRoot) and Environment are not available.
-
-Useful for updating headers and routing information without affecting the message.
 
 
-6. Exception Mode
 
-Only ExceptionList is copied.
 
-InputRoot, LocalEnvironment, and Environment are not available.
 
-Used for error handling and debugging without accessing the main message.
-Compute Mode defines how the message tree is handled when passing through a Compute Node in IBM Integration Bus (IIB) or App Connect Enterprise (ACE). It determines which parts of the message tree are propagated to the next node.
+
+
+
+
+
+
+
+
+CREATE COMPUTE MODULE flow1_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--CALL Numeric_comparisons();
+		--CALL Date_Time_comparisons();
+		--CALL Interval_comparisons();
+		--CALL String_comparisons();
+		--CALL Handling_Null_comparisons();
+		CALL List_Rows_comparisons();
+
+		RETURN TRUE;
+	END;
+
+
+
+	CREATE PROCEDURE Numeric_comparisons() BEGIN
+
+		DECLARE num1 INTEGER 10;
+		DECLARE num2 INTEGER 20;
+		-- Greater than
+		IF num1 > num2 THEN
+			SET OutputRoot.JSON.Data.Result = 'num1 is greater than num2';
+		ELSE
+			SET OutputRoot.JSON.Data.Result = 'num1 is not greater than num2';
+		END IF;
+		-- Less than
+		IF num1 < num2 THEN
+			SET OutputRoot.JSON.Data.LessThan = 'num1 is less than num2';
+		END IF;
+		-- Greater than or equal to
+		IF num1 >= num2 THEN
+			SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is greater than or equal to num2';
+		ELSE
+			SET OutputRoot.JSON.Data.GreaterEqual = 'num1 is not greater than or equal to num2';
+		END IF;
+		-- Less than or equal to
+		IF num1 <= num2 THEN
+			SET OutputRoot.JSON.Data.LessEqual = 'num1 is less than or equal to num2';
+		END IF;
+		-- Equal to
+		IF num1 = num2 THEN
+			SET OutputRoot.JSON.Data.Equal = 'num1 is equal to num2';
+		ELSE
+			SET OutputRoot.JSON.Data.Equal = 'num1 is not equal to num2';
+		END IF;
+		-- Not equal to
+		IF num1 <> num2 THEN
+			SET OutputRoot.JSON.Data.NotEqual = 'num1 is not equal to num2';
+		END IF;
+	END;
+
+	CREATE PROCEDURE Date_Time_comparisons() BEGIN
+		DECLARE date1 DATE '2025-01-01';
+		DECLARE date2 DATE '2024-01-01';
+		/* IF date1 < date2 THEN
+		SET OutputRoot.JSON.Data.DateComparison = 'date1 is before date2';
+		END IF;
+		IF date1 > date2 THEN
+		SET OutputRoot.JSON.Data.DateComparison = 'date1 is after date2';
+		END IF;
+		IF date1 = date2 THEN
+		SET OutputRoot.JSON.Data.DateComparison = 'date1 is equal date2';
+		END IF;
+		IF date1 <> date2 THEN
+		SET OutputRoot.JSON.Data.NotEqual = 'date1 is not equal to date2';
+		END IF;*/
+		-- Comparing timestamps
+		DECLARE ts1 TIMESTAMP '2023-01-01 10:30:00';
+		DECLARE ts2 TIMESTAMP '2023-01-01 12:00:00';
+
+		IF ts1 < ts2 THEN
+			SET OutputRoot.JSON.Data.TimestampComparison = 'ts1 is earlier than ts2';
+		END IF;
+	END;
+
+
+	CREATE PROCEDURE Interval_comparisons() BEGIN
+		DECLARE i1 INTERVAL;
+		DECLARE i2 INTERVAL ;
+		SET i1 = INTERVAL '10' YEAR;
+		SET i2 = INTERVAL '12' YEAR;
+
+		IF i1 < i2 THEN
+			SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is shorter than interval2';
+		ELSE
+			SET OutputRoot.JSON.Data.IntervalComparison = 'interval1 is longer or equal to interval2';
+		END IF;
+	END;
+
+
+
+	CREATE PROCEDURE String_comparisons() BEGIN
+		DECLARE str1 CHARACTER 'ABD';
+		DECLARE str2 CHARACTER 'ABC';
+		-- Greater than (Lexicographic comparison)
+		IF str1 > str2 THEN
+			SET OutputRoot.JSON.Data.StringComparison = 'str1 is greater than str2';
+		END IF;
+		-- Less than
+		IF str1 < str2 THEN
+			SET OutputRoot.JSON.Data.StringComparison = 'str1 is less than str2';
+		END IF;
+		-- Equal to
+		IF str1 = str2 THEN
+			SET OutputRoot.JSON.Data.StringComparison = 'str1 is equal to str2';
+		ELSE
+			SET OutputRoot.JSON.Data.StringComparison = 'str1 is not equal to str2';
+		END IF;
+	END;
+
+
+	CREATE PROCEDURE Handling_Null_comparisons() BEGIN
+		DECLARE var1 INTEGER NULL;
+		DECLARE var2 INTEGER NULL;
+
+
+
+		IF var1 = var2 THEN
+			SET OutputRoot.JSON.Data.NullComparison = 'var1 is equal to var2';
+		ELSE
+			SET OutputRoot.JSON.Data.NullComparison = 'var1 is NULL or not equal to var2';
+		END IF;
+		/*IF NULL = var1 THEN
+		SET OutputRoot.JSON.Data.NullComparison = 'var1 is NULL ';
+		ELSE
+		SET OutputRoot.JSON.Data.NullComparison = 'var1 is  Not NULL ';
+		END IF;*/
+
+	END;
+
+	CREATE PROCEDURE List_Rows_comparisons() BEGIN
+
+
+		DECLARE ChocolateData ROW;
+		DECLARE BiscuitData ROW;
+		DECLARE FruitData ROW;
+
+		SET ChocolateData.PartNumber = 1;
+		SET ChocolateData.Description = 'Chocolate bar';
+		SET ChocolateData.Price = 0.30;
+
+		SET BiscuitData.PartNumber = 2;
+		SET BiscuitData.Description = 'Biscuit';
+		SET BiscuitData.Price = 0.35;
+
+		SET FruitData.PartNumber = 3;
+		SET FruitData.Description = 'Fruit';
+		SET FruitData.Price = 0.42;		
+		/*IF ChocolateData=BiscuitData THEN
+		SET OutputRoot.JSON.Data.RowComparison='ChocolateData is equal to BiscuitData';
+		ELSEIF ChocolateData<>BiscuitData THEN
+		SET OutputRoot.JSON.Data.RowComparison='ChocolateData is NOT equal to BiscuitData';
+		ELSE
+		SET OutputRoot.JSON.Data.RowComparison='KHUCH NAHI';
+		END IF;*/       
+  
+        
+
+
+		SET OutputRoot.XMLNS.Data.ProductList[] = LIST{ChocolateData, BiscuitData};
+		SET OutputRoot.XMLNS.Data.ProductList2[] = LIST{ChocolateData, BiscuitData,FruitData};
+
+           DECLARE prdlist1 REFERENCE To OutputRoot.XMLNS.Data.ProductList[];
+           DECLARE prdlist2 REFERENCE To OutputRoot.XMLNS.Data.ProductList2[];
+
+		SET OutputRoot.XMLNSC.Data.len1=CARDINALITY(prdlist1);		
+		SET OutputRoot.XMLNSC.Data.len2=CARDINALITY(prdlist2);
+	
+		/*DECLARE prdlist REFERENCE TO OutputRoot.XMLNS.Data.ProductList[];
+		SET OutputRoot.JSON.Data.len1=prdlist[1];
+		/*DECLARE len INTEGER;
+		SET len=CARDINALITY(OutputRoot.XMLNS.Data.ProductList.*[]);
+		SET OutputRoot.JSON.Data.len=len;*/
+		/* DECLARE i INTEGER;
+		SET i = 1;
+		X : LOOP
+		IF i>= 4 THEN
+		LEAVE X;
+		END IF;
+		SET i = i + 1;
+		END LOOP X;*/*/
+		END;
+
+
+		END MODULE;
