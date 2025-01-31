@@ -1,3 +1,29 @@
-parse timing -- complete --message should be xmlnsc hi chaiyeh jo specify kiya voo but agar message mai error hoga phir toh bhi pass hoga 
-                no demand --message should be xmlnsc hi chaiyeh jo specify kiya voo but agar message mai error hoga phir bhi pass nahi hoga
-                Immediate --
+Parse Timing Modes
+
+Parse timing defines when the parser processes a message in IBM Integration Bus (IIB) or App Connect Enterprise (ACE). There are three main parse timing modes:
+
+a) Complete
+
+The message must be parsed as XMLNSC (or the specified format).
+
+Even if there is an error in the message, it will still pass through the flow.
+
+Parsing occurs fully at the first point where the message is accessed.
+
+
+b) No Demand
+
+The message must be parsed as XMLNSC (or the specified format).
+
+However, if there is an error in the message, it will not pass through the flow.
+
+Parsing occurs only when a field is explicitly accessed in the ESQL code.
+
+
+c) Immediate
+
+The message must be parsed immediately when the input node receives it.
+
+Any error in the message will cause immediate failure.
+
+This mode ensures that the entire message is valid before processing continues.
