@@ -1,57 +1,49 @@
-
-
 CREATE COMPUTE MODULE dofileekoutput_Compute
-	DECLARE shrvar SHARED CHARACTER;
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+    DECLARE shrvar SHARED CHARACTER;  -- Shared variable for storing concatenated data
 
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
+    CREATE PROCEDURE CopyEntireMessage() 
+    BEGIN
+        DECLARE jsonString CHARACTER;
+        DECLARE xmlString CHARACTER;
+        DECLARE finalString CHARACTER;
 
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-	
-		
-		
-		DECLARE jsonString BLOB;
+        -- Convert JSON message to a string
+        SET jsonString = CAST(ASBITSTREAM(
+            InputRoot.JSON.Data
+            ENCODING 0
+            CCSID 1208  -- UTF-8 encoding
+            SET '' 
+            TYPE '' 
+            FORMAT '' 
+            OPTIONS ValidateNone
+        ) AS CHARACTER CCSID 1208);
 
-		SET jsonString = ASBITSTREAM(
-		InputRoot.JSON.Data
-		ENCODING 0
-		CCSID 1208 -- Assuming UTF-8 encoding
-		SET '' -- Assuming no specific message set
-		TYPE '' -- Assuming no specific message type
-		FORMAT '' -- Assuming no specific message format
-		OPTIONS ValidateNone -- No validation options
-		);
-		
-		
-		SET OutputRoot.BLOB.BLOB = jsonString;		
-			DECLARE temp BLOB;
-		SET temp=CAST(jsonString AS BLOB CSID 1208);
-		SET shrvar=temp;
-		
-		
-		
-		
-		
-		DECLARE xmlString BLOB;
+        -- Convert XML message to a string
+        SET xmlString = CAST(ASBITSTREAM(
+            InputRoot.XMLNSC
+            ENCODING 0
+            CCSID 1208  -- UTF-8 encoding
+            SET '' 
+            TYPE '' 
+            FORMAT '' 
+            OPTIONS ValidateNone
+        ) AS CHARACTER CCSID 1208);
 
-		SET xmlString = ASBITSTREAM(
-		InputRoot.XMLNSC
-		ENCODING 0
-		CCSID 1208 -- Assuming UTF-8 encoding
-		SET '' -- Assuming no specific message set
-		TYPE '' -- Assuming no specific message type
-		FORMAT '' -- Assuming no specific message format
-		OPTIONS ValidateNone -- No validation options
-		);
-		-- Set the output message to the string representation
-		SET OutputRoot.BLOB.BLOB = xmlString;
-		DECLARE temp2 BLOB;
-		SET temp2=CAST(xmlString AS BLOB CSID 1208);
-		SET shrvar=temp2;
-		
-	END;
+        -- Ensure thread safety while concatenating shared variable
+        ATOMIC
+        BEGIN
+            -- Concatenate JSON and XML data safely
+            SET finalString = COALESCE(shrvar, '') || ' ' || jsonString || ' ' || xmlString;
+            SET shrvar = finalString;
+        END;
+
+        -- Set the final output message
+        SET OutputRoot.BLOB.BLOB = CAST(finalString AS BLOB CCSID 1208);
+    END;
 END MODULE;
