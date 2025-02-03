@@ -1,45 +1,57 @@
-CREATE COMPUTE MODULE MyComputeNode
-  CREATE FUNCTION Main() RETURNS BOOLEAN
-  BEGIN
-    DECLARE OutputMsg REFERENCE TO OutputRoot;
-    DECLARE RequestPayload CHARACTER;
-    
-    -- Extract input data
-    SET RequestPayload = InputRoot.JSON.Data.value;
 
-    -- Handling scope of variables
-    DECLARE Variable1 CHAR 'Existing variable';
 
-    BEGIN
-      -- Inside BEGIN block
-      DECLARE Variable1 CHAR 'Local variable';
-      SET OutputMsg.JSON.Data.LocalScopeExample = Variable1;
-    END;
+CREATE COMPUTE MODULE dofileekoutput_Compute
+	DECLARE shrvar SHARED CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
 
-    -- Demonstrating ATOMIC for thread safety on shared variables
-    DECLARE Count SHARED INT;
 
-    SharedCounterUpdate : BEGIN ATOMIC
-      SET Count = Count + 1;
-    END;
 
-    -- Using Exception Handling inside BEGIN...END
-    DECLARE ErrorMsg CHARACTER;
-    BEGIN
-      DECLARE OrderDate DATE;
-      -- Simulate an operation that may fail
-      SET OrderDate = CAST(RequestPayload AS DATE FORMAT 'YYYY-MM-DD');
-    EXCEPTION
-      WHEN SQLSTATE LIKE '22%' DO
-        SET ErrorMsg = 'Invalid date format';
-        LEAVE; -- Exit execution on error
-    END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+	
+		
+		
+		DECLARE jsonString BLOB;
 
-    -- Returning response
-    SET OutputMsg.JSON.Data.Count = Count;
-    SET OutputMsg.JSON.Data.OrderDate = OrderDate;
-    SET OutputMsg.JSON.Data.ErrorMessage = ErrorMsg;
+		SET jsonString = ASBITSTREAM(
+		InputRoot.JSON.Data
+		ENCODING 0
+		CCSID 1208 -- Assuming UTF-8 encoding
+		SET '' -- Assuming no specific message set
+		TYPE '' -- Assuming no specific message type
+		FORMAT '' -- Assuming no specific message format
+		OPTIONS ValidateNone -- No validation options
+		);
+		
+		
+		SET OutputRoot.BLOB.BLOB = jsonString;		
+			DECLARE temp BLOB;
+		SET temp=CAST(jsonString AS BLOB CSID 1208);
+		SET shrvar=temp;
+		
+		
+		
+		
+		
+		DECLARE xmlString BLOB;
 
-    RETURN TRUE;
-  END;
+		SET xmlString = ASBITSTREAM(
+		InputRoot.XMLNSC
+		ENCODING 0
+		CCSID 1208 -- Assuming UTF-8 encoding
+		SET '' -- Assuming no specific message set
+		TYPE '' -- Assuming no specific message type
+		FORMAT '' -- Assuming no specific message format
+		OPTIONS ValidateNone -- No validation options
+		);
+		-- Set the output message to the string representation
+		SET OutputRoot.BLOB.BLOB = xmlString;
+		DECLARE temp2 BLOB;
+		SET temp2=CAST(xmlString AS BLOB CSID 1208);
+		SET shrvar=temp2;
+		
+	END;
 END MODULE;
