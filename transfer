@@ -1,49 +1,15 @@
-CREATE COMPUTE MODULE dofileekoutput_Compute
-    DECLARE shrvar SHARED CHARACTER;  -- Shared variable for storing concatenated data
+   -- Only propagate when both JSON and XML data have been processed
+        IF LENGTH(TRIM(shrvar)) > 0 THEN
+            -- Prepare output message
+            SET OutputRoot.Properties.MessageFormat = 'XML';
+            SET OutputRoot.BLOB.BLOB = CAST(shrvar AS BLOB CCSID 1208);
 
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL CopyEntireMessage();
-        RETURN TRUE;
-    END;
-
-    CREATE PROCEDURE CopyEntireMessage() 
-    BEGIN
-        DECLARE jsonString CHARACTER;
-        DECLARE xmlString CHARACTER;
-        DECLARE finalString CHARACTER;
-
-        -- Convert JSON message to a string
-        SET jsonString = CAST(ASBITSTREAM(
-            InputRoot.JSON.Data
-            ENCODING 0
-            CCSID 1208  -- UTF-8 encoding
-            SET '' 
-            TYPE '' 
-            FORMAT '' 
-            OPTIONS ValidateNone
-        ) AS CHARACTER CCSID 1208);
-
-        -- Convert XML message to a string
-        SET xmlString = CAST(ASBITSTREAM(
-            InputRoot.XMLNSC
-            ENCODING 0
-            CCSID 1208  -- UTF-8 encoding
-            SET '' 
-            TYPE '' 
-            FORMAT '' 
-            OPTIONS ValidateNone
-        ) AS CHARACTER CCSID 1208);
-
-        -- Ensure thread safety while concatenating shared variable
-        ATOMIC
-        BEGIN
-            -- Concatenate JSON and XML data safely
-            SET finalString = COALESCE(shrvar, '') || ' ' || jsonString || ' ' || xmlString;
-            SET shrvar = finalString;
-        END;
-
-        -- Set the final output message
-        SET OutputRoot.BLOB.BLOB = CAST(finalString AS BLOB CCSID 1208);
-    END;
-END MODULE;
+            -- Send concatenated output to FileOutputNode
+            PROPAGATE;
+            
+            -- Reset shared variable after propagation to avoid duplicate writes
+            ATOMIC
+            BEGIN
+                SET shrvar = ''; 
+            END;
+        END I
