@@ -1,116 +1,45 @@
--- SYMMETRIC form (default if not specified)
-DECLARE var1 INTEGER 20;
-DECLARE result1 BOOLEAN;
+CREATE COMPUTE MODULE MyComputeNode
+  CREATE FUNCTION Main() RETURNS BOOLEAN
+  BEGIN
+    DECLARE OutputMsg REFERENCE TO OutputRoot;
+    DECLARE RequestPayload CHARACTER;
+    
+    -- Extract input data
+    SET RequestPayload = InputRoot.JSON.Data.value;
 
-SET result1 = var1 BETWEEN SYMMETRIC 10 AND 30; -- TRUE, as 20 is between 10 and 30
-SET OutputRoot.XMLNSC.Top.Result1 = result1;
+    -- Handling scope of variables
+    DECLARE Variable1 CHAR 'Existing variable';
 
--- ASYMMETRIC form
-DECLARE result2 BOOLEAN;
-SET result2 = var1 BETWEEN ASYMMETRIC 10 AND 30; -- TRUE, as 20 is between 10 and 30
-SET OutputRoot.XMLNSC.Top.Result2 = result2;
+    BEGIN
+      -- Inside BEGIN block
+      DECLARE Variable1 CHAR 'Local variable';
+      SET OutputMsg.JSON.Data.LocalScopeExample = Variable1;
+    END;
 
--- ASYMMETRIC where boundaries are reversed
-DECLARE result3 BOOLEAN;
-SET result3 = var1 BETWEEN ASYMMETRIC 30 AND 10; -- FALSE, as 20 is not between 30 and 10
-SET OutputRoot.XMLNSC.Top.Result3 = result3;
--- Check if at least one row is returned from a SELECT statement
-DECLARE result4 BOOLEAN;
-SET result4 = EXISTS (SELECT * FROM InputRoot.XMLNSC.Top.Orders WHERE Quantity > 10);
-SET OutputRoot.XMLNSC.Top.Result4 = result4; -- TRUE if there are orders with Quantity > 10, else FALSE
--- Testing scalar values against a list
-DECLARE var1 INTEGER 30;
-DECLARE result5 BOOLEAN;
-SET result5 = var1 NOT IN (34, 42, 45); -- TRUE, as 30 is not in the given list
-SET OutputRoot.XMLNSC.Top.Result5 = result5;
+    -- Demonstrating ATOMIC for thread safety on shared variables
+    DECLARE Count SHARED INT;
 
-DECLARE result6 BOOLEAN;
-SET result6 = var1 IN (30, 42, 45); -- TRUE, as 30 is in the list
-SET OutputRoot.XMLNSC.Top.Result6 = result6;
+    SharedCounterUpdate : BEGIN ATOMIC
+      SET Count = Count + 1;
+    END;
 
--- Using IN with SELECT statement
-DECLARE result7 BOOLEAN;
-SET result7 = 42 IN (SELECT A FROM InputRoot.XMLNSC.Top.a[] AS A);
-SET OutputRoot.XMLNSC.Top.Result7 = result7;
+    -- Using Exception Handling inside BEGIN...END
+    DECLARE ErrorMsg CHARACTER;
+    BEGIN
+      DECLARE OrderDate DATE;
+      -- Simulate an operation that may fail
+      SET OrderDate = CAST(RequestPayload AS DATE FORMAT 'YYYY-MM-DD');
+    EXCEPTION
+      WHEN SQLSTATE LIKE '22%' DO
+        SET ErrorMsg = 'Invalid date format';
+        LEAVE; -- Exit execution on error
+    END;
 
--- Using IN with LIST
-DECLARE result8 BOOLEAN;
-SET result8 = 42 IN (LIST{34, 36, 37, 38, 39, 40, 41, 42, 43, 44}); -- TRUE
-SET OutputRoot.XMLNSC.Top.Result8 = result8;
--- Testing for NULL
-DECLARE var2 INTEGER NULL;
-DECLARE result9 BOOLEAN;
-SET result9 = var2 IS NULL; -- TRUE, since var2 is NULL
-SET OutputRoot.XMLNSC.Top.Result9 = result9;
+    -- Returning response
+    SET OutputMsg.JSON.Data.Count = Count;
+    SET OutputMsg.JSON.Data.OrderDate = OrderDate;
+    SET OutputMsg.JSON.Data.ErrorMessage = ErrorMsg;
 
--- Testing for Boolean values
-DECLARE var3 BOOLEAN TRUE;
-DECLARE result10 BOOLEAN;
-SET result10 = var3 IS TRUE; -- TRUE
-SET OutputRoot.XMLNSC.Top.Result10 = result10;
-
--- Testing for special decimal values
-DECLARE var4 FLOAT NAN;
-DECLARE result11 BOOLEAN;
-SET result11 = var4 IS NAN; -- TRUE
-SET OutputRoot.XMLNSC.Top.Result11 = result11;
-
--- Using LIKE for pattern matching
-DECLARE companyName CHARACTER 'IBM Corp';
-DECLARE result12 BOOLEAN;
-SET result12 = companyName LIKE 'I%'; -- TRUE, as it starts with 'I'
-SET OutputRoot.XMLNSC.Top.Result12 = result12;
-
--- Using underscore (_) for single-character match
-DECLARE result13 BOOLEAN;
-SET result13 = companyName LIKE 'I__'; -- FALSE, as it expects exactly 3 characters
-SET OutputRoot.XMLNSC.Top.Result13 = result13;
--- Testing if a list has exactly one element
-DECLARE result16 BOOLEAN;
-SET result16 = SINGULAR (LIST{42}); -- TRUE, as the list has exactly one element
-SET OutputRoot.XMLNSC.Top.Result16 = result16;
-
-DECLARE result17 BOOLEAN;
-SET result17 = SINGULAR (LIST{42, 43}); -- FALSE, as the list has more than one element
-SET OutputRoot.XMLNSC.Top.Result17 = result17;
-
--- Escaping special characters
-DECLARE companyName2 CHARACTER 'IBM_Corp';
-DECLARE result14 BOOLEAN;
-SET result14 = companyName2 LIKE 'IBM\_Corp'; -- TRUE, as _ is escaped
-SET OutputRoot.XMLNSC.Top.Result14 = result14;
-
--- Using a custom ESCAPE character
-DECLARE result15 BOOLEAN;
-SET result15 = companyName2 LIKE 'IBM$_Corp' ESCAPE '$'; -- TRUE
-SET OutputRoot.XMLNSC.Top.Result15 = result15;
-{
-  "InputRoot": {
-    "XMLNSC": {
-      "Top": {
-        "Orders": [
-          {
-            "OrderID": 1,
-            "Product": "Laptop",
-            "Quantity": 5
-          },
-          {
-            "OrderID": 2,
-            "Product": "Mouse",
-            "Quantity": 15
-          },
-          {
-            "OrderID": 3,
-            "Product": "Keyboard",
-            "Quantity": 8
-          },
-          {
-            "OrderID": 4,
-            "Product": "Monitor",
-            "Quantity": 20
-          }
-        ]
-      }
-    }
-  }
-}
+    RETURN TRUE;
+  END;
+END MODULE;
