@@ -1,15 +1,29 @@
-   -- Only propagate when both JSON and XML data have been processed
-        IF LENGTH(TRIM(shrvar)) > 0 THEN
-            -- Prepare output message
-            SET OutputRoot.Properties.MessageFormat = 'XML';
-            SET OutputRoot.BLOB.BLOB = CAST(shrvar AS BLOB CCSID 1208);
+   CREATE COMPUTE MODULE ExceptionHandler_Compute
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL HandleException();
+        RETURN TRUE;
+    END;
 
-            -- Send concatenated output to FileOutputNode
-            PROPAGATE;
+    CREATE PROCEDURE HandleException()
+    BEGIN
+        DECLARE i INTEGER 1;
+        DECLARE exceptionRef REFERENCE TO InputExceptionList.*[1];
+        DECLARE errorList REFERENCE TO OutputRoot.JSON.Data.Errors;
+
+        -- Initialize the JSON structure
+        SET OutputRoot.JSON.Data.Status = 'Error';
+        SET OutputRoot.JSON.Data.Errors = [];
+
+        WHILE exceptionRef IS NOT NULL DO
+            CREATE LASTCHILD OF errorList TYPE NAME 'Error' VALUE NULL;
+            SET errorList.Error[i].Number = exceptionRef.Number;
+            SET errorList.Error[i].Text = exceptionRef.Text;
+            SET errorList.Error[i].Type = FIELDNAME(exceptionRef);
             
-            -- Reset shared variable after propagation to avoid duplicate writes
-            ATOMIC
-            BEGIN
-                SET shrvar = ''; 
-            END;
-        END I
+            -- Move to next exception in the list
+            MOVE exceptionRef NEXTSIBLING;
+            SET i = i + 1;
+        END WHILE;
+    END;
+END MODULE;
