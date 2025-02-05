@@ -1,16 +1,74 @@
-DECLARE inputData CHARACTER;
-DECLARE errorMessage CHARACTER;
 
--- JSON/XML parsing attempt
-SET inputData = FIELDNAME(InputRoot.JSON.Data); 
 
--- Agar field missing hai ya format galat hai, toh exception throw karein
-IF inputData IS NULL THEN
-    SET errorMessage = 'Parsing Exception: Invalid or missing data in request';
-    
-    THROW USER EXCEPTION 
-    SEVERITY 3 
-    CATALOG 'BIPmsgs' 
-    MESSAGE 2951 
-    VALUES(errorMessage);
-END IF;
+CREATE COMPUTE MODULE flow1_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+	DECLARE inputData CHARACTER;
+		DECLARE errorMessage CHARACTER;
+	
+	
+		SET inputData = FIELDNAME(InputRoot.JSON.Data);
+	
+		IF inputData IS NULL THEN
+			SET errorMessage = 'Parsing Exception: Invalid ';
+
+			THROW USER EXCEPTION
+			SEVERITY 3
+			CATALOG 'BIPmsgs'
+			MESSAGE 2951
+			VALUES(errorMessage);
+		END IF;
+		
+	END;
+END MODULE;
+
+
+
+
+
+
+CREATE COMPUTE MODULE sub_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;	
+
+
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+
+		DECLARE i INTEGER 1;
+		DECLARE count INTEGER ;
+		SET count=CARDINALITY(InputExceptionList.*[]);
+
+		WHILE i<=count DO
+			SET OutputRoot.JSON.Data.Exception[i].Number=InputExceptionList.[i].Number;
+			SET OutputRoot.JSON.Data.Exception[i].Text=InputExceptionList.[i].Text;
+			SET OutputRoot.JSON.Data.Exception[i].Type=FIELDNAME(InputExceptionList.[i]);
+			SET i=i+1;
+		END WHILE;		
+
+
+	END;
+END MODULE;
+
+{
+    "Exception": {
+        "Number": 2230,
+        "Text": "Caught exception and rethrowing",
+        "Type": "RecoverableException"
+    }
+}
+
+here i am sending null data but i am getting this exception i wnagt gthat user exception should show up please correct it what changes i should make in oredr to to so 
+
+  
