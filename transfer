@@ -1,29 +1,16 @@
-   CREATE COMPUTE MODULE ExceptionHandler_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL HandleException();
-        RETURN TRUE;
-    END;
+DECLARE inputData CHARACTER;
+DECLARE errorMessage CHARACTER;
 
-    CREATE PROCEDURE HandleException()
-    BEGIN
-        DECLARE i INTEGER 1;
-        DECLARE exceptionRef REFERENCE TO InputExceptionList.*[1];
-        DECLARE errorList REFERENCE TO OutputRoot.JSON.Data.Errors;
+-- JSON/XML parsing attempt
+SET inputData = FIELDNAME(InputRoot.JSON.Data); 
 
-        -- Initialize the JSON structure
-        SET OutputRoot.JSON.Data.Status = 'Error';
-        SET OutputRoot.JSON.Data.Errors = [];
-
-        WHILE exceptionRef IS NOT NULL DO
-            CREATE LASTCHILD OF errorList TYPE NAME 'Error' VALUE NULL;
-            SET errorList.Error[i].Number = exceptionRef.Number;
-            SET errorList.Error[i].Text = exceptionRef.Text;
-            SET errorList.Error[i].Type = FIELDNAME(exceptionRef);
-            
-            -- Move to next exception in the list
-            MOVE exceptionRef NEXTSIBLING;
-            SET i = i + 1;
-        END WHILE;
-    END;
-END MODULE;
+-- Agar field missing hai ya format galat hai, toh exception throw karein
+IF inputData IS NULL THEN
+    SET errorMessage = 'Parsing Exception: Invalid or missing data in request';
+    
+    THROW USER EXCEPTION 
+    SEVERITY 3 
+    CATALOG 'BIPmsgs' 
+    MESSAGE 2951 
+    VALUES(errorMessage);
+END IF;
