@@ -1,24 +1,27 @@
-
-
-
-
-
-
 CREATE COMPUTE MODULE flow3_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
+    CREATE PROCEDURE CopyEntireMessage() 
+    BEGIN
+        DECLARE ref1 REFERENCE TO OutputRoot.JSON.Data;
+        
+        -- Ensure OutputRoot.JSON.Data exists
+        IF NOT EXISTS(OutputRoot.JSON.Data) THEN
+            CREATE FIELD OutputRoot.JSON.Data;
+        END IF;
+        
+        -- Now set the reference properly
+        SET ref1 = OutputRoot.JSON.Data;
+        
+        -- Create a field under JSON.Data
+        CREATE FIRSTCHILD OF ref1 TYPE NameValue NAME 'Price' VALUE 92.3;
 
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		declare ref1 reference to OutputRoot.JSON.Data;
-		CREATE  FIELD  ref1;
-		CREATE FIRSTCHILD OF ref1 TYPE NameValue NAME 'Price' VALUE 92.3;
-		
-		CREATE FIRSTCHILD OF ref1;
-		
-	END;
+        -- Fix: Ensure the second child creation has a type and name
+        CREATE FIRSTCHILD OF ref1 TYPE NameValue NAME 'Discount' VALUE 10.5; 
+        
+    END;
 END MODULE;
