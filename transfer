@@ -1,12 +1,17 @@
-DECLARE mychar CHARACTER '<root><name>pankaj</name></root>';
-		 
-		 DECLARE jsonBlob BLOB;
-		
-		
-		  CREATE  FIELD  OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
-		DECLARE myxml REFERENCE to OutputRoot.XMLNSC;
-		
-		
+DECLARE myvar CHARACTER;
+		DECLARE myblob BLOB;
+		 DECLARE mychar CHARACTER;
+		SET myblob = InputRoot.BLOB.BLOB;
+		SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
+        DECLARE jsonBlob BLOB;		
+
+            
+           
+		CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
+
+		DECLARE myxml REFERENCE to OutputRoot.XMLNSC;		
 	
-		SET OutputRoot.JSON.Data.text=myxml;
-		
+
+
+	 	
+	 	SET OutputRoot.JSON.Data.text=myxml;
