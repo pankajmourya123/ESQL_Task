@@ -1,18 +1,12 @@
 DECLARE mychar CHARACTER '<root><name>pankaj</name></root>';
-DECLARE myxml REFERENCE;
-DECLARE jsonBlob BLOB;
-
--- Step 1: Convert CHARACTER to XML
-CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
-SET myxml = OutputRoot.XMLNSC;  -- Reference to XML Data
-
--- Step 2: Convert XML to JSON
-SET jsonBlob = ASBITSTREAM(myxml
-                           ENCODING 1208
-                           CCSID 1208
-                           SET 'JSON'
-                           TYPE 'JSON'
-                           FORMAT 'JSON');
-
--- Step 3: Parse JSON structure into OutputRoot
-CREATE LASTCHILD OF OutputRoot DOMAIN('JSON') PARSE(jsonBlob CCSID 1208);
+		 
+		 DECLARE jsonBlob BLOB;
+		
+		
+		  CREATE  FIELD  OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
+		DECLARE myxml REFERENCE to OutputRoot.XMLNSC;
+		
+		
+	
+		SET OutputRoot.JSON.Data.text=myxml;
+		
