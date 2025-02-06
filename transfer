@@ -1,24 +1,18 @@
-DECLARE myblob BLOB;
-DECLARE parseData CHARACTER;
-DECLARE xmlData CHARACTER;
+DECLARE mychar CHARACTER '<root><name>pankaj</name></root>';
+DECLARE myxml REFERENCE;
+DECLARE jsonBlob BLOB;
 
--- Get raw BLOB data from input
-SET myblob = InputRoot.BLOB.BLOB;
+-- Step 1: Convert CHARACTER to XML
+CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
+SET myxml = OutputRoot.XMLNSC;  -- Reference to XML Data
 
--- Convert BLOB to CHARACTER (XML)
-SET xmlData = CAST(myblob AS CHARACTER CCSID 1208);
+-- Step 2: Convert XML to JSON
+SET jsonBlob = ASBITSTREAM(myxml
+                           ENCODING 1208
+                           CCSID 1208
+                           SET 'JSON'
+                           TYPE 'JSON'
+                           FORMAT 'JSON');
 
--- Parse as XML first to create an XML structure
-CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNSC';
-SET OutputRoot.XMLNSC = xmlData;
-
--- Convert XML structure to JSON format
-DECLARE jsonBlob BLOB ASBITSTREAM(OutputRoot.XMLNSC
-                                  ENCODING 1208
-                                  CCSID 1208
-                                  SET 'JSON'
-                                  TYPE 'JSON'
-                                  FORMAT 'JSON');
-                                  
--- Parse JSON structure into OutputRoot
-CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON' PARSE(jsonBlob CCS
+-- Step 3: Parse JSON structure into OutputRoot
+CREATE LASTCHILD OF OutputRoot DOMAIN('JSON') PARSE(jsonBlob CCSID 1208);
