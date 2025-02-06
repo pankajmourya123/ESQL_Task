@@ -1,31 +1,26 @@
-CREATE COMPUTE MODULE flow3_Compute
-
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
-
-	CREATE PROCEDURE CopyEntireMessage() 
-	BEGIN
-		-- Initialize JSON structure
-		SET OutputRoot.JSON.Data = NULL;
+CREATE PROCEDURE CopyEntireMessage() BEGIN
+	
+		 DECLARE MyMessage REFERENCE TO OutputRoot.JSON.Data;
 		
-		-- Declare reference to JSON Data
-		DECLARE ref1 REFERENCE TO OutputRoot.JSON.Data;
-		
-		-- Create first child element under JSON Data
-		CREATE FIRSTCHILD OF ref1 TYPE NameValue NAME 'Price' VALUE 'Pahila baccha';
+		CREATE FIELD LASTCHILD
+		OF MyMessage
+		AS MyNewField
+		DOMAIN MyDomain
+		REPEAT VALUE -10
+			VALUE 20
+			TYPE VARCHAR(255)
+			NAMESPACE 'http://example.com/myNamespace'
+			NAME 'MyFieldName'
+			IDENTITY MyIdentityField
+			FROM SourceField
+			PARSE (
+			BitStreamExpression << ENCODING 'UTF-8'
+			CCSID 1208
+			SET 'MySet'
+			TYPE 'MyType'
+			FORMAT 'MyFormat'
+			OPTIONS 'MyOptions'
+			);
 
-		-- Move reference to 'Price'
-		MOVE ref1 TO ref1.LastChild;
-
-		-- Declare a new reference for the 'Price' field
-		DECLARE ref2 REFERENCE TO ref1;
-		
-		-- Create child under 'Price'
-		CREATE FIRSTCHILD OF ref2 TYPE NameValue NAME 'Pr' VALUE 'Pahila baccha ke baccha';
-		
-	END;
-
-END MODULE;
+		END;
+	END MODULE;
