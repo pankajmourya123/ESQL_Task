@@ -1,15 +1,12 @@
 DECLARE myvar CHARACTER;
-		DECLARE myblob BLOB;
-		DECLARE parseData CHARACTER;	
+DECLARE myblob BLOB;
+DECLARE parseData CHARACTER;
 
+-- Get the input BLOB
+SET myblob = InputRoot.BLOB.BLOB;
 
+-- Convert BLOB to CHARACTER using UTF-8 encoding
+SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
 
-
-		SET myblob = InputRoot.BLOB.BLOB;
-		SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
-		DECLARE dataAsBit BIT CAST(parseData AS BIT CCSID 1208);
-		CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON' PARSE(dataAsBit CCSID 1208);	
-		
-		<root>
-<name>pankaj</name>
-<root>
+-- Parse the CHARACTER data as JSON
+CREATE LASTCHILD OF OutputRoot DOMAIN('JSON') PARSE(parseData CCSID 1208);
