@@ -1,17 +1,22 @@
 DECLARE myvar CHARACTER;
-		DECLARE myblob BLOB;
-		 DECLARE mychar CHARACTER;
-		SET myblob = InputRoot.BLOB.BLOB;
-		SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
-        DECLARE jsonBlob BLOB;		
+DECLARE myblob BLOB;
+DECLARE mychar CHARACTER;
+SET myblob = InputRoot.BLOB.BLOB;
+SET mychar = CAST(myblob AS CHARACTER CCSID 1208);
+DECLARE jsonBlob BLOB;
 
-            
-           
-		CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
+-- Create XML structure from BLOB
+CREATE LASTCHILD OF Environment DOMAIN('XMLNSC') PARSE(mychar CCSID 1208);
 
-		DECLARE myxml REFERENCE to OutputRoot.XMLNSC;		
-	
+-- Reference the XML structure
+DECLARE myxml REFERENCE TO Environment.XMLNSC;
 
+-- Extract only the required XML portion
+DECLARE extractedText CHARACTER;
+SET extractedText = FIELDVALUE(myxml); -- Extract value from the XML structure
 
-	 	
-	 	SET OutputRoot.JSON.Data.text=myxml;
+-- Remove XMLNSC from OutputRoot to avoid unwanted XML in response
+DELETE FIELD OutputRoot.XMLNSC;
+
+-- Assign extracted text to JSON output
+SET OutputRoot.JSON.Data.text = extractedText;
