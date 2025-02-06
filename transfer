@@ -1,41 +1,15 @@
+DECLARE myvar CHARACTER;
+		DECLARE myblob BLOB;
+		DECLARE parseData CHARACTER;	
 
 
 
 
-
-
-CREATE COMPUTE MODULE flow3_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
-
-Syntax error. Valid options include: ; AS FROM IDENTITY NAME NAMESPACE PARSE REPEAT TYPE VALUE
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-	
-		 DECLARE MyMessage REFERENCE TO OutputRoot.JSON.Data;
+		SET myblob = InputRoot.BLOB.BLOB;
+		SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
+		DECLARE dataAsBit BIT CAST(parseData AS BIT CCSID 1208);
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON' PARSE(dataAsBit CCSID 1208);	
 		
-		CREATE FIELD LASTCHILD
-		OF MyMessage
-		AS MyNewField
-		DOMAIN MyDomain
-		REPEAT VALUE -10
-			VALUE 20
-			TYPE VARCHAR(255)
-			NAMESPACE 'http://example.com/myNamespace'
-			NAME 'MyFieldName'
-			IDENTITY MyIdentityField
-			FROM SourceField
-			PARSE (
-			BitStreamExpression << ENCODING 'UTF-8'
-			CCSID 1208
-			SET 'MySet'
-			TYPE 'MyType'
-			FORMAT 'MyFormat'
-			OPTIONS 'MyOptions'
-			);
-
-		END;
-	END MODULE;
+		<root>
+<name>pankaj</name>
+<root>
