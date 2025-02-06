@@ -1,12 +1,24 @@
-DECLARE myvar CHARACTER;
 DECLARE myblob BLOB;
 DECLARE parseData CHARACTER;
+DECLARE xmlData CHARACTER;
 
--- Get the input BLOB
+-- Get raw BLOB data from input
 SET myblob = InputRoot.BLOB.BLOB;
 
--- Convert BLOB to CHARACTER using UTF-8 encoding
-SET parseData = CAST(myblob AS CHARACTER CCSID 1208);
+-- Convert BLOB to CHARACTER (XML)
+SET xmlData = CAST(myblob AS CHARACTER CCSID 1208);
 
--- Parse the CHARACTER data as JSON
-CREATE LASTCHILD OF OutputRoot DOMAIN('JSON') PARSE(parseData CCSID 1208);
+-- Parse as XML first to create an XML structure
+CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNSC';
+SET OutputRoot.XMLNSC = xmlData;
+
+-- Convert XML structure to JSON format
+DECLARE jsonBlob BLOB ASBITSTREAM(OutputRoot.XMLNSC
+                                  ENCODING 1208
+                                  CCSID 1208
+                                  SET 'JSON'
+                                  TYPE 'JSON'
+                                  FORMAT 'JSON');
+                                  
+-- Parse JSON structure into OutputRoot
+CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON' PARSE(jsonBlob CCS
