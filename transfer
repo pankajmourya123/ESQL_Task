@@ -1,26 +1,28 @@
-CREATE PROCEDURE CopyEntireMessage() BEGIN
-	
-		 DECLARE MyMessage REFERENCE TO OutputRoot.JSON.Data;
-		
-		CREATE FIELD LASTCHILD
-		OF MyMessage
-		AS MyNewField
-		DOMAIN MyDomain
-		REPEAT VALUE -10
-			VALUE 20
-			TYPE VARCHAR(255)
-			NAMESPACE 'http://example.com/myNamespace'
-			NAME 'MyFieldName'
-			IDENTITY MyIdentityField
-			FROM SourceField
-			PARSE (
-			BitStreamExpression << ENCODING 'UTF-8'
-			CCSID 1208
-			SET 'MySet'
-			TYPE 'MyType'
-			FORMAT 'MyFormat'
-			OPTIONS 'MyOptions'
-			);
+CREATE PROCEDURE CopyEntireMessage() 
+BEGIN
+    -- Declare a reference to OutputRoot.JSON.Data
+    DECLARE MyMessage REFERENCE TO OutputRoot.JSON.Data;
+    
+    -- Create a new field inside MyMessage
+    CREATE LASTCHILD OF MyMessage 
+        DOMAIN 'JSON' -- Correct placement of DOMAIN
+        NAME 'MyFieldName' -- Name of the new field
+        TYPE VARCHAR(255) -- Field type
+        NAMESPACE 'http://example.com/myNamespace'; -- Namespace
 
-		END;
-	END MODULE;
+    -- Assign a value to the newly created field
+    SET MyMessage.MyFieldName = 'SampleValue';
+
+    -- Parsing a field from a bitstream
+    DECLARE SourceField REFERENCE TO InputRoot.JSON.Data.SomeSource;
+    
+    CREATE LASTCHILD OF MyMessage AS MyParsedField;
+    PARSE (SourceField BITSTREAM
+        ENCODING 'UTF-8'
+        CCSID 1208
+        SET 'MySet'
+        TYPE 'MyType'
+        FORMAT 'MyFormat'
+        OPTIONS 'MyOptions');
+
+END PROCEDURE;
