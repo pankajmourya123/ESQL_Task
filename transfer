@@ -1,49 +1,570 @@
-CREATE PROCEDURE CopyEntireMessage() 
-BEGIN
-    -- Extract from CURRENT_DATE
-    SET OutputRoot.JSON.Data.CURRENT_DATE = CURRENT_DATE;
-    SET OutputRoot.JSON.Data.CURRENT_DATE_YEAR = EXTRACT(YEAR FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_MONTH = EXTRACT(MONTH FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_DAY = EXTRACT(DAY FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_DAYOFYEAR = EXTRACT(DAYOFYEAR FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_DAYOFWEEK = EXTRACT(DAYOFWEEK FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_WEEKOFYEAR = EXTRACT(WEEKOFYEAR FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_WEEKOFMONTH = EXTRACT(WEEKOFMONTH FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_QUARTEROFYEAR = EXTRACT(QUARTEROFYEAR FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_ISLEAPYEAR = EXTRACT(ISLEAPYEAR FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_DAYS = EXTRACT(DAYS FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_MONTHS = EXTRACT(MONTHS FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_QUARTERS = EXTRACT(QUARTERS FROM CURRENT_DATE);
-    SET OutputRoot.JSON.Data.CURRENT_DATE_WEEKS = EXTRACT(WEEKS FROM CURRENT_DATE);
+ABS and ABSVAL functions
+Last Updated: 2023-06-21
+The ABS and ABSVAL numeric functions return the absolute value of a supplied number.
 
-    -- Extract from CURRENT_TIME
-    SET OutputRoot.JSON.Data.CURRENT_TIME = CURRENT_TIME;
-    SET OutputRoot.JSON.Data.CURRENT_TIME_HOUR = EXTRACT(HOUR FROM CURRENT_TIME);
-    SET OutputRoot.JSON.Data.CURRENT_TIME_MINUTE = EXTRACT(MINUTE FROM CURRENT_TIME);
-    SET OutputRoot.JSON.Data.CURRENT_TIME_SECOND = EXTRACT(SECOND FROM CURRENT_TIME);
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ABS
+ABSVAL
+(
+source_number
+)
+The absolute value of the source number is a number with the same magnitude as the source but without a sign. The parameter must be a numeric value. The result is of the same type as the parameter unless it is NULL, in which case the result is NULL.
 
-    -- Extract from CURRENT_TIMESTAMP
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP = CURRENT_TIMESTAMP;
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_YEAR = EXTRACT(YEAR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_MONTH = EXTRACT(MONTH FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_DAY = EXTRACT(DAY FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_HOUR = EXTRACT(HOUR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_MINUTE = EXTRACT(MINUTE FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_SECOND = EXTRACT(SECOND FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_DAYOFYEAR = EXTRACT(DAYOFYEAR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_DAYOFWEEK = EXTRACT(DAYOFWEEK FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_WEEKOFYEAR = EXTRACT(WEEKOFYEAR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_WEEKOFMONTH = EXTRACT(WEEKOFMONTH FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_QUARTEROFYEAR = EXTRACT(QUARTEROFYEAR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_ISLEAPYEAR = EXTRACT(ISLEAPYEAR FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_DAYS = EXTRACT(DAYS FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_MONTHS = EXTRACT(MONTHS FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_QUARTERS = EXTRACT(QUARTERS FROM CURRENT_TIMESTAMP);
-    SET OutputRoot.JSON.Data.CURRENT_TIMESTAMP_WEEKS = EXTRACT(WEEKS FROM CURRENT_TIMESTAMP);
+For example:
+ABS( -3.7 )
 
-    -- Extract from GMT Date and Time (if supported)
-    SET OutputRoot.JSON.Data.CURRENT_GMTDATE = CURRENT_GMTDATE;
-    SET OutputRoot.JSON.Data.CURRENT_GMTTIME = CURRENT_GMTTIME;
-    SET OutputRoot.JSON.Data.CURRENT_GMTTIMESTAMP = CURRENT_GMTTIMESTAMP;
-    SET OutputRoot.JSON.Data.LOCAL_TIMEZONE = LOCAL_TIMEZONE;
-END;
+returns 3.7
+ABS( 3.7 )
+
+returns 3.7
+ABS( 1024 )
+
+returns 1024
+
+
+
+ACOS function
+Last Updated: 2023-06-21
+The ACOS numeric function returns the angle of a given cosine.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ACOS
+(
+NumericExpression
+)
+The ACOS function returns the angle, in radians, whose cosine is the given NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+ASIN function
+Last Updated: 2023-06-21
+The ASIN numeric function returns the angle of the given sine.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ASIN
+(
+NumericExpression
+)
+The ASIN function returns the angle, in radians, whose sine is the given NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+ATAN function
+Last Updated: 2023-06-21
+The ATAN numeric function returns the angle of the given tangent.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ATAN
+(
+NumericExpression
+)
+The ATAN function returns the angle, in radians, whose tangent is the given NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+ATAN2 function
+Last Updated: 2023-06-21
+The ATAN2 numeric function returns the angle subtended in a right angled triangle between an opposite and the base.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ATAN2
+(
+OppositeNumericExpression
+,
+BaseNumericExpression
+)
+The ATAN2 function returns the angle, in radians, subtended (in a right angled triangle) by an opposite given by OppositeNumericExpression and the base given by BaseNumericExpression. The parameters can be any built-in numeric data type. The result is FLOAT unless either parameter is NULL, in which case the result is NULL
+BITAND function
+Last Updated: 2023-06-21
+The BITAND numeric function performs a bitwise AND on the binary representation of two or more numbers.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+BITAND
+(
+source_integer
+,
+,
+source_integer
+)
+BITAND takes two or more integer values and returns the result of performing the bitwise AND on the binary representation of the numbers. The result is INTEGER unless either parameter is NULL, in which case the result is NULL.
+BITNOT function
+Last Updated: 2023-06-21
+The BITNOT numeric function performs a bitwise complement on the binary representation of a number.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+BITNOT
+(
+source_integer
+)
+BITNOT takes an integer value and returns the result of performing the bitwise complement on the binary representation of the number. The result is INTEGER unless either parameter is NULL, in which case the result is NULL.
+
+For example:
+BITNOT(7)
+
+returns -8, as shown by this worked example:
+   Binary Decimal
+00...0111    7
+NOT
+_________
+11...1000   -8
+
+BITOR function
+Last Updated: 2023-06-21
+The BITOR numeric function performs a bitwise OR on the binary representation of two or more numbers.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+BITOR
+(
+source_integer
+,
+,
+source_integer
+)
+BITOR takes two or more integer values and returns the result of performing the bitwise OR on the binary representation of the numbers. The result is INTEGER unless either parameter is NULL, in which case the result is NULL.
+
+For example:
+BITOR(12, 7)
+
+returns 15, as shown by this worked example:
+   Binary Decimal
+    1100    12
+OR  0111     7
+_________
+    1111    15
+
+
+BITXOR function
+Last Updated: 2023-06-21
+The BITXOR numeric function performs a bitwise XOR on the binary representation of two or more numbers.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+BITXOR
+(
+source_integer
+,
+,
+source_integer
+)
+BITXOR takes two or more integer values and returns the result of performing the bitwise XOR on the binary representation of the numbers. The result is INTEGER unless either parameter is NULL, in which case the result is NULL.
+
+For example:
+BITXOR(12, 7)
+
+returns 11, as shown by this worked example:
+   Binary Decimal
+    1100    12
+XOR 0111     7
+_________
+    1011    11
+
+CEIL and CEILING functions
+Last Updated: 2023-06-21
+The CEIL and CEILING numeric functions return the smallest integer equivalent of a decimal number.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+CEIL
+CEILING
+(
+source_number
+)
+CEIL and CEILING return the smallest integer value greater than or equal to source_number. The parameter can be any numeric data type. The result is of the same type as the parameter unless it is NULL, in which case the result is NULL.
+
+For example:
+CEIL(1)
+
+returns 1
+CEIL(1.2)
+
+returns 2.0
+CEIL(-1.2)
+
+returns -1.0
+If possible, the scale is changed to zero. If the result cannot be represented at that scale, it is made sufficiently large to represent the number.
+COS function
+Last Updated: 2023-06-21
+The COS numeric function returns the cosine of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+COS
+(
+NumericExpression
+)
+The COS function returns the cosine of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+COSH function
+Last Updated: 2023-06-21
+The COSH numeric function returns the hyperbolic cosine of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+COSH
+(
+NumericExpression
+)
+The COSH function returns the hyperbolic cosine of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+COT function
+Last Updated: 2023-06-21
+The COT numeric function returns the cotangent of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+COT
+(
+NumericExpression
+)
+The COT function returns the cotangent of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+DEGREES function
+Last Updated: 2023-06-21
+The DEGREES numeric function returns the angle of the radians supplied.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+DEGREES
+(
+NumericExpression
+)
+The DEGREES function returns the angle, in degrees, specified by NumericExpression in radians. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+
+
+EXP function
+Last Updated: 2023-06-21
+The EXP numeric function returns the exponential value of a given number.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+EXP
+(
+NumericExpression
+)
+The EXP function returns the exponential of the value specified by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+
+FLOOR function
+Last Updated: 2023-06-21
+The FLOOR numeric function returns the largest integer equivalent to a given decimal number.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+FLOOR
+(
+source_number
+)
+FLOOR returns the largest integer value less than or equal to source_number. The parameter can be any numeric data type. The result is of the same type as the parameter unless it is NULL, in which case the result is NULL.
+
+For example:
+FLOOR(1)
+
+returns 1
+FLOOR(1.2)
+
+returns 1.0
+FLOOR(-1.2)
+
+returns -2.0
+If possible, the scale is changed to zero. If the result cannot be represented at that scale, it is made sufficiently large to represent the number.
+LN and LOG functions
+Last Updated: 2023-06-21
+The LN and LOG equivalent numeric functions return the natural logarithm of a given value.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+LN
+LOG
+(
+NumericExpression
+)
+The LN and LOG functions return the natural logarithm of the value specified by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL
+LOG10 function
+Last Updated: 2023-06-21
+The LOG10 numeric function returns the logarithm to base 10 of a given value.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+LOG10
+(
+NumericExpression
+)
+The LOG10 function returns the logarithm to base 10 of the value specified by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+
+MOD function
+Last Updated: 2023-06-21
+The MOD numeric function returns the remainder when dividing two numbers.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+MOD
+(
+dividend
+,
+divisor
+)
+MOD returns the remainder when the first parameter is divided by the second parameter. The result is negative only if the first parameter is negative. Parameters must be integers. The function returns an integer. If any parameter is NULL, the result is NULL.
+
+For example:
+MOD(7, 3)
+
+returns 1
+MOD(-7, 3)
+
+returns -1
+MOD(7, -3)
+
+returns 1
+MOD(6, 3)
+
+returns 0
+
+POWER function
+Last Updated: 2023-06-21
+The POWER numeric function raises a value to the power supplied.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+POWER
+(
+ValueNumericExpression
+,
+PowerNumericExpression
+)
+POWER returns the given value raised to the given power. The parameters can be any built-in numeric data type. The result is FLOAT unless any parameter is NULL, in which case the result is NULL
+
+An exception occurs, if the value is either:
+Zero and the power is negative, or
+Negative and the power is not an integer
+
+RADIANS function
+Last Updated: 2023-06-21
+The RADIANS numeric function returns a given radians angle in degrees.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+RADIANS
+(
+NumericExpression
+)
+The RADIANS function returns the angle, in radians, specified by NumericExpression in degrees. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+ROUND function
+Last Updated: 2023-06-21
+The ROUND numeric function rounds a supplied value to a given number of places.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+ROUND
+(
+source_number
+,
+precision
+MODE
+1
+RoundingMode
+)
+RoundingMode
+Read syntax diagramSkip visual syntax diagram
+ROUND_UP
+ROUND_DOWN
+ROUND_CEILING
+ROUND_FLOOR
+ROUND_HALF_UP
+ROUND_HALF_EVEN
+ROUND_HALF_DOWN
+Notes:
+1 If you do not specify MODE, a value of ROUND_HALF_EVEN is used.
+If precision is a positive number, source_number is rounded to precision places right of the decimal point. If precision is negative, the result is source_number rounded to the absolute value of precision places to the left of the decimal point.
+
+source_number can be any built-in numeric data type; precision must be an integer. The result is of the same data type as the source_number parameter unless source_number is NULL, in which case the result is NULL.
+
+This means that the result of the function is:
+INTEGER if source_number is INTEGER
+FLOAT if source_number is FLOAT
+DECIMAL if source_number is DECIMAL
+When rounding, the banker's or half-even symmetric rounding rules are used by default, unless a RoundingMode is specified.
+RoundingMode
+RoundingMode can take one of the following values:
+ROUND_UP
+Round away from zero. Always increments the digit prior to a nonzero discarded fraction. This rounding mode never decreases the magnitude of the calculated value.
+ROUND_DOWN
+Round towards zero. Never increments the digit prior to a discarded fraction, that is, truncates. This rounding mode never increases the magnitude of the calculated value.
+ROUND_CEILING
+Round towards positive infinity. If the decimal is positive, behaves as for ROUND_UP; if negative, behaves as for ROUND_DOWN. This rounding mode never decreases the calculated value.
+ROUND_FLOOR
+Round towards negative infinity. If the decimal is positive, behaves as for ROUND_DOWN; if negative, behaves as for ROUND_UP. This rounding mode never increases the calculated value.
+ROUND_HALF_UP
+Round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up. Behaves as for ROUND_UP if the discarded fraction is greater than, or equal to, 0.5; otherwise, behaves as for ROUND_DOWN. This is the rounding mode that is typically taught in schools.
+ROUND_HALF_DOWN
+Round towards "nearest neighbor" unless both neighbors are equidistant, in which case round down. Behaves as for ROUND_UP if the discarded fraction is grater than 0.5; otherwise, behaves as for ROUND_DOWN.
+ROUND_HALF_EVEN
+Round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round towards the even neighbor. Behaves as for ROUND_HALF_UP if the digit to the left of the discarded fraction is odd; behaves as for ROUND_HALF_DOWN if it is even. This is the rounding mode that minimizes cumulative error when applied repeatedly over a sequence of calculations, and is sometimes referred to as Banker's rounding.
+The following table gives a summary of rounding operations, with a precision of zero, under different rounding modes.
+Input number
+ROUND UP
+ROUND DOWN
+ROUND CEILING
+ROUND FLOOR
+ROUND HALF UP
+ROUND HALF DOWN
+ROUND HALF EVEN
+5.5	6	5	6	5	6	5	6
+2.5	3	2	3	2	3	2	2
+1.6	2	1	2	1	2	2	2
+1.1	2	1	2	1	1	1	1
+1.0	1	1	1	1	1	1	1
+-1.0	-1	-1	-1	-1	-1	-1	-1
+-1.1	-2	-1	-1	-2	-1	-1	-1
+-1.6	-2	-1	-1	-2	-2	-2	-2
+-2.5	-3	-2	-2	-3	-3	-2	-2
+-5.5	-6	-5	-5	-6	-6	-5	-6
+Examples using the default rounding mode (ROUND_HALF_EVEN):
+ROUND(27.75, 2)
+
+returns 27.75
+ROUND(27.75, 1)
+
+returns 27.8
+ROUND(27.75, 0)
+
+returns 28
+ROUND(27.75, -1)
+
+returns 30
+Examples using a rounding mode with a precision of zero:
+ROUND(5.5, 0 MODE ROUND_UP);
+
+returns 6
+ROUND(5.5, 0 MODE ROUND_DOWN);
+
+returns 5
+ROUND(5.5, 0 MODE ROUND_CEILING);
+
+returns 6
+ROUND(5.5, 0 MODE ROUND_FLOOR);
+
+returns 5
+ROUND(5.5, 0 MODE ROUND_HALF_UP);
+
+returns 6
+ROUND(5.5, 0 MODE ROUND_HALF_DOWN);
+
+returns 5
+ROUND(5.5, 0 MODE ROUND_HALF_EVEN);
+
+returns 6
+ROUND(2.5, 0 MODE ROUND_UP);
+
+returns 3
+ROUND(2.5, 0 MODE ROUND_DOWN);
+
+returns 2
+ROUND(2.5, 0 MODE ROUND_CEILING);
+
+returns 3
+ROUND(2.5, 0 MODE ROUND_FLOOR);
+
+returns 2
+ROUND(2.5, 0 MODE ROUND_HALF_UP);
+
+returns 3
+ROUND(2.5, 0 MODE ROUND_HALF_DOWN);
+
+returns 2
+ROUND(2.5, 0 MODE ROUND_HALF_EVEN);
+
+returns 2
+If possible, the scale is changed to the given value. If the result cannot be represented within the given scale, it is INFINITY.
+
+SIN function
+Last Updated: 2023-06-21
+The SIN numeric function returns the sine of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+SIN
+(
+NumericExpression
+)
+The SIN function returns the sine of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+SINH function
+Last Updated: 2023-06-21
+The SINH numeric function returns the hyperbolic sine of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+SINH
+(
+NumericExpression
+)
+The SINH function returns the hyperbolic sine of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+
+SQRT function
+Last Updated: 2023-06-21
+The SQRT numeric function returns the square root of a given number.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+SQRT
+(
+source_number
+)
+SQRT returns the square root of source_number. The parameter can be any built-in numeric data type. The result is a FLOAT. If the parameter is NULL, the result is NULL.
+
+For example:
+SQRT(4)
+
+returns 2E+1
+SQRT(2)
+
+returns 1.414213562373095E+0
+SQRT(-1)
+
+throws an exception.
+TAN function
+Last Updated: 2023-06-21
+The TAN numeric function returns the tangent of a given angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+TAN
+(
+NumericExpression
+)
+The TAN function returns the tangent of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+TANH function
+Last Updated: 2023-06-21
+The TANH numeric function returns the hyperbolic tangent of an angle.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+TANH
+(
+NumericExpression
+)
+The TANH function returns the hyperbolic tangent of the angle, in radians, given by NumericExpression. The parameter can be any built-in numeric data type. The result is FLOAT unless the parameter is NULL, in which case the result is NULL.
+TRUNCATE function
+Last Updated: 2023-06-21
+The TRUNCATE numeric function truncates a supplied decimal number a specified number of places.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+TRUNCATE
+(
+source_number
+,
+precision
+)
+If precision is positive, the result of the TRUNCATE function is source_number truncated to precision places right of the decimal point. If precision is negative, the result is source_number truncated to the absolute value of precision places to the left of the decimal point.
+
+source_number can be any built-in numeric data type. precision must evaluate to an INTEGER. The result is of the same data type as source_number. If any parameter is NULL, the result is NULL.
+
+For example:
+TRUNCATE(27.75, 2)
+
+returns 27.75
+TRUNCATE(27.75, 1)
+
+returns 27.7
+TRUNCATE(27.75, 0)
+
+returns 27.0
+TRUNCATE(27.75, -1)
+
+returns 20.0
+If possible, the scale is changed to the given value. If the result cannot be represented within the given scale, it is INF.
