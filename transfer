@@ -1,56 +1,101 @@
-
-
-
-
-
 CREATE COMPUTE MODULE flow3_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL ComputeAllFunctions();
+        RETURN TRUE;
+    END;
 
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
+    CREATE PROCEDURE ComputeAllFunctions()
+    BEGIN
+        -- ABS and ABSVAL functions
+        SET OutputRoot.JSON.Data.ABS_Neg = ABS(-3.7);
+        SET OutputRoot.JSON.Data.ABS_Pos = ABS(3.76);
+        SET OutputRoot.JSON.Data.ABS_Zero = ABS(0);
+        SET OutputRoot.JSON.Data.ABSVAL_Neg = ABSVAL(-3.7);
+        SET OutputRoot.JSON.Data.ABSVAL_Pos = ABSVAL(3.76);
 
+        -- ACOS function (Inverse Cosine)
+        SET OutputRoot.JSON.Data.ACOS_0 = DEGREES(ACOS(0));
+        SET OutputRoot.JSON.Data.ACOS_1 = DEGREES(ACOS(1));
+        SET OutputRoot.JSON.Data.ACOS_minus1 = DEGREES(ACOS(-1));
 
+        -- ASIN function (Inverse Sine)
+        SET OutputRoot.JSON.Data.ASIN_0 = DEGREES(ASIN(0));
+        SET OutputRoot.JSON.Data.ASIN_1 = DEGREES(ASIN(1));
+        SET OutputRoot.JSON.Data.ASIN_minus1 = DEGREES(ASIN(-1));
 
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		
-	
-		/*SET OutputRoot.JSON.Data.ABS=ABS(-3.7);
-		SET OutputRoot.JSON.Data.ABSVAL=ABSVAL(-3.7);
-		
-		SET OutputRoot.JSON.Data.ABS_p=ABS(3.76);
-		SET OutputRoot.JSON.Data.ABSVAL_p=ABSVAL(3.76);
-		
-		
-		SET OutputRoot.JSON.Data.ABS=ABS(-3.7);
-		SET OutputRoot.JSON.Data.ABSVAL=ABSVAL(-3.7);
-		
-		SET OutputRoot.JSON.Data.ABS_p=ABS(3.76);
-		SET OutputRoot.JSON.Data.ABSVAL_p=ABSVAL(3.76);*/
-		
-		
-		
-		
-		/*SET OutputRoot.JSON.Data.ACOS_0=ACOS(0);
-		SET OutputRoot.JSON.Data.ACOS_1=ACOS(1);
-		SET OutputRoot.JSON.Data.ACOS_minus1=ACOS(-1);
-		SET OutputRoot.JSON.Data.ACOS_postive5=ACOS(0.5);
-		SET OutputRoot.JSON.Data.ACOS_negative05=ACOS(-0.5);
-		SET OutputRoot.JSON.Data.ACOS_null=ACOS(NULL);*/
-	  --SET OutputRoot.JSON.Data.ACOS_null=ACOS(999);
-		
-		
-		SET OutputRoot.JSON.Data.ATAN_0=DEGREES(ATAN(0));
-		SET OutputRoot.JSON.Data.ATAN_1=DEGREES(ATAN(1));
-		SET OutputRoot.JSON.Data.ACOS_minus1=DEGREES(ATAN(-1));
-		SET OutputRoot.JSON.Data.ACOS_postive5=DEGREES(ATAN(0.5));
-		SET OutputRoot.JSON.Data.ACOS_negative05=DEGREES(ATAN(-0.5));
-		SET OutputRoot.JSON.Data.ACOS_null=ACOS(NULL);
-		
-	  --SET OutputRoot.JSON.Data.ACOS_null=ACOS(999);
-		
-		
-		
-	END;
+        -- ATAN and ATAN2 functions (Inverse Tangent)
+        SET OutputRoot.JSON.Data.ATAN_1 = DEGREES(ATAN(1));
+        SET OutputRoot.JSON.Data.ATAN_minus1 = DEGREES(ATAN(-1));
+        SET OutputRoot.JSON.Data.ATAN2_1_1 = DEGREES(ATAN2(1, 1));
+        SET OutputRoot.JSON.Data.ATAN2_minus1_1 = DEGREES(ATAN2(-1, 1));
+
+        -- Bitwise Operations
+        SET OutputRoot.JSON.Data.BITAND_5_3 = BITAND(5, 3); -- 5 (101) & 3 (011) = 1
+        SET OutputRoot.JSON.Data.BITNOT_5 = BITNOT(5); -- Bitwise NOT
+        SET OutputRoot.JSON.Data.BITOR_5_3 = BITOR(5, 3); -- 5 (101) | 3 (011) = 7
+        SET OutputRoot.JSON.Data.BITXOR_5_3 = BITXOR(5, 3); -- 5 (101) ^ 3 (011) = 6
+
+        -- CEIL and CEILING functions
+        SET OutputRoot.JSON.Data.CEIL_3_2 = CEIL(3.2);
+        SET OutputRoot.JSON.Data.CEILING_3_8 = CEILING(3.8);
+
+        -- COS and COSH functions
+        SET OutputRoot.JSON.Data.COS_60 = COS(RADIANS(60));
+        SET OutputRoot.JSON.Data.COSH_1 = COSH(1);
+
+        -- COT function (Cotangent)
+        SET OutputRoot.JSON.Data.COT_45 = 1 / TAN(RADIANS(45));
+
+        -- DEGREES function
+        SET OutputRoot.JSON.Data.DEGREES_PI = DEGREES(PI());
+
+        -- EXP function (Exponential)
+        SET OutputRoot.JSON.Data.EXP_2 = EXP(2);
+
+        -- FLOOR function
+        SET OutputRoot.JSON.Data.FLOOR_3_8 = FLOOR(3.8);
+
+        -- LN and LOG functions
+        SET OutputRoot.JSON.Data.LN_10 = LN(10);
+        SET OutputRoot.JSON.Data.LOG_100 = LOG(100, 10);
+
+        -- LOG10 function
+        SET OutputRoot.JSON.Data.LOG10_1000 = LOG10(1000);
+
+        -- MOD function
+        SET OutputRoot.JSON.Data.MOD_10_3 = MOD(10, 3); -- Remainder of 10 / 3
+
+        -- POWER function
+        SET OutputRoot.JSON.Data.POWER_2_3 = POWER(2, 3);
+
+        -- RADIANS function
+        SET OutputRoot.JSON.Data.RADIANS_180 = RADIANS(180);
+
+        -- RAND function (Random Number)
+        SET OutputRoot.JSON.Data.RAND = RAND();
+
+        -- ROUND function
+        SET OutputRoot.JSON.Data.ROUND_2_5 = ROUND(2.5);
+
+        -- SIGN function
+        SET OutputRoot.JSON.Data.SIGN_Neg = SIGN(-50);
+        SET OutputRoot.JSON.Data.SIGN_Pos = SIGN(50);
+        SET OutputRoot.JSON.Data.SIGN_Zero = SIGN(0);
+
+        -- SIN and SINH functions
+        SET OutputRoot.JSON.Data.SIN_30 = SIN(RADIANS(30));
+        SET OutputRoot.JSON.Data.SINH_1 = SINH(1);
+
+        -- SQRT function (Square Root)
+        SET OutputRoot.JSON.Data.SQRT_25 = SQRT(25);
+
+        -- TAN and TANH functions
+        SET OutputRoot.JSON.Data.TAN_45 = TAN(RADIANS(45));
+        SET OutputRoot.JSON.Data.TANH_1 = TANH(1);
+
+        -- TRUNCATE function
+        SET OutputRoot.JSON.Data.TRUNCATE_5_7 = TRUNCATE(5.789, 2);
+
+    END;
 END MODULE;
