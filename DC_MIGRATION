@@ -39,3 +39,7 @@ mqm user ke 2 root user rahte hai 1)opt 2)usr
 
 agar ek hi setup ke multiple bank for cedgerrb toh har bak ke liye alag alag worklow floder banateneg but  ek crontab file 
 
+
+sftp hi is usde for pc -- server and vice versa
+mqm user --- a pppliction which use for file transfer in mq
+
