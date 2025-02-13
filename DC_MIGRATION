@@ -1,0 +1,41 @@
+DC Migration--Yaha pe hum dc ko ek server se dusre server pe jaate hai aur voo permantely usi  server pe run hoga yaha pe waapas aane ke koi jhol nahi hai 
+DR Drill--Yaha pe hum dc ko ek server se dusre server pe jaate hai aur voo temperorly  usi  server pe run hoga yaha pe waapas aana padageur yeh 
+
+cds ke pas multipke server pe mutiple bank hai isyle jab bhi koi bank ka dc migrate hota hai toh srif hum cbs ke workflow ko cange karte hai lekin iib ke pass ek hi server isyle uska workflow change karne ki jarurrat 
+us serever mai voo queue miljayega  (sfms ke pass bhi multiple server hote hai)
+
+
+DC Migration -- Samjho ek bank hai krunachal jo abhi 143. pe run ho raha hai aur humai isse 154 server pe le jana hai 
+Ab yaha pe humai kisi pe bhi bank ke application ko run karne ke liye usak workflow honna jarurui hota hai .Aur jab 143 se 154 pe jaate hai toh hum 143 saar workflow 153 pe le jaana hota hai ab yaha pe 2 case ho sakte hai
+1)143 pe worklfow mil jaye (toh dierct copy kar dena 154  pe);
+2) 143 pe workflow naa mile 
+toh hum yaha pe kya karene phele dekheynge ki voo particular bank konse se setup mai hai aur usee setup pe jo durse bank hai uske workflow ka reference lenge aur ussmai changes karenge 
+ab apne workflow 
+1 scripct floder 3 xml 1 crontab file hota hai 
+
+SCRIPT
+   -- ufm_144_cedgerrb_done --->   ufm_143_cedgerrb_done    --- yaha pe hum sab khuch queue name matlab har jagah 144 --143 mai change karenge (yaha pe queue name bhi change kar rahe hai kyunki hamare pass 143 queue hai 
+                                                                                                                                                agar hamare queue nahi hai toh hum queue name nhi change karenge ab yeh kaise pata chalta hai
+                                                                                                                                                voo humai server se pata hai ab hamamre pass 143 server hai matlab voo qeue bhi hogaa isyile change kiya
+                                                                                                                                                ab yeh saare cheeze hum sabhi file pe apply hogi hum outward file mai reason bhi change karenge  );
+
+   -- ufm_144_cedgerrb_inward  ---> ufm_143_cedgerrb_done
+   -- ufm_144_cedgerrb_outward  ---> ufm_143_cedgerrb_done
+
+CBS144_CEDGERRB_OUTWARD_WORKFLOW  --> CBS143_CEDGERRB_OUTWARD_WORKFLOW 
+CBS144_CEDGERRB_DONE_WORKFLOW     --> CBS143_CEDGERRB_OUTWARD_WORKFLOW 
+CBS144_CEDGERRB_INWARD_WORKFLOW   --> CBS143_CEDGERRB_OUTWARD_WORKFLOW 
+
+Crontab                144 --143 
+
+
+workflow change karne baad hum yeh neft( production) mai bhejnege  phir yaha pe jaake iib yeh bank ke application ko dwon karenge kyunki iib ka application cbs ke server se data leta hai but voo purane 143 se leta hoga lekin humne
+purane server ko  change isyile hum iib usse dwon karnege 12 server pe jaake ufm mai jaake hash add karnge 
+
+ab naye server 154 cbs pe jayenge aur workflow ke path pe workflow add akrenge scrpti mai script add karneg aur crontab ke path pe jaake crotab aad karenge 
+                        
+mqm user ke 2 root user rahte hai 1)opt 2)usr
+
+
+agar ek hi setup ke multiple bank for cedgerrb toh har bak ke liye alag alag worklow floder banateneg but  ek crontab file 
+
