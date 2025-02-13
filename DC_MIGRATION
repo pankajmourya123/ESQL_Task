@@ -29,8 +29,7 @@ CBS144_CEDGERRB_INWARD_WORKFLOW   --> CBS143_CEDGERRB_OUTWARD_WORKFLOW
 Crontab                144 --143 
 
 
-workflow change karne baad hum yeh neft( production) mai bhejnege  phir yaha pe jaake iib yeh bank ke application ko dwon karenge kyunki iib ka application cbs ke server se data leta hai but voo purane 143 se leta hoga lekin humne
-purane server ko  change isyile hum iib usse dwon karnege 12 server pe jaake ufm mai jaake hash add karnge 
+workflow change karne baad hum yeh neft( production) mai bhejnege  phir yaha pe jaake iib yeh bank ke application ko dwon karenge 
 
 ab naye server 154 cbs pe jayenge aur workflow ke path pe workflow add akrenge scrpti mai script add karneg aur crontab ke path pe jaake crotab aad karenge 
                         
@@ -42,4 +41,9 @@ agar ek hi setup ke multiple bank for cedgerrb toh har bak ke liye alag alag wor
 
 sftp hi is usde for pc -- server and vice versa
 mqm user --- a pppliction which use for file transfer in mq
+
+
+hum iib isylie band karte hai kyunki voo inward ke liye kaam karta rahta smhajo inward koi file aayi apne iib but dc miagration ke time hum cbs band hai toh tanscation process hi nhi hionge isylie hum iib bnad rakhte
+hai taaki inward transcation sfms end end pe hi ruke ranhgene jab tak iib up nhi ho jata hai ( ufm mai jaake hash add karnge );
+
 
