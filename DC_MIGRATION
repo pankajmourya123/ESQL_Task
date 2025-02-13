@@ -44,6 +44,6 @@ mqm user --- a pppliction which use for file transfer in mq
 
 
 hum iib isylie band karte hai kyunki voo inward ke liye kaam karta rahta smhajo inward koi file aayi apne iib but dc miagration ke time hum cbs band hai toh tanscation process hi nhi hionge isylie hum iib bnad rakhte
-hai taaki inward transcation sfms end end pe hi ruke ranhgene jab tak iib up nhi ho jata hai ( ufm mai jaake hash add karnge );
+hai taaki inward transcation sfms end end pe hi ruke ranhgene jab tak iib up nhi ho jata hai ( ufm mai jaake hash add karnge taaki crontab band ho jayge phir uske baad kill karo process ko  );
 
 
