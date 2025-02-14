@@ -1,74 +1,26 @@
-<Orders xmlns:amazon="http://amazon.com/orders" xmlns:flipkart="http://flipkart.com/orders">
-    <amazon:Order>
-        <ID>123</ID>
-        <Customer>Rahul</Customer>
-    </amazon:Order>
-    <flipkart:Order>
-        <ID>789</ID>
-        <Customer>Amit</Customer>
-    </flipkart:Order>
-</Orders>
-ExceptionList
-	RecoverableException
-			File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\WebServices\WSLibrary\ImbWSReplyNode.cpp
-			Line:INTEGER:1056
-			Function:CHARACTER:ImbWSReplyNode::evaluate
-			Type:CHARACTER:ComIbmWSReplyNode
-			Name:CHARACTER:flowtp#FCMComposite_1_2
-			Label:CHARACTER:flowtp.HTTP Reply
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Caught exception and rethrowing
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:flowtp.HTTP Reply
-			ParserException
-					File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCParser.cpp
-					Line:INTEGER:930
-					Function:CHARACTER:ImbXMLNSCParser::refreshBitStreamFromElementsCommon
-					Type:CHARACTER:ComIbmWSInputNode
-					Name:CHARACTER:flowtp#FCMComposite_1_1
-					Label:CHARACTER:flowtp.HTTP Input
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:5010
-					Text:CHARACTER:XML Writing Errors have occurred
-					ParserException
-							File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCWriter.cpp
-							Line:INTEGER:277
-							Function:CHARACTER:ImbXMLNSCWriter::writeBuffer
-							Type:CHARACTER:
-							Name:CHARACTER:
-							Label:CHARACTER:
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:5031
-							Text:CHARACTER:No root element was found while writing the XML message.
-
-
-
-
 CREATE COMPUTE MODULE flowtp_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        CALL CopyEntireMessage();
+        RETURN TRUE;
+    END;
 
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;	
+    CREATE PROCEDURE CopyEntireMessage() 
+    BEGIN
+        DECLARE amazon_ns NAMESPACE 'http://amazon.com/orders';
+        DECLARE flipkart_ns NAMESPACE 'http://flipkart.com/orders';
 
+        -- Define root and namespaces
+        SET OutputRoot.XMLNSC.Orders = NULL; 
+        SET OutputRoot.XMLNSC.(XML.NamespaceDecl)amazon = 'http://amazon.com/orders';
+        SET OutputRoot.XMLNSC.(XML.NamespaceDecl)flipkart = 'http://flipkart.com/orders';
 
+        -- Copy Amazon Order
+        SET OutputRoot.XMLNSC.Orders.amazon:Order.ID = InputRoot.XMLNSC.amazon_ns:Order.ID;
+        SET OutputRoot.XMLNSC.Orders.amazon:Order.Customer = InputRoot.XMLNSC.amazon_ns:Order.Customer;
 
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-DECLARE amazon_ns NAMESPACE 'http://amazon.com/orders';
-DECLARE flipkart_ns NAMESPACE 'http://flipkart.com/orders';
-
-
-
-
-
-SET OutputRoot.XMLNSC.amazonorder =FIELDNAME(InputRoot.XMLNSC.amazon_ns:Order);
-
-
-	END;
+        -- Copy Flipkart Order
+        SET OutputRoot.XMLNSC.Orders.flipkart:Order.ID = InputRoot.XMLNSC.flipkart_ns:Order.ID;
+        SET OutputRoot.XMLNSC.Orders.flipkart:Order.Customer = InputRoot.XMLNSC.flipkart_ns:Order.Customer;
+    END;
 END MODULE;
