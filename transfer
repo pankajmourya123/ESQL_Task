@@ -1,26 +1,24 @@
-CREATE COMPUTE MODULE ConvertToBlob
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Declare a variable to store the bit stream options
-        DECLARE options INTEGER BITOR(RootBitStream, ValidateNone);
 
-        -- Declare a variable to store the BLOB result
-        DECLARE result BLOB;
 
-        -- Convert the input message field into a BLOB using all available options
-        SET result = ASBITSTREAM(
-            InputRoot.XMLNSC
-            OPTIONS options
-            ENCODING 273
-            CCSID 1208
-            SET 'MyMessageSet'
-            TYPE 'MyMessageType'
-            FORMAT 'XML'
-        );
 
-        -- Store the result in OutputRoot
-        SET OutputRoot.BLOB.BLOB = result;
 
-        RETURN TRUE;
-    END;
+CREATE COMPUTE MODULE flowtp_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;	
+
+
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+
+SET OutputRoot.JSON.Data.X=FIELDNAME(InputBody.*[<]);
+SET OutputRoot.JSON.Data.Y=FIELDNAME(InputBody.F1.*[<]);
+SET OutputRoot.JSON.Data.Z=FIELDNAME(InputBody.*[<].*[<]);
+DECLARE ns NAMESPACE 'urn:nid:xxxxxx';
+
+SET OutputRoot.JSON.Data.yY=FIELDNAME(InputBody.ns:F1.*[<]);
+	END;
 END MODULE;
