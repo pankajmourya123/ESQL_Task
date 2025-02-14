@@ -1,24 +1,10 @@
-
-
-
-
-CREATE COMPUTE MODULE flowtp_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;	
-
-
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-
-SET OutputRoot.JSON.Data.X=FIELDNAME(InputBody.*[<]);
-SET OutputRoot.JSON.Data.Y=FIELDNAME(InputBody.F1.*[<]);
-SET OutputRoot.JSON.Data.Z=FIELDNAME(InputBody.*[<].*[<]);
-DECLARE ns NAMESPACE 'urn:nid:xxxxxx';
-
-SET OutputRoot.JSON.Data.yY=FIELDNAME(InputBody.ns:F1.*[<]);
-	END;
-END MODULE;
+<Orders xmlns:amazon="http://amazon.com/orders" xmlns:flipkart="http://flipkart.com/orders">
+    <amazon:Order>
+        <ID>123</ID>
+        <Customer>Rahul</Customer>
+    </amazon:Order>
+    <flipkart:Order>
+        <ID>789</ID>
+        <Customer>Amit</Customer>
+    </flipkart:Order>
+</Orders>
