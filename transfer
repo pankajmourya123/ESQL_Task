@@ -1,26 +1,10 @@
-CREATE COMPUTE MODULE flowtp_Compute
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        CALL CopyEntireMessage();
-        RETURN TRUE;
-    END;
-
-    CREATE PROCEDURE CopyEntireMessage() 
-    BEGIN
-        DECLARE amazon_ns NAMESPACE 'http://amazon.com/orders';
-        DECLARE flipkart_ns NAMESPACE 'http://flipkart.com/orders';
-
-        -- Define root and namespaces
-        SET OutputRoot.XMLNSC.Orders = NULL; 
-        SET OutputRoot.XMLNSC.(XML.NamespaceDecl)amazon = 'http://amazon.com/orders';
-        SET OutputRoot.XMLNSC.(XML.NamespaceDecl)flipkart = 'http://flipkart.com/orders';
-
-        -- Copy Amazon Order
-        SET OutputRoot.XMLNSC.Orders.amazon:Order.ID = InputRoot.XMLNSC.amazon_ns:Order.ID;
-        SET OutputRoot.XMLNSC.Orders.amazon:Order.Customer = InputRoot.XMLNSC.amazon_ns:Order.Customer;
-
-        -- Copy Flipkart Order
-        SET OutputRoot.XMLNSC.Orders.flipkart:Order.ID = InputRoot.XMLNSC.flipkart_ns:Order.ID;
-        SET OutputRoot.XMLNSC.Orders.flipkart:Order.Customer = InputRoot.XMLNSC.flipkart_ns:Order.Customer;
-    END;
-END MODULE;
+While we are having an activity of CBS DC migration we request you to kindly do the following changes while migrating.       
+ mqm user creation
+        2 ) INSTALL MQ 7.5
+        3 ) SCP CAPTIALWARE FOLDER (/usr/mqm) To New DC Server
+        4) crontab Access to mqm User
+        5) File permission access to mqm server.
+        6) Access Java to mqm user.
+       7) mqm user creation
+        
+       This all steps need to Be executed while migrating to NEW CBS DC Server.
