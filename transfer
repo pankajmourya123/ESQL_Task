@@ -1,43 +1,22 @@
+DECLARE count INT 0;
+
+-- Loop through the array and count the elements
+FOR P AS InputRoot.JSON.Data[] DO
+    SET count = count + 1;
+END FOR;
+
+-- Set the count in the output
+SET OutputRoot.JSON.Data.Count = count;
 
 
-CREATE COMPUTE MODULE flowtp_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;	
+DECLARE count INT 0;
 
+-- Loop through the array and count occurrences of a specific roll_no
+FOR P AS InputRoot.JSON.Data[] DO
+    IF P.roll_no = '12345' THEN
+        SET count = count + 1;
+    END IF;
+END FOR;
 
-	CREATE PROCEDURE CopyEntireMessage()
-	BEGIN
-
-		
-
-		SET OutputRoot.JSON.Data.Part[] = SELECT
-		P.name,
-		P.roll_no,
-		P.age,
-		COUNT(P.roll_no) AS TotalParts,  
-		FROM InputRoot.JSON.Data[] AS P;		
-
-
-
-	END;
-
-END MODULE;
-
-{
-"name":"pankaj",
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"roll_no":90,
-"age":23,
-"age":67
-
-}    
+-- Set the count for this specific roll_no in the output
+SET OutputRoot.JSON.Data.Count = count;
