@@ -1,5 +1,27 @@
-{
-  "name": "pankaj",
-  "roll_no": [90, 90, 90, 90, 90, 90, 90, 90, 90],
-  "age": [23, 67]
-}
+<ArticleDetails>
+
+    <Article>
+        <Name>Nana Pencil</Name>
+        <Quantity>10</Quantity>
+        <Price Unit="INR">50</Price>
+    </Article>
+
+    <Article>
+        <Name>Rane Pen</Name>
+        <Quantity>20</Quantity>
+        <Price Unit="INR">60</Price>
+    </Article>
+
+    <Article>
+        <Name>Sama Book</Name>
+        <Quantity>14</Quantity>
+        <Price Unit="INR">500</Price>
+    </Article>
+
+    <Article>
+        <Name>Rane Copy</Name>
+        <Quantity>16</Quantity>
+        <Price Unit="INR">400</Price>
+    </Article>
+
+</ArticleDetails>
