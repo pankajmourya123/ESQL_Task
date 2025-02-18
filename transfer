@@ -1,22 +1,23 @@
-DECLARE count INT 0;
+Input {
+"name":"pankaj",
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"roll_no":90,
+"age":23,
+"age":67
 
--- Loop through the array and count the elements
-FOR P AS InputRoot.JSON.Data[] DO
-    SET count = count + 1;
-END FOR;
+}    
 
--- Set the count in the output
-SET OutputRoot.JSON.Data.Count = count;
+output {}
 
-
-DECLARE count INT 0;
-
--- Loop through the array and count occurrences of a specific roll_no
-FOR P AS InputRoot.JSON.Data[] DO
-    IF P.roll_no = '12345' THEN
-        SET count = count + 1;
-    END IF;
-END FOR;
-
--- Set the count for this specific roll_no in the output
-SET OutputRoot.JSON.Data.Count = count;
+code SET OutputRoot.JSON.Data.Part[] =( SELECT
+		p.age
+		FROM InputRoot.JSON.Data[] AS p
+		WHERE p.age>25
+		);
