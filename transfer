@@ -1,15 +1,11 @@
-DECLARE ptrException REFERENCE TO InputExceptionList;
-MOVE ptrException FIRSTCHILD;  -- Move to the first child
+MOVE cursor FIRSTCHILD TYPE Name NAME 'Field1';
 
-DECLARE i INTEGER 1;  -- Initialize counter
-
-WHILE LASTMOVE(ptrException) DO  -- Loop until no more children
-    SET OutputRoot.JSON.Data.Exception[i].Number = ptrException.Number;
-    SET OutputRoot.JSON.Data.Exception[i].Text = ptrException.Text;
-    SET OutputRoot.JSON.Data.Exception[i].Type = FIELDNAME(ptrException);
-    
-    -- Move to the next sibling (next exception)
-    MOVE ptrException NEXTSIBLING;
-    
-    SET i = i + 1;
-END WHILE
+WHILE LASTMOVE(sourceCursor) DO
+  SET targetCursor.ItemNumber  = sourceCursor.item;
+  SET targetCursor.Description = sourceCursor.name;
+  SET targetCursor.Price       = sourceCursor.prc;
+  SET targetCursor.Tax         = sourceCursor.prc * 0.175;
+  SET targetCursor.quantity    = 1;
+  CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
+  MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
+END WHILE;
