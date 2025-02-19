@@ -1,11 +1,24 @@
-MOVE cursor FIRSTCHILD TYPE Name NAME 'Field1';
+DECLARE sourceCursor REFERENCE TO InputExceptionList;
+MOVE sourceCursor FIRSTCHILD TYPE Name NAME 'Exception';  -- Move to the first exception
 
-WHILE LASTMOVE(sourceCursor) DO
-  SET targetCursor.ItemNumber  = sourceCursor.item;
-  SET targetCursor.Description = sourceCursor.name;
-  SET targetCursor.Price       = sourceCursor.prc;
-  SET targetCursor.Tax         = sourceCursor.prc * 0.175;
-  SET targetCursor.quantity    = 1;
-  CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
-  MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
+DECLARE targetCursor REFERENCE TO OutputRoot.JSON.Data.Exception[1]; -- Initialize the target reference
+DECLARE i INTEGER 1;  -- Initialize counter
+
+WHILE LASTMOVE(sourceCursor) DO  -- Loop until no more children
+    SET targetCursor.Number = sourceCursor.Number;
+    SET targetCursor.Text = sourceCursor.Text;
+    SET targetCursor.Type = FIELDNAME(sourceCursor);
+    
+    -- Extract deeper exception details
+    SET targetCursor.Text5 = sourceCursor.ParserException.ParserException.Text;
+    SET targetCursor.Text1 = sourceCursor.ParserException.ParserException.Insert[5].Text;
+    SET targetCursor.Text2 = sourceCursor.ParserException.ParserException.Insert[1].Text;
+
+    -- Create the next sibling for the next exception
+    CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
+    
+    -- Move to the next exception in the list
+    MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
+    
+    SET i = i + 1;
 END WHILE;
