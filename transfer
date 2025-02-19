@@ -1,5 +1,15 @@
-MOVE ptrException LASTCHILD;
-IF LASTMOVE(ptrException) THEN
-    SET OutputRoot.JSON.Data.LastExceptionNumber = ptrException.Number;
-    SET OutputRoot.JSON.Data.LastExceptionText = ptrException.Text;
-END IF;
+DECLARE ptrException REFERENCE TO InputExceptionList;
+MOVE ptrException FIRSTCHILD;  -- Move to the first child
+
+DECLARE i INTEGER 1;  -- Initialize counter
+
+WHILE LASTMOVE(ptrException) DO  -- Loop until no more children
+    SET OutputRoot.JSON.Data.Exception[i].Number = ptrException.Number;
+    SET OutputRoot.JSON.Data.Exception[i].Text = ptrException.Text;
+    SET OutputRoot.JSON.Data.Exception[i].Type = FIELDNAME(ptrException);
+    
+    -- Move to the next sibling (next exception)
+    MOVE ptrException NEXTSIBLING;
+    
+    SET i = i + 1;
+END WHILE
