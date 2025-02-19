@@ -1,23 +1,5 @@
-DECLARE sourceCursor REFERENCE TO InputExceptionList;
-DECLARE targetCursor REFERENCE TO OutputRoot.JSON.Data.Exception;
-
--- Initialize sourceCursor to the first ParserException
-MOVE sourceCursor FIRSTCHILD TYPE Name NAME 'ParserException';
-
--- Ensure the target field exists before using it
-CREATE LASTCHILD OF OutputRoot.JSON.Data AS targetCursor;
-
-WHILE LASTMOVE(sourceCursor) DO
-    -- Copy values safely
-    SET targetCursor.Number = sourceCursor.Number;
-    SET targetCursor.Text = sourceCursor.Text;
-    SET targetCursor.Type = FIELDNAME(sourceCursor);
-
-    -- Move to the next sibling
-    MOVE sourceCursor NEXTSIBLING TYPE Name;
-    
-    -- Create the next target sibling only if another ParserException exists
-    IF LASTMOVE(sourceCursor) THEN
-        CREATE NEXTSIBLING OF targetCursor AS targetCursor;
-    END IF;
-END WHILE;
+MOVE ptrException LASTCHILD;
+IF LASTMOVE(ptrException) THEN
+    SET OutputRoot.JSON.Data.LastExceptionNumber = ptrException.Number;
+    SET OutputRoot.JSON.Data.LastExceptionText = ptrException.Text;
+END IF;
