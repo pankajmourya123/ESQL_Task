@@ -1,24 +1,105 @@
+BIP2087E: Integration node 'test' was unable to process the internal configuration message. 
+
+The entire internal configuration message failed to be processed successfully. 
+
+Use the messages following this message to determine the reasons for the failure. If the problem cannot be resolved after reviewing these messages, contact your IBM Support center. Enabling service trace may help determine the cause of the failure.
+
+BIP4041E: Integration server 'default' received an administration request that encountered an exception. 
+
+While attempting to process an administration request, an exception was encountered. No updates have been made to the configuration of the integration server. 
+
+Review related error messages to determine why the administration request failed.
+
+BIP4001E: Syntax error in SQL statements in node 'sub.Compute'. 
+
+The configuration failed due to errors in the SQL statement text. See the following messages for details of the error 
+
+The following error messages will give specific details of the location and nature of the error. Check and correct the syntax of the SQL statements and redeploy.
+
+BIP2432E: (.sub_Compute.CopyEntireMessage, 6.16) : The correlation name 'cursor' is not valid. Those in scope are: Environment, InputLocalEnvironment, OutputLocalEnvironment, InputRoot, InputBody, InputProperties, OutputRoot, InputExceptionList, OutputExceptionList, InputDestinationList, OutputDestinationList, sourceCursor. 
+
+The first element of a field reference must be a valid correlation name, from those in scope. This message may sometimes be due to an incorrectly formed or spelled expression which is not intended to be a field reference being parsed as if it were a field reference because the parser does not recognize it. 
+
+Correct the syntax of your ESQL expression in node '.sub_Compute.CopyEntireMessage', around line and column '6.16', then redeploy the message flow.
+
+BIP2871I: The request made by user 'CEDGE\Pankaj.m' to 'deploy' the resource 'C:/Users/pankaj.m/IBM/IIBT10/workspace/GeneratedBarFiles/appproject.generated.bar' of type 'BAR' on parent 'default' of type 'ExecutionGroup' has the status of 'FAILED'.
+
 DECLARE sourceCursor REFERENCE TO InputExceptionList;
-MOVE sourceCursor FIRSTCHILD TYPE Name NAME 'Exception';  -- Move to the first exception
+          MOVE cursor FIRSTCHILD TYPE Name NAME 'ParserException';
+		DECLARE targetCursor REFERENCE TO OutputRoot.JSON.Data.Exception;
+        
+		WHILE LASTMOVE(sourceCursor) DO
+			SET targetCursor.Number = sourceCursor.Number;
+			SET targetCursor.Text = sourceCursor.Text;
+			SET targetCursor.Type = FIELDNAME(sourceCursor);
+			CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
+			MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
+		END WHILE;		
 
-DECLARE targetCursor REFERENCE TO OutputRoot.JSON.Data.Exception[1]; -- Initialize the target reference
-DECLARE i INTEGER 1;  -- Initialize counter
 
-WHILE LASTMOVE(sourceCursor) DO  -- Loop until no more children
-    SET targetCursor.Number = sourceCursor.Number;
-    SET targetCursor.Text = sourceCursor.Text;
-    SET targetCursor.Type = FIELDNAME(sourceCursor);
-    
-    -- Extract deeper exception details
-    SET targetCursor.Text5 = sourceCursor.ParserException.ParserException.Text;
-    SET targetCursor.Text1 = sourceCursor.ParserException.ParserException.Insert[5].Text;
-    SET targetCursor.Text2 = sourceCursor.ParserException.ParserException.Insert[1].Text;
+ExceptionList
+	ParserException
+			File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\MessageServices\ImbRootParser.cpp
+			Line:INTEGER:879
+			Function:CHARACTER:ImbRootParser::parseNextItem
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:flowtp#FCMComposite_1_1
+			Label:CHARACTER:flowtp.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:2
+			Number:INTEGER:5902
+			Text:CHARACTER:Exception whilst parsing
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:Root
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:XMLNSC
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:3c41727469636c6544657461696c733e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e2050656e63696c3c2f4e616d653e0d0a20202020202020203c5175616e746974793e31303c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e35303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e50656e3c2f4e616d653e0d0a20202020202020203c5175616e746974793e32303c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e36303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e20426f6f6b3c2f4e616d653e0d0a20202020202020203c5175616e746974793e31343c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e3530303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e52616e6520436f70793c2f4e616d653e0d0a20202020202020203c5175616e746974793e31363c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e3430303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a3c2f41727469636c6544657461696c73
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:flowtp.HTTP Input
+			ParserException
+					File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCParser.cpp
+					Line:INTEGER:1070
+					Function:CHARACTER:ImbXMLNSCParser::parseLastChild
+					Type:CHARACTER:
+					Name:CHARACTER:
+					Label:CHARACTER:
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:5009
+					Text:CHARACTER:XML Parsing Errors have occurred
+					ParserException
+							File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCDocHandler.cpp
+							Line:INTEGER:769
+							Function:CHARACTER:ImbXMLNSCDocHandler::handleParseErrors
+							Type:CHARACTER:ComIbmWSInputNode
+							Name:CHARACTER:flowtp#FCMComposite_1_1
+							Label:CHARACTER:flowtp.HTTP Input
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:5004
+							Text:CHARACTER:An XML parsing error has occurred while parsing the XML document
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:1518
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:2
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:27
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:3
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:The end-tag for element type "ArticleDetails" must end with a ''>'' delimiter.
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:/Root/XMLNSC/ArticleDetails
 
-    -- Create the next sibling for the next exception
-    CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
-    
-    -- Move to the next exception in the list
-    MOVE sourceCursor NEXTSIBLING REPEAT TYPE NAME;
-    
-    SET i = i + 1;
-END WHILE;
+i want pringt each child information one by one 
