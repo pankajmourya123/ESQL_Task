@@ -1,27 +1,259 @@
-<ArticleDetails>
+ExceptionList
+	RecoverableException
+			File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
+			Line:INTEGER:1251
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:flow1#FCMComposite_1_1
+			Label:CHARACTER:flow1.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:flow1.HTTP Input
+			RecoverableException
+					File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\SQLNodeLibrary\ImbComputeNode.cpp
+					Line:INTEGER:515
+					Function:CHARACTER:ImbComputeNode::evaluate
+					Type:CHARACTER:ComIbmComputeNode
+					Name:CHARACTER:flow1#FCMComposite_1_7
+					Label:CHARACTER:flow1.Compute1
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:2230
+					Text:CHARACTER:Caught exception and rethrowing
+					Insert
+							Type:INTEGER:14
+							Text:CHARACTER:flow1.Compute1
+					RecoverableException
+							File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlStatementGroup.cpp
+							Line:INTEGER:792
+							Function:CHARACTER:SqlStatementGroup::execute
+							Type:CHARACTER:
+							Name:CHARACTER:
+							Label:CHARACTER:
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:2488
+							Text:CHARACTER:Error detected, rethrowing
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:.flow1_Compute1.Main
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:4.3
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:CALL CopyEntireMessage();
+							RecoverableException
+									File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlRoutine.cpp
+									Line:INTEGER:1425
+									Function:CHARACTER:SqlRoutine::invoke
+									Type:CHARACTER:
+									Name:CHARACTER:
+									Label:CHARACTER:
+									Catalog:CHARACTER:BIPmsgs
+									Severity:INTEGER:3
+									Number:INTEGER:2934
+									Text:CHARACTER:Error occured in procedure
+									Insert
+											Type:INTEGER:5
+											Text:CHARACTER:CopyEntireMessage
+									RecoverableException
+											File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlStatementGroup.cpp
+											Line:INTEGER:792
+											Function:CHARACTER:SqlStatementGroup::execute
+											Type:CHARACTER:
+											Name:CHARACTER:
+											Label:CHARACTER:
+											Catalog:CHARACTER:BIPmsgs
+											Severity:INTEGER:3
+											Number:INTEGER:2488
+											Text:CHARACTER:Error detected, rethrowing
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:.flow1_Compute1.CopyEntireMessage
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:11.3
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:SET temp = CAST('ytre' AS INTEGER);
+											RecoverableException
+													File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\ImbRdl\ImbRdlTypeCast.cpp
+													Line:INTEGER:342
+													Function:CHARACTER:SqlTypeCast::evaluate
+													Type:CHARACTER:
+													Name:CHARACTER:
+													Label:CHARACTER:
+													Catalog:CHARACTER:BIPmsgs
+													Severity:INTEGER:3
+													Number:INTEGER:2521
+													Text:CHARACTER:Error casting from %3 to %4
+													Insert
+															Type:INTEGER:5
+															Text:CHARACTER:.flow1_Compute1.CopyEntireMessage
+													Insert
+															Type:INTEGER:5
+															Text:CHARACTER:11.13
+													Insert
+															Type:INTEGER:5
+															Text:CHARACTER:'ytre'
+													Insert
+															Type:INTEGER:5
+															Text:CHARACTER:INTEGER
+													ConversionException
+															File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\CommonServices\ImbUtility.cpp
+															Line:INTEGER:440
+															Function:CHARACTER:imbWcsToInt64
+															Type:CHARACTER:
+															Name:CHARACTER:
+															Label:CHARACTER:
+															Catalog:CHARACTER:BIPmsgs
+															Severity:INTEGER:3
+															Number:INTEGER:2595
+															Text:CHARACTER:Invalid characters
+															Insert
+																	Type:INTEGER:2
+																	Text:CHARACTER:-1
+															Insert
+																	Type:INTEGER:5
+																	Text:CHARACTER:S22018
+															Insert
+																	Type:INTEGER:5
+																	Text:CHARACTER:ytre
 
-    <Article>
-        <Name>Nana Pencil</Name>
-        <Quantity>10</Quantity>
-        <Price Unit="INR">50</Price>
-    </Article>
 
-    <Article>
-        <Name>Rane Pen</Name>
-        <Quantity>20</Quantity>
-        <Price Unit="INR">60</Price>
-    </Article>
 
-    <Article>
-        <Name>Sama Book</Name>
-        <Quantity>14</Quantity>
-        <Price Unit="INR">500</Price>
-    </Article>
+ExceptionList
+	ParserException
+			File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\MessageServices\ImbRootParser.cpp
+			Line:INTEGER:879
+			Function:CHARACTER:ImbRootParser::parseNextItem
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:flowtp#FCMComposite_1_1
+			Label:CHARACTER:flowtp.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:2
+			Number:INTEGER:5902
+			Text:CHARACTER:Exception whilst parsing
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:Root
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:XMLNSC
+			Insert
+					Type:INTEGER:5
+					Text:CHARACTER:3c41727469636c6544657461696c733e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e2050656e63696c3c2f4e616d653e0d0a20202020202020203c5175616e746974793e31303c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e35303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e50656e3c2f4e616d653e0d0a20202020202020203c5175616e746974793e32303c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e36303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e20426f6f6b3c2f4e616d653e0d0a20202020202020203c5175616e746974793e31343c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e3530303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a202020203c41727469636c653e0d0a20202020202020203c4e616d653e52616e6520436f70793c2f4e616d653e0d0a20202020202020203c5175616e746974793e31363c2f5175616e746974793e0d0a20202020202020203c507269636520556e69743d22494e52223e3430303c2f50726963653e0d0a202020203c2f41727469636c653e0d0a0d0a3c2f41727469636c6544657461696c73
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:flowtp.HTTP Input
+			ParserException
+					File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCParser.cpp
+					Line:INTEGER:1070
+					Function:CHARACTER:ImbXMLNSCParser::parseLastChild
+					Type:CHARACTER:
+					Name:CHARACTER:
+					Label:CHARACTER:
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:5009
+					Text:CHARACTER:XML Parsing Errors have occurred
+					ParserException
+							File:CHARACTER:F:\build\S1000_slot1\S1000_P\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCDocHandler.cpp
+							Line:INTEGER:769
+							Function:CHARACTER:ImbXMLNSCDocHandler::handleParseErrors
+							Type:CHARACTER:ComIbmWSInputNode
+							Name:CHARACTER:flowtp#FCMComposite_1_1
+							Label:CHARACTER:flowtp.HTTP Input
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:5004
+							Text:CHARACTER:An XML parsing error has occurred while parsing the XML document
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:1518
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:2
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:27
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:3
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:The end-tag for element type "ArticleDetails" must end with a ''>'' delimiter.
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:/Root/XMLNSC/ArticleDetails
 
-    <Article>
-        <Name>Rane Copy</Name>
-        <Quantity>16</Quantity>
-        <Price Unit="INR">400</Price>
-    </Article>
 
-</ArticleDetails>
+
+
+ CREATE COMPUTE MODULE sub_Compute
+ 	CREATE FUNCTION Main() RETURNS BOOLEAN
+ 	BEGIN
+ 		CALL CopyEntireMessage();
+ 		RETURN TRUE;
+ 	END;
+
+
+
+ 	CREATE PROCEDURE CopyEntireMessage() BEGIN
+
+
+ 		DECLARE i INTEGER 1;
+ 		DECLARE count INTEGER ;
+ 		SET count=CARDINALITY(InputExceptionList.*[]);
+ 		declare ptrException reference to InputExceptionList.*[1];
+
+ 		WHILE i<=count DO
+ 			
+ 			 SET OutputRoot.JSON.Data.Exception[i].Number=InputExceptionList.[i].Number;
+ 			SET OutputRoot.JSON.Data.Exception[i].Text=InputExceptionList.[i].Text;
+ 			SET OutputRoot.JSON.Data.Exception[i].Type=FIELDNAME(InputExceptionList.[i]);
+ 			
+ 			/*SET OutputRoot.JSON.Data.Exception[i].Text3=ptrException.Text;
+ 			SET OutputRoot.JSON.Data.Exception[i].Text4=ptrException.ParserException.Text;*/
+ 			
+ 			SET OutputRoot.JSON.Data.Exception[i].Text5=ptrException.ParserException.ParserException.Text;
+ 			SET OutputRoot.JSON.Data.Exception[i].Text1= ptrException.ParserException.ParserException.Insert[5].Text;
+ 			SET OutputRoot.JSON.Data.Exception[i].Text2= ptrException.ParserException.ParserException.Insert[1].Text;
+
+ 			SET i=i+1;
+ 		END WHILE;
+
+ 	END;
+ END MODULE;
+
+
+
+CREATE COMPUTE MODULE flow1_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;	
+
+
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		/*THROW USER EXCEPTION
+		SEVERITY 3
+		CATALOG 'BIPmsgs'
+		MESSAGE 2951
+		VALUES ('Parsing Exception:','Invalid data format detected','Error Code:',SQLCODE ,'SQL State:',SQLSTATE);*/
+		
+
+		DECLARE temp INTEGER;
+		SET temp =CAST( 'ytre' AS INTEGER);
+	END;
+	
+END MODULE;
