@@ -1,4 +1,21 @@
-	DECLARE childRef REFERENCE To ref.*[>];
+CREATE COMPUTE MODULE sub_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rootRef REFERENCE TO InputExceptionList;
+		CALL prcExc(rootRef);
+		RETURN TRUE;
+	END;
+
+
+
+	CREATE FUNCTION prcExc(IN ref REFERENCE)
+	BEGIN
+		
+		
+
+		
+
+		DECLARE childRef REFERENCE To ref.*[>];
 		SET OutputRoot.JSON.Data.Exception.LastExceptionNumber = childRef.Number;
 		SET OutputRoot.JSON.Data.Exception.LastExceptionText = childRef.Insert[5].Text || ' _____ ' || nodeName.Text;
 		SET OutputRoot.JSON.Data.Exception.Type = FIELDNAME(InputExceptionList.[1]);
