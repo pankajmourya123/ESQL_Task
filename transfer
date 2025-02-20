@@ -1,28 +1,47 @@
 CREATE COMPUTE MODULE sub_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		DECLARE rootRef REFERENCE TO InputExceptionList;
-		CALL prcExc(rootRef);
-		RETURN TRUE;
-	END;
 
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        DECLARE rootRef REFERENCE TO InputExceptionList;
+        CALL prcExc(rootRef);
+        RETURN TRUE;
+    END;
 
+    CREATE FUNCTION prcExc(IN ref REFERENCE)
+    BEGIN
+        -- Declare reference to iterate over child nodes
+        DECLARE childRef REFERENCE;
+        
+        -- Initialize childRef to the first child
+        SET childRef = ref.*[1];
 
-	CREATE FUNCTION prcExc(IN ref REFERENCE)
-	BEGIN
-		
-		
+        -- Process the current node
+        IF EXISTS(ref.Number) THEN
+            SET OutputRoot.JSON.Data.Exception.LastExceptionNumber = ref.Number;
+        END IF;
 
-		
+        IF EXISTS(ref.Insert[5].Text) THEN
+            SET OutputRoot.JSON.Data.Exception.LastExceptionText = ref.Insert[5].Text || ' _____ ' || FIELDNAME(ref);
+        END IF;
 
-		DECLARE childRef REFERENCE To ref.*[>];
-		SET OutputRoot.JSON.Data.Exception.LastExceptionNumber = childRef.Number;
-		SET OutputRoot.JSON.Data.Exception.LastExceptionText = childRef.Insert[5].Text || ' _____ ' || nodeName.Text;
-		SET OutputRoot.JSON.Data.Exception.Type = FIELDNAME(InputExceptionList.[1]);
-		
-		WHILE LASTMOVE(childRef) DO
-			CALL prcExc(childRef);
-			MOVE childRef NEXTSIBLING;
-		END WHILE;
+        IF EXISTS(InputExceptionList[1]) THEN
+            SET OutputRoot.JSON.Data.Exception.Type = FIELDNAME(InputExceptionList[1]);
+        END IF;
 
-	END;
+        -- Iterate over each child node using WHILE loop
+        WHILE LASTMOVE(childRef) DO
+            -- Process the child node (similar logic as above)
+            IF EXISTS(childRef.Number) THEN
+                SET OutputRoot.JSON.Data.Exception.LastExceptionNumber = childRef.Number;
+            END IF;
+
+            IF EXISTS(childRef.Insert[5].Text) THEN
+                SET OutputRoot.JSON.Data.Exception.LastExceptionText = childRef.Insert[5].Text || ' _____ ' || FIELDNAME(childRef);
+            END IF;
+
+            -- Move to the next sibling
+            MOVE childRef NEXTSIBLING;
+        END WHILE;
+    END;
+
+END MODULE;
