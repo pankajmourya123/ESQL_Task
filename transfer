@@ -1,34 +1,12 @@
+SET OutputRoot.JSON.Data.text[] = (
+    SELECT p.*
+    FROM InputRoot.JSON.Data[] AS p 
+    WHERE p.roll = 179
+);
 [
-    {
-    "name":"pankaj",
-    "roll":79,
-    "age":98
-},
-{
-    "name":"pankaj",
-    "roll":78,
-    "age":98
-},
-{
-    "name":"pankaj",
-    "roll":797,
-    "age":98
-},
-{
-    "name":"pankaj",
-    "roll":779,
-    "age":98
-},
-{
-    "name":"pankaj",
-    "roll":179,
-    "age":98
-}
- ]
-
-
-
-	SET OutputRoot.JSON.Data.text[]= ( SELECT
-		 InputRoot.JSON.Data.Item[]
-		FROM InputRoot.JSON.Data[] AS p WHERE  InputRoot.JSON.Data.Item.roll= 179) ; 
-		
+    {"name":"pankaj", "roll":79, "age":98},
+    {"name":"pankaj", "roll":78, "age":98},
+    {"name":"pankaj", "roll":797, "age":98},
+    {"name":"pankaj", "roll":779, "age":98},
+    {"name":"pankaj", "roll":179, "age":98}
+]
