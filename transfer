@@ -1,8 +1,17 @@
-SET OutputRoot.JSON.Data.text[] = (
-    SELECT p.*
-    FROM InputRoot.JSON.Data[] AS p 
-    WHERE p.roll = 179
-);
+DECLARE car INTEGER;
+		SET car =CARDINALITY(InputRoot.JSON.Data.Item[]);
+
+
+
+
+		DECLARE i INTEGER;
+		SET i = 1;
+		X : WHILE i <= car DO
+			SET OutputRoot.JSON.Data.text[i].roll= ( SELECT
+			InputRoot.JSON.Data.Item[i].roll
+			FROM InputRoot.JSON.Data where InputRoot.JSON.Data.Item[i].roll > 100 ) ;
+			SET i = i + 1;
+		END WHILE X;
 [
     {"name":"pankaj", "roll":79, "age":98},
     {"name":"pankaj", "roll":78, "age":98},
@@ -10,3 +19,112 @@ SET OutputRoot.JSON.Data.text[] = (
     {"name":"pankaj", "roll":779, "age":98},
     {"name":"pankaj", "roll":179, "age":98}
 ]
+{
+    "text": {},
+    "text": {},
+    "text": {
+        "roll": {
+            "roll": 797
+        }
+    },
+    "text": {
+        "roll": {
+            "roll": 779
+        }
+    },
+    "text": {
+        "roll": {
+            "roll": 179
+        }
+    }
+}
+LIST constructor function
+Last Updated: 2023-06-21
+The LIST constructor complex function is used to explicitly generate lists of values that can be assigned to fields in an output message.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+LIST
+{
+<< , <<
+expression
+}
+A LIST consists of a sequence of unnamed values. When assigned to an array field reference (indicated by [] suffixed to the last element of the reference), each value is assigned in sequence to an element of the array. A LIST cannot be assigned to a non-array field reference.
+
+Examples
+Example 1
+Given the following XML message input body:
+<Car>
+   <size>big</size>
+   <color>red</color>
+</Car> 
+
+The following ESQL:
+SET OutputRoot.XMLNS.Data.Result[] = LIST{InputBody.Car.color,
+                                                     'green',
+                                                     'blue'};
+
+produces the following results:
+<Data>
+   <Result>red</Result> 
+   <Result>green</Result>
+   <Result>blue</Result>
+</Data>
+
+In the case of a LIST, there is no explicit name associated with each value. The values are assigned in sequence to elements of the message field array specified as the target of the assignment. Curly braces rather than parentheses are used to surround the LIST items.
+Example 2
+Given the following XML input message body:
+<Data>
+   <Field>Keats</Field>
+   <Field>Shelley</Field>
+   <Field>Wordsworth</Field>
+   <Field>Tennyson</Field>
+   <Field>Byron</Field>
+</Data>
+
+the following ESQL:
+-- Copy the entire input message to the output message,
+-- including the XML message field array as above
+SET OutputRoot = InputRoot;
+SET OutputRoot.XMLNS.Data.Field[] = LIST{'Henri','McGough','Patten'};
+
+Produces the following output:
+<Data>
+   <Field>Henri</Field>
+   <Field>McGough</Field>
+   <Field>Patten</Field>
+</Data>
+
+The previous members of the Data.Field[] array have been discarded. Assigning a new list of values to an already existing message field array removes all the elements in the existing array before the new ones are assigned.
+SELECT function
+Last Updated: 2021-03-01
+The SELECT function combines, filters, and transforms complex message and database data.
+
+Syntax
+Read syntax diagramSkip visual syntax diagram
+    (1)                                                      
+>>-------SELECT--SelectClause--FromClause--+-------------+-----><
+                                           '-WhereClause-'   
+
+WHERE
+
+                       .-<<---- ,------ <<--------.        
+                       V                          |        
+|--SelectClause =  --+---Expression--+----------+-+----+--------|
+                     |               +-AS--Path-+      |   
+                     |               '-INSERT---'      |   
+                     +-ITEM--Expression----------------+   
+                     |         (2)                     |   
+                     '-+-COUNT-----+--(--Expression--)-'   
+                       +-MAX-------+                       
+                       +-MIN-------+                       
+                       '-SUM-------'                       
+
+|--FromClause =  --FROM----------------------------------------->
+
+   .-<<---- ,------ <<-----------------------.   
+   V                                         |   
+>----FieldReference--+---------------------+-+------------------|
+                     '-AS--CorrelationName-'     
+
+|--WhereClause =  --WHERE--Expression---------------------------|
