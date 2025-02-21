@@ -355,3 +355,29 @@ iib OUTWARD
 
 
 <!--*************************************ARGB Arunachal Pradesh Rural Bank END************************************************************-->
+
+CREATE COMPUTE MODULE EvalExample
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        -- Declare Output Message Reference
+        DECLARE OutputMsg REFERENCE TO OutputRoot.JSON.Data;
+        
+        -- Extract input values
+        DECLARE A INTEGER;
+        DECLARE B INTEGER;
+        DECLARE Operator CHARACTER;
+        
+        SET A = COALESCE(InputRoot.JSON.Data.A, 0);
+        SET B = COALESCE(InputRoot.JSON.Data.B, 0);
+        SET Operator = COALESCE(InputRoot.JSON.Data.Operator, '+'); -- Default to addition
+
+        -- Construct the expression dynamically
+        DECLARE Expression CHARACTER;
+        SET Expression = CAST(A AS CHARACTER) || Operator || CAST(B AS CHARACTER);
+
+        -- Evaluate the expression dynamically
+        SET OutputMsg.Result = EVAL(Expression);
+
+        RETURN TRUE;
+    END;
+END MODULE;
