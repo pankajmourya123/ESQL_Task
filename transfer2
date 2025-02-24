@@ -1,23 +1,22 @@
-
-
-CREATE COMPUTE MODULE flowtp_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
-
-	CREATE PROCEDURE CopyEntireMessage()
-	BEGIN     
-
-
-		 --set  OutputRoot=	InputRoot;  
-		
-		  SET OutputRoot.blob.blob.text=InputRoot.blob.blob;
-            SET OutputRoot.JSON.Data.text=InputRoot.blob.blob  LIKE '[0-9]%';
-                -- REPLACE(InputRoot.JSON.Data, 'A', 'AA')
-      -- RESULT = AABCDAABCDAABCDAA
-
-	END;
-
-END MODULE;<root></root>908
+CREATE PROCEDURE CopyEntireMessage()
+BEGIN     
+    DECLARE blobString CHARACTER;
+    
+    -- Convert Blob to String
+    SET blobString = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID 1208);
+    
+    -- Remove the last numeric character (0-9) if it exists
+    SET blobString = TRIM(TRAILING '0' FROM blobString);
+    SET blobString = TRIM(TRAILING '1' FROM blobString);
+    SET blobString = TRIM(TRAILING '2' FROM blobString);
+    SET blobString = TRIM(TRAILING '3' FROM blobString);
+    SET blobString = TRIM(TRAILING '4' FROM blobString);
+    SET blobString = TRIM(TRAILING '5' FROM blobString);
+    SET blobString = TRIM(TRAILING '6' FROM blobString);
+    SET blobString = TRIM(TRAILING '7' FROM blobString);
+    SET blobString = TRIM(TRAILING '8' FROM blobString);
+    SET blobString = TRIM(TRAILING '9' FROM blobString);
+    
+    -- Convert back to Blob
+    SET OutputRoot.BLOB.BLOB = CAST(blobString AS BLOB CCSID 1208);
+END;
