@@ -381,3 +381,9 @@ CREATE COMPUTE MODULE EvalExample
         RETURN TRUE;
     END;
 END MODULE;
+****************************************
+* Command: "C:\Program Files (x86)\IBM\WebSphere MQ\bin\strmqm" test
+****************************************
+AMQ6119: An internal IBM MQ error has occurred ()
+exitvalue = 71
+
