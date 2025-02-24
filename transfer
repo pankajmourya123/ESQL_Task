@@ -387,3 +387,37 @@ END MODULE;
 AMQ6119: An internal IBM MQ error has occurred ()
 exitvalue = 71
 
+Enter an Integration Bus command e.g.
+IIB toolkit, IIB help
+
+C:\Program Files\IBM\IIB\10.0.0.12>dspmq
+QMNAME(test)                                              STATUS(Ended immediately)
+QMNAME(test2)                                             STATUS(Ended immediately)
+
+C:\Program Files\IBM\IIB\10.0.0.12>dspmq -o all
+QMNAME(test)                                              STATUS(Ended immediately) DEFAULT(no) STANDBY(Not applicable) INSTNAME(Installation1) INSTPATH(C:\Program Files (x86)\IBM\WebSphere MQ) INSTVER(9.0.0.0)
+QMNAME(test2)                                             STATUS(Ended immediately) DEFAULT(no) STANDBY(Not applicable) INSTNAME(Installation1) INSTPATH(C:\Program Files (x86)\IBM\WebSphere MQ) INSTVER(9.0.0.0)
+
+C:\Program Files\IBM\IIB\10.0.0.12>net stop IBM MQSeries
+The syntax of this command is:
+
+NET STOP
+service
+
+
+C:\Program Files\IBM\IIB\10.0.0.12>NET STOP service IBM MQSeries
+The syntax of this command is:
+
+NET STOP
+service
+
+
+C:\Program Files\IBM\IIB\10.0.0.12>net start IBM MQSeries
+The service name is invalid.
+
+More help is available by typing NET HELPMSG 2185.
+
+
+C:\Program Files\IBM\IIB\10.0.0.12>
+
+C:\Program Files\IBM\IIB\10.0.0.12>
