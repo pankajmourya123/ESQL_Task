@@ -42,6 +42,7 @@ DECLARE blobstr CHARACTER;
 		SET blobstr = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID 1208);
 		SET temp=LEFT(blobstr,3);
 		SET blobstr = TRIM(LEADING temp FROM blobstr);
+SET OutputRoot.BLOB.BLOB=cast(blobstr as  Blob CCSID 1208);
 		CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNS') PARSE(blobstr,
 		InputProperties.Encoding,
 		InputProperties.CodedCharSetId);
