@@ -1,0 +1,23 @@
+
+
+CREATE COMPUTE MODULE flowtp_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage()
+	BEGIN     
+
+
+		 --set  OutputRoot=	InputRoot;  
+		
+		  SET OutputRoot.blob.blob.text=InputRoot.blob.blob;
+            SET OutputRoot.JSON.Data.text=InputRoot.blob.blob  LIKE '[0-9]%';
+                -- REPLACE(InputRoot.JSON.Data, 'A', 'AA')
+      -- RESULT = AABCDAABCDAABCDAA
+
+	END;
+
+END MODULE;<root></root>908
