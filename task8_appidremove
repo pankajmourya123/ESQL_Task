@@ -1,21 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 CREATE COMPUTE MODULE flowtp_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
@@ -39,10 +22,7 @@ CREATE COMPUTE MODULE flowtp_Compute
 		SET parseData=REPLACE(parseData, '908', '');
 		SET OutputRoot.XMLNS.root=REPLACE(parseData, '908', '');*/
 
-		DECLARE blobstr CHARACTER;
-		DECLARE temp CHARACTER;
-		DECLARE blobstr2 BLOB;
-		SET blobstr = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID 1208);
+		
 
 		 --SET blobstr = TRIM(LEADING '***' FROM blobstr);
 		/*SET blobstr = TRIM(LEADING '1' FROM blobstr);
@@ -54,12 +34,17 @@ CREATE COMPUTE MODULE flowtp_Compute
 		SET blobstr = TRIM(LEADING '7' FROM blobstr);
 		SET blobstr = TRIM(LEADING '8' FROM blobstr);
 		SET blobstr = TRIM(LEADING '9' FROM blobstr);*/
-		
-		 SET temp=LEFT(blobstr,3);
-	  	SET blobstr = TRIM(LEADING temp  FROM blobstr);
-	  	
-		 
-		 SET OutputRoot.BLOB.BLOB = CAST(blobstr AS BLOB CCSID 1208);
+
+
+DECLARE blobstr CHARACTER;
+		DECLARE temp CHARACTER;
+		DECLARE blobstr2 BLOB;
+		SET blobstr = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID 1208);
+		SET temp=LEFT(blobstr,3);
+		SET blobstr = TRIM(LEADING temp FROM blobstr);
+		CREATE LASTCHILD OF OutputRoot DOMAIN('XMLNS') PARSE(blobstr,
+		InputProperties.Encoding,
+		InputProperties.CodedCharSetId);
 		
 		
 		
