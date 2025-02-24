@@ -1,0 +1,22 @@
+app log if utr pass suceefully yeh show karta hai
+exception log mai dihk raha hai matlab voo utr fail ho gy hai hai 
+
+ek utr same time pe 2 dono jagah nhi rahe sakta hai 
+
+jab tak  utr process ho raha hai tab tak voo app log mai dikhega aur jaise hi voo exception dega uski entry exception log mai dikhigi
+
+
+database --> log---->mirror --> UFM 
+f --matlab sfms ko nhi gy hai
+p-- sfms ko gya hai 
+y-- rbi tak gya hai
+n-- rbi pe fail huaa hai
+o--
+
+
+
+cbs se pick nhi ho raha hai toh
+ufm restart
+ufm chaluu hai kya
+path sahi karoo
+
