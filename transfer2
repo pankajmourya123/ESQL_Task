@@ -1,39 +1,44 @@
-scp -P 2222 "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" iibadmin@10.43.49.53:/usr/bin/
-
-
-
-Microsoft Windows [Version 10.0.22631.4890]
-(c) Microsoft Corporation. All rights reserved.
-
-C:\Users\pankaj.m>ssh iibadmin@10.43.49.53
-
- #####################################################################################################
- # NOTICE TO USERS #
- # --------------- #
- # This computer system is the private property of C-edge Technologies Ltd, whether #
- # individual,corporate or government.It is for authorized use only.Users(authorized & unauthorized) #
- # have no explicit/implicit expectation of privacy. Any or all uses of this system and #
- # all files on this system may be intercepted, monitored, recorded, copied, audited, #
- # inspected, and disclosed to your employer, to authorized site, government, and/or #
- # law enforcement personnel, as well as authorized officials of government agencies, #
- # both domestic and foreign. By using this system, the user expressly consents to #
- # such interception, monitoring, recording, copying, auditing, inspection, and disclosure #
- # at the discretion of such officials. Unauthorized or improper use of this system may #
- # Restricted Page 18 result in civil andriminalpenalties and administrative or #
- # disciplinary action, as appropriate. By continuing to use this system you #
- # indicate your awareness of and consent to these terms and conditions of use. #
- # LOG OFF IMMEDIATELY if you do not agree to the conditions stated in this warning. #
- # #
- ####################################################################################################
-
-iibadmin@10.43.49.53's password:
-Activate the web console with: systemctl enable --now cockpit.socket
-
-Last login: Tue Feb 25 16:36:03 2025 from 10.43.49.53
-
-MQSI 12.0.12.5
-/opt/IBM/ace-12.0.12.5/server
-
-[iibadmin@dciibprod-uat ~]$ scp -P 2222 "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" iibadmin@10.43.49.53:/usr/bin/
-ssh: Could not resolve hostname c: Name or service not known
-[iibadmin@dciibprod-uat ~]$
+Command:	ls
+Error:	/usr/bin/amqsput.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Listing directory /usr/bin
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
+Error:	/usr/bin/amqsget.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Retrieving directory listing...
+Command:	ls
+Status:	Listing directory /usr/bin
+Status:	Directory listing successful
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" "amqsput.exe"
+Error:	/usr/bin/amqsget.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
+Status:	Retrieving directory listing...
+Command:	ls
+Error:	/usr/bin/amqsput.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
+Status:	Retrieving directory listing...
+Status:	Listing directory /usr/bin
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
+Error:	File transfer failed
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" "amqsput.exe"
+Error:	/usr/bin/amqsput.exe: open for write: permission denied
+Error:	File transfer failed
+Error:	/usr/bin/amqsget.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
+Status:	Retrieving directory listing...
+Command:	ls
+Status:	Listing directory /usr/bin
+Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
+Error:	/usr/bin/amqsget.exe: open for write: permission denied
+Error:	File transfer failed
+Status:	Retrieving directory listing...
+Command:	ls
+Status:	Listing directory /usr/bin
+Status:	Directory listing successful
