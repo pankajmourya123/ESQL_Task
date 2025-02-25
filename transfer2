@@ -1,44 +1,15 @@
-Command:	ls
-Error:	/usr/bin/amqsput.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Listing directory /usr/bin
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
-Error:	/usr/bin/amqsget.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Retrieving directory listing...
-Command:	ls
-Status:	Listing directory /usr/bin
-Status:	Directory listing successful
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" "amqsput.exe"
-Error:	/usr/bin/amqsget.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
-Status:	Retrieving directory listing...
-Command:	ls
-Error:	/usr/bin/amqsput.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
-Status:	Retrieving directory listing...
-Status:	Listing directory /usr/bin
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
-Error:	File transfer failed
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsput.exe" "amqsput.exe"
-Error:	/usr/bin/amqsput.exe: open for write: permission denied
-Error:	File transfer failed
-Error:	/usr/bin/amqsget.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Starting upload of C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe
-Status:	Retrieving directory listing...
-Command:	ls
-Status:	Listing directory /usr/bin
-Command:	put "C:\Program Files (x86)\IBM\WebSphere MQ\bin\amqsget.exe" "amqsget.exe"
-Error:	/usr/bin/amqsget.exe: open for write: permission denied
-Error:	File transfer failed
-Status:	Retrieving directory listing...
-Command:	ls
-Status:	Listing directory /usr/bin
-Status:	Directory listing successful
+ amqcrsta                                                 
+ amqldmpa                                   
+ amqlrepa                                  
+ amqmfsck                                   
+ amqrdbgm                                   
+ amqrfdm                                   
+ amqsget.exe                                
+ amqspdbg                                  
+ amqsput.exe 
+this is my exe file in bin floder but the also and the color of rest command lefting  amqsget.exe    and  amqsput.exe is bluer but this two has gerrn why it is not working
+[iibadmin@dciibprod-uat bin]$ asmqput A A
+bash: asmqput: command not found...
+[iibadmin@dciibprod-uat bin]$ asmqput.exe A A
+bash: asmqput.exe: command not found...
+[iibadmin@dciibprod-uat bin]$
