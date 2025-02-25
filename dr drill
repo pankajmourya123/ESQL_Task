@@ -81,6 +81,28 @@ isyle hum 2 queue use karenge cbsdr cbsdr1
  
  
  SFMS Dr Drill
-just change the sender channel ip but (check that the new ip is connected to iib)
-the reciever channel  change done by sfms
+just change the sender channel ip(ip of recievr channel ) but (check that the new ip is connected to iib (telnet maar ke ) )
+remote queue mai jaake bas ip change karte hai sometime port bhi agar bhi change huaa hai 
+
+step 1-- remote config 
+recervier channel ka ip port, reciver queue manager ka naam , reciver queue  ka naam ,apne transmission queue ka naam 
+
+step 2- transmission queue(bridge between channel and remote queue) 
+channel  ka naam 
+
+message kabhi bhi local queue mai aata hai
+remote queue use when ever we have send data from one queue manager to another queue manger
+
+channel-- path to send data from one queue manger to another queue manager
+listerner -- port number 
+
+
+persistent 
+
+
+
+
+
+
+
  
