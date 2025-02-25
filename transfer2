@@ -13,3 +13,20 @@ bash: asmqput: command not found...
 [iibadmin@dciibprod-uat bin]$ asmqput.exe A A
 bash: asmqput.exe: command not found...
 [iibadmin@dciibprod-uat bin]$
+[iibadmin@dciibprod-uat bin]$ asmqput A A
+bash: asmqput: command not found...
+[iibadmin@dciibprod-uat bin]$ asmqput.exe A A
+bash: asmqput.exe: command not found...
+[iibadmin@dciibprod-uat bin]$ ^C
+[iibadmin@dciibprod-uat bin]$ file  amqsput.exe
+amqsput.exe: PE32 executable (console) Intel 80386, for MS Windows
+[iibadmin@dciibprod-uat bin]$ wine  amqsput.exe  A A
+bash: wine: command not found...
+[iibadmin@dciibprod-uat bin]$ chmod +x  amqsput.exe ./ amqsput.exe A A
+chmod: changing permissions of './': Operation not permitted
+chmod: cannot access 'A': No such file or directory
+chmod: cannot access 'A': No such file or directory
+[iibadmin@dciibprod-uat bin]$ idd  amqsput.exe
+bash: idd: command not found...
+Similar command is: 'id'
+[iibadmin@dciibprod-uat bin]$
