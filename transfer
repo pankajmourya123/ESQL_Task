@@ -160,3 +160,29 @@
         </Actions>
       </WatchItem>
 <!--********************************RMGB END*******************************************************-->
+
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
+<UFM_Workflow>
+  <Global onerrorfail="N">
+    <LogFile>/tmp/mqm/sysout/ufm/CBS123_CEDGERRB_DONE_WORKFLOW.log</LogFile>
+    <Log4JFile>/opt/mqm/Capitalware/UFM/CBS_log4j.properties</Log4JFile>
+    <OnError>
+      <SendEmail xmlfile="CBS148_CEDGERRB_SENDEMAIL_DONE.xml" />
+    </OnError>
+  </Global>
+  
+  <Actions>
+
+    <MQReceive getwithconvert="N" run="D">
+      <MQ>
+        <MQFile>CBS_MQFILE.xml</MQFile>
+        <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+        <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
+      </MQ>
+    </MQReceive>
+
+  </Actions>
+</UFM_Workflow>
+
