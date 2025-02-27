@@ -185,4 +185,246 @@
 
   </Actions>
 </UFM_Workflow>
+------------------------------------------------------
 
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
+<UFM_Workflow>
+  <Global onerrorfail="N">
+    <LogFile>/tmp/mqm/sysout/ufm/CBS123_CEDGERRB_INWARD_WORKFLOW.log</LogFile>
+    <Log4JFile>/opt/mqm/Capitalware/UFM/CBS_log4j.properties</Log4JFile>
+    <OnError>
+      <SendEmail xmlfile="CBS148_CEDGERRB_SENDEMAIL_INWARD.xml" />
+    </OnError>
+  </Global>
+  
+  <Actions>
+
+    <MQReceive getwithconvert="N" run="D">
+      <MQ>
+        <MQFile>CBS_MQFILE.xml</MQFile>
+	    <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+        <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+      </MQ>
+    </MQReceive>
+
+  </Actions>
+</UFM_Workflow>
+----------------------------------------------------
+<!--*************************************RMGB START************************************************************-->
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/N02</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/INCOMING/N02</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/N09</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/RTGS-INCOMING-RBI/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+	  
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/N10</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/INCOMING/N10-INCOMING/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+	  
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/F27</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/INCOMING/OUTGOING-RESPONSE</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/N04</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/INCOMING/N04</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/972</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/OUTGOING/SOD</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+		  
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/inward/file_backup/RMGB/R41</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/INWARD/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+	  
+	  <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/inward/file_backup/RMGB/N03_N09</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/RTGS-INCOMING-RBI/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/inward/file_backup/RMGB/N10</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/N10-INCOMING/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/inward/file_backup/RMGB/SOD</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/SOD/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>	  
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/inward/file_backup/RMGB/EOD</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/EOD/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>	
+	  
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/inward/file_backup/RMGB/IFSC</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBCEDGERRB.TO.CBSDR.IN</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.IN.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/IFSC/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>		  
+<!--*************************************RMGB END************************************************************-->
