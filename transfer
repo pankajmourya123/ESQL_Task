@@ -1,240 +1,67 @@
-DONE
-
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
 <UFM_Workflow>
   <Global onerrorfail="N">
-    <LogFile>/tmp/mqm/sysout/ufm/CBS122_SBIRRB_DONE_WORKFLOW.log</LogFile>
+    <LogFile>/tmp/mqm/sysout/ufm/CBS123_RMGB_CEDGERRB_OUTWARD_WORKFLOW.log</LogFile>
     <Log4JFile>/opt/mqm/Capitalware/UFM/CBS_log4j.properties</Log4JFile>
     <OnError>
-      <SendEmail xmlfile="CBS149_SBIRRB_SENDEMAIL_DONE.xml" />
+      <SendEmail xmlfile="CBS148_CEDGERRB_SENDEMAIL_OUTWARD.xml" />
     </OnError>
   </Global>
-  
-  <Actions>
 
-    <MQReceive getwithconvert="N" run="D">
-      <MQ>
-        <MQFile>CBS_MQFILE.xml</MQFile>
-        <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-        <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-      </MQ>
-    </MQReceive>
-
-  </Actions>
-</UFM_Workflow>
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
-<UFM_Workflow>
-  <Global onerrorfail="N">
-    <LogFile>/tmp/mqm/sysout/ufm/CBS122_SBIRRB_INWARD_WORKFLOW.log</LogFile>
-    <Log4JFile>/opt/mqm/Capitalware/UFM/CBS_log4j.properties</Log4JFile>
-    <OnError>
-      <SendEmail xmlfile="CBS149_SBIRRB_SENDEMAIL_INWARD.xml" />
-    </OnError>
-  </Global>
-  
-  <Actions>
-
-    <MQReceive getwithconvert="N" run="D">
-      <MQ>
-        <MQFile>CBS_MQFILE.xml</MQFile>
-	    <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-        <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
-      </MQ>
-    </MQReceive>
-
-  </Actions>
-</UFM_Workflow>
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
-<UFM_Workflow>
-  <Global onerrorfail="N">
-    <LogFile>/tmp/mqm/sysout/ufm/CBS122_SBIRRB_OUTWARD_WORKFLOW.log</LogFile>
-    <Log4JFile>/opt/mqm/Capitalware/UFM/CBS_log4j.properties</Log4JFile>
-    <OnError>
-      <SendEmail xmlfile="CBS149_SBIRRB_SENDEMAIL_OUTWARD.xml" />
-    </OnError>
-  </Global>
-INWARD
   <Actions>
 
     <Watch pollinterval="5">
-
-
-
-<!--***********************************ARGB Arunachal Pradesh Rural Bank START***************************************************************-->
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/fns/hd/r/spool/Interfaces/NEFT/OUTGOING/RTGS-OUTGOING/</Directory>
-        <Extension>NEFT</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>CBS_MQFILE.xml</MQFile>
-              <QueueName>CBS149.TO.IIBSBIRRB.NEFT.OUT</QueueName>
-              <BackOutQName>CBS149.TO.IIBSBIRRB.NEFT.OUT.FAIL</BackOutQName>
-            </MQ>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/fns/hd/r/spool/Interfaces/NEFT/OUTGOING/N10-OUTGOING/</Directory>
-        <Extension>TXT</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>CBS_MQFILE.xml</MQFile>
-              <QueueName>CBS149.TO.IIBSBIRRB.NEFT.OUT</QueueName>
-              <BackOutQName>CBS149.TO.IIBSBIRRB.NEFT.OUT.FAIL</BackOutQName>
-            </MQ>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-          <WatchItem type="D">
-        <Directory sendonstartup="Y">/fns/hd/r/spool/Interfaces/RTGS/OUTWARD/</Directory>
+	
+<!--********************************RMGB START*******************************************************-->
+	  <WatchItem type="D">
+        <Directory sendonstartup="Y">/fns/rd/r/spool/Interfaces/RTGS/OUTWARD/</Directory>
         <Extension>RTGS</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>CBS_MQFILE.xml</MQFile>
-              <QueueName>CBS149.TO.IIBSBIRRB.RTGS.OUT</QueueName>
-              <BackOutQName>CBS149.TO.IIBSBIRRB.RTGS.OUT.FAIL</BackOutQName>
+              <QueueName>CBS148.TO.IIBCEDGERRB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS148.TO.IIBCEDGERRB.RTGS.OUT.FAIL</BackOutQName>
             </MQ>
           </MQSend>
         </Actions>
       </WatchItem>
 
-          <WatchItem type="D">
-        <Directory sendonstartup="Y">/fns/hd/r/spool/Interfaces/RTGS/RR42-OUTWARD/</Directory>
+	  <WatchItem type="D">
+        <Directory sendonstartup="Y">/fns/rd/r/spool/Interfaces/RTGS/RR42-OUTWARD/</Directory>
         <Extension>TXT</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>CBS_MQFILE.xml</MQFile>
-              <QueueName>CBS149.TO.IIBSBIRRB.RTGS.OUT</QueueName>
-              <BackOutQName>CBS149.TO.IIBSBIRRB.RTGS.OUT.FAIL</BackOutQName>
+              <QueueName>CBS148.TO.IIBCEDGERRB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS148.TO.IIBCEDGERRB.RTGS.OUT.FAIL</BackOutQName>
             </MQ>
           </MQSend>
         </Actions>
       </WatchItem>
 
-          <WatchItem type="D">
-        <Directory sendonstartup="Y">/fns/hd/r/spool/Interfaces/RTGS/N10-OUTWARD/</Directory>
+	  <WatchItem type="D">
+        <Directory sendonstartup="Y">/fns/rd/r/spool/Interfaces/NEFT/OUTGOING/</Directory>
         <Extension>TXT</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>CBS_MQFILE.xml</MQFile>
-              <QueueName>CBS149.TO.IIBSBIRRB.RTGSACK.OUT</QueueName>
-              <BackOutQName>CBS149.TO.IIBSBIRRB.RTGSACK.OUT.FAIL</BackOutQName>
+              <QueueName>CBS148.TO.IIBCEDGERRB.NEFT.OUT</QueueName>
+              <BackOutQName>CBS148.TO.IIBCEDGERRB.NEFT.OUT.FAIL</BackOutQName>
             </MQ>
           </MQSend>
         </Actions>
       </WatchItem>
 
-<!--***********************************ARGB Arunachal Pradesh Rural Bank END*****************************************************************-->
 
 
-
-
-iib OUTWARD 
- <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/neft/outward/file_backup/ARGB/N06</Directory>
-        <Extension>Done</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/NEFT/OUTGOING/RTGS-OUTGOING/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/neft/outward/file_backup/ARGB/N10</Directory>
-        <Extension>Done</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/NEFT/OUTGOING/N10-OUTGOING/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/outward/file_backup/ARGB/R41</Directory>
-        <Extension>Done</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/OUTWARD/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/outward/file_backup/ARGB/RR42</Directory>
-        <Extension>Done</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/RR42-OUTWARD/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-      <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/outward/file_backup/ARGB/N10</Directory>
-        <Extension>Done</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.DONE</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.DONE.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/N10-OUTWARD/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-<!--********************************ARGB Arunachal Pradesh Rural Bank END*********************************
+<!--********************************RMGB STOP*******************************************************-->
 
     </Watch>
 
@@ -242,182 +69,94 @@ iib OUTWARD
 </UFM_Workflow>
 
 
-<!--*************************************ARGB Arunachal Pradesh Rural Bank START************************************************************-->
+<!--********************************RMGB START*******************************************************-->
       <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/neft/inward/file_backup/ARGB/N02</Directory>
-        <Extension>TXT</Extension>
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/outward/file_backup/RMGB/N06</Directory>
+        <Extension>Done</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
+			  <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
             </MQ>
             <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/NEFT/INCOMING/N02/</Directory>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/OUTGOING/</Directory>
             </Remote>
           </MQSend>
         </Actions>
       </WatchItem>
 
       <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/neft/inward/file_backup/ARGB/N09</Directory>
-        <Extension>TXT</Extension>
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/neft/outward/file_backup/RMGB/N10</Directory>
+        <Extension>Done</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
+			  <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
             </MQ>
             <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/RTGS-INCOMING-RBI</Directory>
+              <Directory>/fns/rd/r/spool/Interfaces/NEFT/OUTGOING/N10-OUTGOING/</Directory>
             </Remote>
           </MQSend>
         </Actions>
       </WatchItem>
-	  
-	  
+
       <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/neft/inward/file_backup/ARGB/STAT</Directory>
-        <Extension>TXT</Extension>
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/outward/file_backup/RMGB/R41</Directory>
+        <Extension>Done</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
+			  <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
             </MQ>
             <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/NEFT/NEFT-R41-STAT</Directory>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/OUTWARD/</Directory>
             </Remote>
           </MQSend>
         </Actions>
       </WatchItem>
-	  	  
+
       <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/inward/file_backup/ARGB/R41</Directory>
-        <Extension>TXT</Extension>
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/outward/file_backup/RMGB/RR42</Directory>
+        <Extension>Done</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
+			  <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
             </MQ>
             <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/INWARD/</Directory>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/RR42-OUTWARD/</Directory>
             </Remote>
           </MQSend>
         </Actions>
       </WatchItem>
-	  
-	        <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/inward/file_backup/ARGB/SOD</Directory>
-        <Extension>TXT</Extension>
+
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/cedgerrb/rtgs/outward/file_backup/RMGB/N10</Directory>
+        <Extension>Done</Extension>
         <Actions>
           <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
+			  <QueueName>IIBCEDGERRB.TO.CBSDR.DONE</QueueName>
+              <BackOutQName>IIBCEDGERRB.TO.CBSDR.DONE.FAIL</BackOutQName>
             </MQ>
             <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/SOD/</Directory>
+              <Directory>/fns/rd/r/spool/Interfaces/RTGS/N10-OUTWARD/</Directory>
             </Remote>
           </MQSend>
         </Actions>
       </WatchItem>
-
-         <WatchItem type="D">
-        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/inward/file_backup/ARGB/EOD</Directory>
-        <Extension>TXT</Extension>
-        <Actions>
-          <MQSend delete="Y" format="S">
-            <File>${WATCH_FOUND_FILE}</File>
-            <MQ>
-              <MQFile>IIB_MQFILE.xml</MQFile>
-              <QueueName>IIBSBIRRB.TO.CBSDR.IN</QueueName>
-              <BackOutQName>IIBSBIRRB.TO.CBSDR.IN.FAIL</BackOutQName>
-            </MQ>
-            <Remote>
-              <Directory>/fns/hd/r/spool/Interfaces/RTGS/EOD/</Directory>
-            </Remote>
-          </MQSend>
-        </Actions>
-      </WatchItem>
-
-
-
-<!--*************************************ARGB Arunachal Pradesh Rural Bank END************************************************************-->
-
-CREATE COMPUTE MODULE EvalExample
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Declare Output Message Reference
-        DECLARE OutputMsg REFERENCE TO OutputRoot.JSON.Data;
-        
-        -- Extract input values
-        DECLARE A INTEGER;
-        DECLARE B INTEGER;
-        DECLARE Operator CHARACTER;
-        
-        SET A = COALESCE(InputRoot.JSON.Data.A, 0);
-        SET B = COALESCE(InputRoot.JSON.Data.B, 0);
-        SET Operator = COALESCE(InputRoot.JSON.Data.Operator, '+'); -- Default to addition
-
-        -- Construct the expression dynamically
-        DECLARE Expression CHARACTER;
-        SET Expression = CAST(A AS CHARACTER) || Operator || CAST(B AS CHARACTER);
-
-        -- Evaluate the expression dynamically
-        SET OutputMsg.Result = EVAL(Expression);
-
-        RETURN TRUE;
-    END;
-END MODULE;
-****************************************
-* Command: "C:\Program Files (x86)\IBM\WebSphere MQ\bin\strmqm" test
-****************************************
-AMQ6119: An internal IBM MQ error has occurred ()
-exitvalue = 71
-
-Enter an Integration Bus command e.g.
-IIB toolkit, IIB help
-
-C:\Program Files\IBM\IIB\10.0.0.12>dspmq
-QMNAME(test)                                              STATUS(Ended immediately)
-QMNAME(test2)                                             STATUS(Ended immediately)
-
-C:\Program Files\IBM\IIB\10.0.0.12>dspmq -o all
-QMNAME(test)                                              STATUS(Ended immediately) DEFAULT(no) STANDBY(Not applicable) INSTNAME(Installation1) INSTPATH(C:\Program Files (x86)\IBM\WebSphere MQ) INSTVER(9.0.0.0)
-QMNAME(test2)                                             STATUS(Ended immediately) DEFAULT(no) STANDBY(Not applicable) INSTNAME(Installation1) INSTPATH(C:\Program Files (x86)\IBM\WebSphere MQ) INSTVER(9.0.0.0)
-
-C:\Program Files\IBM\IIB\10.0.0.12>net stop IBM MQSeries
-The syntax of this command is:
-
-NET STOP
-service
-
-
-C:\Program Files\IBM\IIB\10.0.0.12>NET STOP service IBM MQSeries
-The syntax of this command is:
-
-NET STOP
-service
-
-
-C:\Program Files\IBM\IIB\10.0.0.12>net start IBM MQSeries
-The service name is invalid.
-
-More help is available by typing NET HELPMSG 2185.
-
-
-C:\Program Files\IBM\IIB\10.0.0.12>
-
-C:\Program Files\IBM\IIB\10.0.0.12>
+<!--********************************RMGB END*******************************************************-->
