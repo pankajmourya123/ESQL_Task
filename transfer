@@ -428,3 +428,14 @@
         </Actions>
       </WatchItem>		  
 <!--*************************************RMGB END************************************************************-->
+
+CBS XML
+<?xml version="2.0" encoding="ISO-8859-1"?>
+<!DOCTYPE UFM_MQ SYSTEM "UFM_MQ.dtd">
+<UFM_MQ>
+    <QMgrName>IIBPRODQMGR</QMgrName>
+    <Hostname>10.43.49.53</Hostname>
+    <ChannelName>PROD.DEV.SVRCONN</ChannelName>
+    <Port>1416</Port>
+</UFM_MQ>
+
