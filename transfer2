@@ -1,32 +1,36 @@
- amqcrsta                                                 
- amqldmpa                                   
- amqlrepa                                  
- amqmfsck                                   
- amqrdbgm                                   
- amqrfdm                                   
- amqsget.exe                                
- amqspdbg                                  
- amqsput.exe 
-this is my exe file in bin floder but the also and the color of rest command lefting  amqsget.exe    and  amqsput.exe is bluer but this two has gerrn why it is not working
-[iibadmin@dciibprod-uat bin]$ asmqput A A
-bash: asmqput: command not found...
-[iibadmin@dciibprod-uat bin]$ asmqput.exe A A
-bash: asmqput.exe: command not found...
-[iibadmin@dciibprod-uat bin]$
-[iibadmin@dciibprod-uat bin]$ asmqput A A
-bash: asmqput: command not found...
-[iibadmin@dciibprod-uat bin]$ asmqput.exe A A
-bash: asmqput.exe: command not found...
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$ mqrc 2058
+
+      2058  0x0000080a  MQRC_Q_MGR_NAME_ERROR
+[iibadmin@dciibprod-uat bin]$ dspmq
+QMNAME(IIBPRODQM)                                         STATUS(Running)
+QMNAME(IIBPRODQMGR)                                       STATUS(Running)
+QMNAME(AJAYQM)                                            STATUS(Ended normally)
+QMNAME(CCR)                                               STATUS(Running)
+QMNAME(LINUX)                                             STATUS(Running)
+QMNAME(QM1)                                               STATUS(Running)
+QMNAME(A)                                                 STATUS(Running)
+QMNAME(B)                                                 STATUS(Ended unexpectedly)
+QMNAME(C)                                                 STATUS(Ended unexpectedly)
 [iibadmin@dciibprod-uat bin]$ ^C
-[iibadmin@dciibprod-uat bin]$ file  amqsput.exe
-amqsput.exe: PE32 executable (console) Intel 80386, for MS Windows
-[iibadmin@dciibprod-uat bin]$ wine  amqsput.exe  A A
-bash: wine: command not found...
-[iibadmin@dciibprod-uat bin]$ chmod +x  amqsput.exe ./ amqsput.exe A A
-chmod: changing permissions of './': Operation not permitted
-chmod: cannot access 'A': No such file or directory
-chmod: cannot access 'A': No such file or directory
-[iibadmin@dciibprod-uat bin]$ idd  amqsput.exe
-bash: idd: command not found...
-Similar command is: 'id'
+[iibadmin@dciibprod-uat bin]$ ^C
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$ ./amqsput0 A pankaj
+-bash: ./amqsput0: No such file or directory
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$ ./amqsget A pankaj
+Sample AMQSGET0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$ mqrc 2058
+
+      2058  0x0000080a  MQRC_Q_MGR_NAME_ERROR
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
 [iibadmin@dciibprod-uat bin]$
