@@ -34,3 +34,31 @@ MQCONNX ended with reason code 2058
 Sample AMQSPUT0 start
 MQCONNX ended with reason code 2058
 [iibadmin@dciibprod-uat bin]$
+unable to open queue for output
+Sample AMQSPUT0 end
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj -m A
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$ netstat -an | grep 1414
+tcp6       0      0 :::1414                 :::*                    LISTEN
+[iibadmin@dciibprod-uat bin]$ strmqm A runmqlsr -m A -t tcp -p 1414
+AMQ7027E: Argument runmqlsr supplied to command strmqm is invalid.
+Usage: strmqm [-z] [-a | -c | -r | -x] [-d none|minimal|all] [-f]
+              [-ns] [-e CMDLEVEL=Level] [QMgrName]
+
+ -a   Activate the backup queue manager.
+ -c   Redefine the default and system objects, then stop the queue manager.
+ -d   Detail level for informational messages.
+ -e   Enable a command level's new functions, then stop the queue manager.
+ -f   Fix corrupt or missing data directories.
+ -ns  Do not start channel initiator, command server, services or listeners.
+      All connection authentication configuration is suppressed.
+ -r   Update the backup queue manager, but do not start it.
+ -x   Start an instance of a multi-instance queue manager.
+ -z   Suppress error messages.
+[iibadmin@dciibprod-uat bin]$ export MQSERVER="SYSTEM.DEF.SVRCONN/TCP/hostname(1414)"
+[iibadmin@dciibprod-uat bin]$ ./amqsput A pankaj -m A
+Sample AMQSPUT0 start
+MQCONNX ended with reason code 2058
+[iibadmin@dciibprod-uat bin]$
+
