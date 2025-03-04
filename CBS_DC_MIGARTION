@@ -205,6 +205,10 @@ This ensures that the environment is updated in the current session.
 > During DC Migration Example:
 If you're migrating to a new data center server (say, server 151) and you add a properly configured .profile file in /home/mqm on that server, every time the mqm user logs in to server 151, the system will automatically execute the .profile file. This guarantees that the environment is set up exactly as needed for running the applications.
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+sftp 
+phele naye server pe sftp user aur password create karna hogaa setdb params maarne  ke liye 
+
 
 
 
