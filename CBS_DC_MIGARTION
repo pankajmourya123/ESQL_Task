@@ -108,7 +108,7 @@ Aapko naye server pe mqm user ke liye crontab access set karna hoga.
 ✅ Crontab Enable Karna:
 
 sudo crontab -u mqm -e
-
+yaha pe hum crontab file mai mqm add kardenge 
 > Isme aap MQ services ke health check aur logs ke liye jobs schedule kar sakte hain.
 
 
