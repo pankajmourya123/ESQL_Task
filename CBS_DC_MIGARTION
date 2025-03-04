@@ -22,6 +22,9 @@ Step 8: Configure the .profile File
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------
 CBS DC Migration Process – Step-by-Step Flow
+Which --command to see which user currently 
+Whoiam -- to check user
+sudo su - to switch user
 
 Aapka CBS (Core Banking System) ka Data Center (DC) migration ho raha hai. Is process me IBM MQ 7.5 install karna hai, mqm user create karna hai, Capitalware folder transfer karna hai, aur environment configuration ke liye .profile file set up karna hai.
 Ab hum is pure process ko step-by-step samjhenge.
