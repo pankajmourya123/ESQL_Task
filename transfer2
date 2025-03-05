@@ -1,6 +1,136 @@
-[iibadmin@dciibprod-uat bin]$ ./amqsput  pakyaa A
-Sample AMQSPUT0 start
-target queue is pakyaa
-MQOPEN ended with reason code 2085
-unable to open queue for output
-Sample AMQSPUT0 end
+#********************************************************************#
+#*                                                                  *#
+#* <copyright                                                       *#
+#* notice="lm-source-program"                                       *#
+#* pids=""                                                          *#
+#* years="1994,2016"                                                *#
+#* crc="3878781346" >                                               *#
+#* Licensed Materials - Property of IBM                             *#
+#*                                                                  *#
+#*                                                                  *#
+#*                                                                  *#
+#* (C) Copyright IBM Corp. 1994, 2016 All Rights Reserved.          *#
+#*                                                                  *#
+#* US Government Users Restricted Rights - Use, duplication or      *#
+#* disclosure restricted by GSA ADP Schedule Contract with          *#
+#* IBM Corp.                                                        *#
+#* </copyright>                                                     *#
+#*                                                                  *#
+#********************************************************************#
+#***********************************************************************#
+#* Module Name: mqs.ini                                                *#
+#* Type       : IBM MQ Machine-wide Configuration File                 *#
+#* Function   : Define IBM MQ resources for an entire machine          *#
+#*                                                                     *#
+#***********************************************************************#
+#* Notes      :                                                        *#
+#* 1) This is the installation time default configuration              *#
+#*                                                                     *#
+#***********************************************************************#
+AllQueueManagers:
+   #********************************************************************#
+   #* The path to the qmgrs directory, below which queue manager data  *#
+   #* is stored                                                        *#
+   #********************************************************************#
+   DefaultPrefix=/var/mqm
+
+LogDefaults:
+   LogDefaultPath=/var/mqm/log
+QueueManager:
+   Name=IIBPRODQM
+   Prefix=/var/mqm
+   Directory=IIBPRODQM
+   InstallationName=Installation1
+QueueManager:
+   Name=IIBPRODQMGR
+   Prefix=/var/mqm
+   Directory=IIBPRODQMGR
+   InstallationName=Installation1
+QueueManager:
+   Name=AJAYQM
+   Prefix=/var/mqm
+   Directory=AJAYQM
+   InstallationName=Installation1
+QueueManager:
+   Name=CCR
+   Prefix=/var/mqm
+   Directory=CCR
+   InstallationName=Installation1
+QueueManager:
+   Name=LINUX
+   Prefix=/var/mqm
+   Directory=LINUX
+   InstallationName=Installation1
+QueueManager:
+   Name=QM1
+   Prefix=/var/mqm
+   Directory=QM1
+   InstallationName=Installation1
+QueueManager:
+   Name=A
+   Prefix=/var/mqm
+   Directory=A
+   InstallationName=Installation1
+QueueManager:
+   Name=B
+   Prefix=/var/mqm
+   Directory=B
+   InstallationName=Installation1
+QueueManager:
+   Name=C
+   Prefix=/var/mqm
+   Directory=C
+   InstallationName=Installation1
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Module Name: qm.ini                                             *#
+#* Type       : IBM MQ queue manager configuration file            *#
+#  Function   : Define the configuration of a single queue manager *#
+#*                                                                 *#
+#*******************************************************************#
+#* Notes      :                                                    *#
+#* 1) This file defines the configuration of the queue manager.    *#
+#* 2) The LogFilePages attribute is read-only and changes to it    *#
+#*    will have no effect.                                         *#
+#* 3) The LogType attribute is read-only and changes to it will    *#
+#*    have no effect. To change the log type of the queue manager  *#
+#*    use the migmqlog command.                                    *#
+#*                                                                 *#
+#*******************************************************************#
+ExitPath:
+   ExitsDefaultPath=/var/mqm/exits
+   ExitsDefaultPath64=/var/mqm/exits64
+#*                                                                 *#
+#*                                                                 *#
+Log:
+   LogPrimaryFiles=3
+   LogSecondaryFiles=2
+   LogFilePages=4096
+   LogType=CIRCULAR
+   LogBufferPages=0
+   LogPath=/var/mqm/log/A/
+   LogWriteIntegrity=TripleWrite
+Service:
+   Name=AuthorizationService
+   EntryPoints=14
+ServiceComponent:
+   Service=AuthorizationService
+   Name=MQSeries.UNIX.auth.service
+   Module=amqzfu
+   ComponentDataSize=0
+SSL:
+   AllowTLSV13=Yes
+   MinimumRSAKeySize=1
+Channels:
+   ChlauthEarlyAdopt=Yes
+   ChlauthIgnoreUserCase=No
+   MaxChannels=1000
+TCP:
+   SndBuffSize=0
+   RcvBuffSize=0
+   RcvSndBuffSize=0
+   RcvRcvBuffSize=0
+   ClntSndBuffSize=0
+   ClntRcvBuffSize=0
+   SvrSndBuffSize=0
+   SvrRcvBuffSize=0
+   SecureCommsOnly=NO
