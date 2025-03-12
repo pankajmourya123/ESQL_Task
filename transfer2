@@ -134,3 +134,80 @@ TCP:
    SvrSndBuffSize=0
    SvrRcvBuffSize=0
    SecureCommsOnly=NO
+Profile
+     RD
+	HOLDER_TYPE:CHARACTER:SELF
+	CUST_NAME:CHARACTER:CHANDENO YANTHAN  .
+	DOB:CHARACTER:24/01/1990
+	MOB_NO:CHARACTER:7989571232
+	NOMINEE:CHARACTER:NOT-REGISTERED
+	EMAIL_1:UNKNOWN:null
+	PAN:CHARACTER:AOIPY8189C          
+	CKYCCOMPLIANCE:CHARACTER:TRUE
+	ACCT_TYPE:CHARACTER:REGULAR
+	BRANCH_NO:CHARACTER:00013
+	COMPOUNDINGFREQUENCY:CHARACTER:MONTHLY
+	CURRENCY:CHARACTER:INR
+	CURR_BAL:DECIMAL:12000.000
+	DESCRIPT:CHARACTER:RD-GEN-PUB-IND-1YR - < 2 YR   
+	IFSC_CODE:CHARACTER:SBIN0RRNLGB
+	INTERESTCOMPUTATION:CHARACTER:COMPOUND
+	INTERESTONMATURITY:FLOAT:1346.185
+	INTERESTPAYOUT:CHARACTER:MATURITY
+	INTERESTPERIODICPAYOUTAMOUNT:DECIMAL:102.00000
+	INTEREST_RATE:DECIMAL:6.8000
+	MAT_AMT:FLOAT:37346.185
+	MAT_DT:CHARACTER:2025-05-31 00:00:00
+	OPENINGDATE:CHARACTER:31-MAY-2024
+	PRIN_AMT:FLOAT:36000.0
+	RECURR_AMT:FLOAT:3000.0
+	RECURR_DATE:CHARACTER:31
+	TENUREDAYS:FLOAT:0.0
+	TENUREMONTHS:FLOAT:0.0
+	TENUREYEARS:FLOAT:1.0
+	
+	
+	
+	
+	Summary accountType="FIXED" openingDate="" branch="" ifsc=""
+maturityAmount="10.0" maturityDate="2004-04-12" description=""
+interestPayout="HALF-YEARLY" interestRate="" principalAmount=""
+tenureDays="" tenureMonths="" tenureYears="" recurringAmount=""
+recurringDepositDay="" interestComputation="COMPOUND"
+compoundingFrequency="HALF-YEARLY" interestPeriodicPayoutAmount=""
+interestOnMaturity="" currentValue=""/>
+
+	
+	"summary": {
+                "CurrentBalance": 10181.000,
+                "Currency": "INR",
+                "ExchgeRate": " ",
+                "BalanceDateTime": "12-MAR-2025 18:41:26+05:30",
+                "Type": "SAVINGS",
+                "Branch": "00011",
+                "Facility": " ",
+                "IfscCode": "SBIN0RRNLGB",
+                "MicrCode": "797804003",
+                "OpeningDate": "25-FEB-2011",
+                "CurrentODLimit": 0,
+                "DrawingLimit": 0,
+                "Status": 0,
+                "Pending": {
+                    "amount": "0"
+                }
+            },
+			
+			
+			
+			                                  SET OutputRoot.JSON.Data.data.Account.summary.ACCT_TYPE = Profile.RD.ACCT_TYPE;
+			                                   SET OutputRoot.JSON.Data.data.Account.summary.CurrentBalance = Profile.RD.CURR_BAL;
+											        
+									           SET OutputRoot.JSON.Data.data.Account.summary.Currency = Profile.RD.CURRENCY;
+									           SET OutputRoot.JSON.Data.data.Account.summary.ExchgeRate = Profile.RD.EXCHGERATE;
+									           SET OutputRoot.JSON.Data.data.Account.summary.BalanceDateTime =Profile.RD.BALANCEDATETIME;
+									           SET OutputRoot.JSON.Data.data.Account.summary.Type = Profile.RD.TYPE;
+									           SET OutputRoot.JSON.Data.data.Account.summary.Branch = Profile.RD.BRANCH_NO;
+									           SET OutputRoot.JSON.Data.data.Account.summary.Facility = Profile.RD.FACILITY;
+									           SET OutputRoot.JSON.Data.data.Account.summary.IfscCode = Profile.RD.IFSC_CODE;
+									           SET OutputRoot.JSON.Data.data.Account.summary.MicrCode = Profile.RD.MICR_CODE;
+									           SET OutputRoot.JSON.Data.data.Account.summary.OpeningDate =Profile.RD.OPENING_DATE;
