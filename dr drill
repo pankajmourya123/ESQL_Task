@@ -1,28 +1,4 @@
-OUTWARD FLOW
-
-CBS -------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/    -------------> /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N06/ ------------> IIBWB.TO.CBSI43.DONE  ------> /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/-----------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/ 
-    cbs bhejega                                         UFM KA KAAM HAI                                                                             UFM KA KAAM HAI                                                                                     SFTP KE THROUGH
-														
-														
-CSB apne outward path pe rakhega aur yeh ouward path ko ufm continously watch karta rahta hai jsie hi koi nayii file is path  
-ufm usse apne path raktha hai phir apne path voo usee desire queue mai dalta hai phir is queue se iib data uthata hai aur apana
- kaam kaarta hai , usse file ko is path rakhta  /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/  phir yaha sfms sftp through
- apne path le leta hai  /Var/iib/interface/wb/netft/outward/file_backup/WBCBS/N10/-----------> fns/wd/r/spool/interfaces/RTGS/OUTWARD/ 
- 
- 
- 
- 
-INWARD FLOW        
-
-
-
-SFMS                                  IIB                              CBS 
- 
- 
- 
- 
- 
- DR DRILL   (ufm wala)
+  DR DRILL   (ufm wala)
  sabse phele hum check kearenge ki hamare server kinte banks hai yeh check karne ke liye humai yeh dekhna hogaa ki hamare csb outward ke file mai kitne bank hai 
  
  case 1 :: 1 server 1 bank   1 dr          ismai hum dc se hatke dr pe lejayenge matlab cbs_dc floder nahi banega
@@ -31,7 +7,7 @@ SFMS                                  IIB                              CBS
 										   karedenge matlab dc floder mai comment kar denge aur cbs_dr ke outward file srif 
 										   vahi bank rakhenge jo humne dc mai band kiya tha (comment kiya tha);
  
- case 3 :: 1 server mutiple banks    2 dr ismai hum ek dc floder banayenge jismai hum dono bank jo ki hii dc server pe hai usse bank ko comment karenge phir uske baad 
+ case 3 :: 1 server mutiple banks (1 iib 2 cbs)::   2 dr ismai hum ek dc floder banayenge jismai hum dono bank jo ki hii dc server pe hai usse bank ko comment karenge phir uske baad 
                                      ek parenty dr floder banaynge jismai bank1_dr floder mai cdb outward mai bank1 dc se utha kar dr pe run karvayege aur aur baaki floder mai queuename cbsdr kar denge 
                                      aur iib floder mai bhi saare file mai cbsdr kare denge 
                                      ab dusre banke ke liye haum dr floder mai ek bank2_dr floder banayenge aur cbd outward flow yeh bank2 run karvenage aur baaki sab floder queuename cbsdr1 qeue naame denge 
@@ -49,8 +25,11 @@ path2                           path2           |   path2                 path2
 ab yaha pe kya hogaa agar 155 waala bank path1 se queue1 daalga aur posssibilty hai voo bank2 156 path2 daal de kyu dono ka queue naam same hai aur 155 wale  bank ko 156 waale bank ka path milega hi nahi toh phir lafdaa hogaa
 isyle hum 2 queue use karenge cbsdr cbsdr1 
  
- 
- 
+ case 4(2 iiib ek cbs) ::1 bank is on 209 and 1 bank is on 12 aur aur dodno ek hi new dc pe jaa rahe hai toh hum kya karenge iib ke iib_mqfile.xml pe change karenge jo 209 usmai ip 209 aur 
+         aur jo 12 pe hai usmai 12 mention karenge ip
+
+
+
  DR DRILL (SFTP)
  ismai kya karenge ki gateway mai jayenge aur check katrenge konsi bank ka dr drill hai aur usse
  bank ko open karenge mai usse user web interface open karenge rigth click karke ab apne application mai
