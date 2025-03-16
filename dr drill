@@ -42,7 +42,8 @@ isyle hum 2 queue use karenge cbsdr cbsdr1
  ab yaha par humne nor/no7 ke node ya message bolsakte usko hi kiya aur baaki n10 aur rtgs aur inward dono humai karnga hoga but hum  mqsisetdbparms DUMMYBROKER -n ftp::DUMMYFTP -u dummy\\user -p abcdef 
  yaha par appsid se jab hum command exexute toh usee bank saare node yaa pe reflect hogaa 
  
- 
+ ace yaani 12 version mai hum policy mai jaake change karenge 
+
  
  testing 
  agar hum neft outward ke code mai change kar rahe hai toh kya uska effect rtgs outward pe dikhega kya?
