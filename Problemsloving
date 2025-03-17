@@ -20,3 +20,54 @@ ufm restart
 ufm chaluu hai kya
 path sahi karoo
 
+
+<WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/sbi/rtgs/outward/file_backup/UTGB/R41</Directory>
+        <Extension>Done</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S"> --String Format y means file picked onece it will be delete 
+            <File>${WATCH_FOUND_FILE}</File>  -- placeholder for actual file name 
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBSBIRRB.TO.CBS148.DONE</QueueName>
+              <BackOutQName>IIBSBIRRB.TO.CBS148.DONE.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/td/r/spool/Interfaces/RTGS/OUTWARD/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+
+file is picked fron no6 and get deleted from no6 and after it goes to done queue and after from there its go to cbs path
+so cbs path is wrong then file will be lost if we not configure any backout queue of that qlocal 
+if we specify the backout queue then it will in backout qeue
+in case suppose your backout is get full or we not configure any backout queue in that suppose we configure dead letter queue then the transaction go in that 
+dead letter queue ( transcation also present mirror queue)
+if dead letter also not configure then transaction get losted
+
+
+suppose in case your 10 transaction get lost then waht will we do because cbs wrong path or wrong queue name ?
+then first of all we stop that particular bank ufm and kill that process
+after ward we can manually take that 10 transaction transaction from the mirror queue or any wrong queue and put it into desire queue and cbs we pick that transcation from
+that queue 
+
+or we can 
+pass that 10 tarnsaction through your desire application we will put the 10 transaction in the starting queue of  application but here problem is that this lost 
+alreday present in database so we have manually delete those entry fromm the database and reprocess the transaction (By this way we reproccesd 1000 laost transaction also);
+we put message by using qload 
+
+suppose one is pass from iib to sfms and we have confirm that tarnsaction is passed from iib
+we will check the test queue if transaction is present in the test queue then 100% the transaction has passed from iib to sfms 
+
+we can say that starting point mirror queue means if transaction is present in mirror then tarnsaction has reached to iib
+ if transaction is present in the test queue then 100% the transaction has passed from iib to sfms 
+
+suppose transaction getting fail from 10 pm then we can get that message by using batch id( 48 batch in a day)
+
+
+
+
+
+
+
