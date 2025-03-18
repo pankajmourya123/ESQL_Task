@@ -1,3 +1,82 @@
+BROKER SCHEMA com.cedge.BeneNameMain
+
+PATH com.cedge.BeneNameFinder_EXP; 
+
+CREATE COMPUTE MODULE BenNameFinder_Compute
+	DECLARE Config EXTERNAL CHARACTER;
+	DECLARE PROP_LOC EXTERNAL CHARACTER '';
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE httpMethod CHARACTER;
+    
+    -- Get the HTTP method from the request
+    SET httpMethod = SUBSTRING(InputRoot.HTTPInputHeader."X-Original-HTTP-Command" FROM 1 FOR 4);
+
+    -- Allow only POST requests
+    IF httpMethod <> 'POST' THEN
+        SET OutputRoot.HTTPReplyHeader."Content-Type" = 'application/json';
+        SET OutputRoot.HTTPReplyHeader."X-Error-Message" = '405 Method Not Allowed';
+        SET OutputRoot.HTTPResponseHeader.StatusCode = 405;
+        
+        RETURN FALSE;
+    END IF;
+    
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1; 
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE inref REFERENCE TO InputRoot.XMLNSC.BeneNameLookUpApiRequest;
+		DECLARE payload, bankPrefix, IP, PORT,CBS_Details,requestString,result CHARACTER;
+		
+		DECLARE rc BOOLEAN; 
+		
+		CALL initLog4j(Config) INTO rc; 
+		SET payload = CAST(ASBITSTREAM(InputRoot.XMLNSC CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding); 
+		SET Environment.payload = payload;
+		 CALL log4j_1_1('BANL', 'BeneficiaryDetails', 'INFO','-------------------------START logging -------------------------') INTO rc;
+         CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','Request data:'||payload) INTO rc;
+         
+		SET Environment.Variables.IFSC = inref.IFSC;
+		SET Environment.Variables.AccountNumber = inref.account_number;
+		
+        SET bankPrefix = SUBSTRING(inref.IFSC FROM 1 FOR 4);
+		SET Environment.PROPFILE = PROP_LOC;
+		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','BankName:'||bankPrefix) INTO rc;
+		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','PropertieFilePath:'||PROP_LOC) INTO rc;
+		
+			 CALL GetPROP(bankPrefix,PROP_LOC) INTO CBS_Details;  
+			
+			 CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS IP and PORT:'||CBS_Details) INTO rc;
+             SET Environment.Variables.IP = SUBSTRING(CBS_Details BEFORE ' ');
+             SET Environment.Variables.PORT = SUBSTRING(CBS_Details AFTER ' ');
+             
+             
+        DECLARE accountNum CHARACTER FIELDVALUE(InputRoot.XMLNSC.BeneNameLookUpApiRequest.account_number);    
+        SET requestString = 'TX:: 0156                    **  000026    003000100000006163060460000000000     0         00000000        000000000000000000000000000000000000'||accountNum||'   5000000A';
+        SET Environment.Variables.TCPRequest = requestString;
+        CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS Req_STRING:'||requestString) INTO rc;
+        
+		       
+	END; 	
+END MODULE;
+ CREATE FUNCTION GetPROP(IN bankPrefix CHARACTER, IN PROP_LOC CHARACTER) RETURNS CHARACTER 
+LANGUAGE JAVA
+EXTERNAL NAME "com.cedge.BeneNameMain.CBS_Details.getIpAndPort";
+
+
+---------------------------------------------------------------------------
 package com.cedge.BeneNameMain;
 
 import com.ibm.broker.javacompute.MbJavaComputeNode;
@@ -85,167 +164,131 @@ public class BenNameFinder_JavaCompute extends MbJavaComputeNode {
         throw new MbUserException(this, "evaluate", "", "", "Error Code: " + errorCode + ", Message: " + errorMessage, null);
     }
 }
--------------------------------------------------------------------------------------------------BROKER SCHEMA com.cedge.AccountLinkingRequest
+----------------------------------------------------
+package com.cedge.BeneNameMain;
 
-PATH com.cedge.AccountLinkingRequest_Exp;
+import java.io.*;
 
+public class CBS_Details {
 
-CREATE COMPUTE MODULE AccountLinkingRequest_Compute
-	DECLARE ConfigFile EXTERNAL CHARACTER;
-	DECLARE DSN EXTERNAL CHARACTER ''; 
-	DECLARE SCHEMANAME EXTERNAL CHARACTER '';
-	DECLARE ACCOUNT_AGGREGATE_OTP EXTERNAL CHARACTER '';
-	DECLARE AA_BANK_IDENTITY EXTERNAL CHARACTER '';
-	
+	public static String getIpAndPort(String bankPrefix, String propFilePath) {
+
+		if (propFilePath == null || propFilePath.isEmpty()) {
+			return "Error: PROPFILE UDP is not set";
+		}
+
+		File file = new File(propFilePath);
+		if (!file.exists() || !file.canRead()) {
+			return "Error: File does not exist or cannot be read at path: " + propFilePath;
+		}
+
+		if (bankPrefix == null || bankPrefix.trim().length() != 4) {
+			return "Error: Invalid bank prefix. It must be exactly 4 characters.";
+		}
+
+		String output = "";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] parts = line.split("\\|");
+
+				if (parts.length < 3) {
+					continue;
+				}
+
+				String prefix = parts[0].trim();
+				String ip = parts[1].trim();
+				String port = parts[2].trim();
+
+				if (prefix.equalsIgnoreCase(bankPrefix)) {
+					output = ip + " " + port;
+					break;
+				}
+			}
+		} catch (IOException e) {
+			return "Error reading file: " + e.getMessage();
+		}
+
+		return output.isEmpty() ? "No matching bank found for prefix: " + bankPrefix : output;
+	}
+
+	public static void main(String[] args) {
+		// Test the function manually (not needed in ACE, but useful for debugging)
+		String propFilePath = "/var/config/cbs_details.txt"; // Replace with actual path
+		String bankPrefix = "HDFC"; // Example prefix
+
+		String result = getIpAndPort(bankPrefix, propFilePath);
+		System.out.println("Result: " + result);
+	}
+}
+---------------------------------------------------------
+BROKER SCHEMA com.cedge.BeneNameMain
+PATH com.cedge.BeneNameFinder_EXP; 
+
+CREATE COMPUTE MODULE BenNameFinder_Compute1
+	DECLARE Config EXTERNAL CHARACTER;
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
-		DECLARE httpMethod CHARACTER;
-    
-    -- Get the HTTP method from the request
-    SET httpMethod = SUBSTRING(InputRoot.HTTPInputHeader."X-Original-HTTP-Command" FROM 1 FOR 4);
-
-    -- Allow only POST requests
-    IF httpMethod <> 'POST' THEN
-        SET OutputRoot.HTTPReplyHeader."Content-Type" = 'application/json';
-        SET OutputRoot.HTTPReplyHeader."X-Error-Message" = '405 Method Not Allowed';
-        SET OutputRoot.HTTPResponseHeader.StatusCode = 405;
-        
-        RETURN FALSE;
-    END IF;
-
-    -- Continue processing for valid POST requests
+		-- CALL CopyMessageHeaders();
 		 CALL CopyEntireMessage();
 		RETURN TRUE;
 	END;
 
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
-	DECLARE inref REFERENCE TO InputRoot.JSON.Data;
- 
-	 
-	DECLARE cust_OTP DECIMAL RAND()*(10-2)+2;
-	SET cust_OTP = cust_OTP*100000000;
-	DECLARE OTP CHARACTER CAST (cust_OTP as CHARACTER); 
-	DECLARE S_OTP CHARACTER SUBSTRING(OTP FROM 1 FOR 6);
---DECLARE CRLF CHAR CAST(X'0D0A' AS CHAR CCSID 1208);
-
-	
-	DECLARE Text CHAR;  
-	DECLARE MyURL CHARACTER;
-	SET MyURL = 'https://http.myvfirst.com/smpp/sendsms';
-	DECLARE URL CHARACTER; 
-	DECLARE TS CHARACTER;   
-	SET TS = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'yyyyMMddHHmmss');
-    DECLARE refno CHARACTER;
-	SET refno = UUIDASCHAR;
-	DECLARE rc BOOLEAN;
-	DECLARE payload CHARACTER; 
-	
-	
-	CALL initLog4j(ConfigFile) INTO rc;
-		SET payload = CAST(ASBITSTREAM(InputRoot.JSON.Data CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding); 
+		DECLARE NAME, AccountNumber,IFSC,Response CHARACTER;
+		DECLARE rc BOOLEAN; 
+		CALL initLog4j(Config) INTO rc;  
 		
-		
-	----------log Referece number-------------------------------------
-	DECLARE logref DECIMAL RAND()*(10-2)+2;
-	SET logref = logref*100000000; 
-	DECLARE log_ref CHARACTER CAST (logref as CHARACTER); 
-	DECLARE Reference_log CHARACTER SUBSTRING(log_ref FROM 1 FOR 8);
-	-----------------------------------------------------------------	
-	--------------Bank identification ----------------------------------- 
-	DECLARE bankname ROW;
-	DECLARE bank_name CHARACTER;
-	SET bank_name = 'SELECT BANK_CODE FROM '||SCHEMANAME||'.'||AA_BANK_IDENTITY||' WHERE BANK_ID = ?';
-	SET bankname.C[] = PASSTHRU(bank_name TO Database.{DSN} VALUES(inref.bankId));
-	
-	
-	SET Environment.bankcode = bankname.C.BANK_CODE;
-	SET Environment.referenceId = refno;
-	SET Environment.inref = inref;
-	SET Environment.OTP = S_OTP; 
-	SET Environment.payload = payload;  
-    -------------------------------------OTP part ------------------------------------------   
-    CASE 
-		
-	WHEN Environment.bankcode ='APGB' THEN
-		SET URL = MyURL||'?username=apgbhttpotp&password=apgb1234&to=91'||inref.mobileNo||'&from=APGBNK&text=Dear Customer, '||S_OTP||' is the OTP to link your APGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';	
-	  
-	WHEN Environment.bankcode ='APGVB' THEN
-		SET URL = MyURL||'?username=apgvbhttpotp&password=apgvb6699&to=91'||inref.mobileNo||'&from=APGVBK&text=Dear Customer, '||S_OTP||' is the OTP to link your APGVB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.APGVB';
-	 
-	WHEN Environment.bankcode ='MGB' THEN
-		SET URL = MyURL||'?username=mgbhttpotp&password=mgbh5678&to=91'||inref.mobileNo||'&from=MGBBNK&text=Dear Customer,'||S_OTP||' is the OTP to link your MGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-		
-    WHEN Environment.bankcode ='CRGB' THEN 
-		SET URL = MyURL||'?username=crgbhttpotp&password=crgb1234&to=91'||inref.mobileNo||'&from=CGBBBK&text= Dear Customer,'||S_OTP||' is the OTP to link your CRGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
+		 DECLARE ErrorMessage, TCPResponse CHARACTER;
 		 
-	WHEN Environment.bankcode ='TGB' THEN 
-		SET URL = MyURL||'?username=dcgbhttpotp&password=dcgb1234&to=91'||inref.mobileNo||'&from=DCGBBK&text=Dear Customer,'||S_OTP||' is the OTP to link your TGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
+    SET ErrorMessage = InputRoot.XMLNSC.Fail;
+    SET TCPResponse = InputRoot.OutputRoot.TCPResponse;
 		
-	WHEN Environment.bankcode ='NGRB' THEN 
-		SET URL = MyURL||'?username=nrbhttpotp&password=nrb12345&to=91'||inref.mobileNo||'&from=NRBBBK&text=Dear Customer,'||S_OTP||' is the OTP to link your NGRB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP. -NAGALAND RURAL BANK';	
+
+--    SET OutputRoot.XMLNSC.Status = CASE 
+--        WHEN ErrorCode IS NOT NULL THEN 'FAILURE'
+--        ELSE 'SUCCESS'
+--    END;
+
+   
+    IF TCPResponse IS NOT NULL AND ErrorMessage IS NULL THEN
+    	
+    	SET NAME = SUBSTRING(TCPResponse FROM 181 FOR 45);
+         
+        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.Status = 'Success';
+        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.NAME = NAME;
+        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.AccountNumber = Environment.Variables.AccountNumber;
+        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.IFSC =Environment.Variables.IFSC;
+        -- Populate Error Response
+--        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ErrorCode = ErrorCode;
+--        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ErrorMessage = ErrorMessage;
+        
+    ELSE
+    	SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.Status = 'UNSUCCESSFUL';
+    	SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ResponseMessage = SUBSTRING(ErrorMessage AFTER 'Message: ');
+    	SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = SUBSTRING(ErrorMessage AFTER 'Error Code: ' FOR 3);
+               
+--        SET Response = CAST(ASBITSTREAM(OutputRoot.XMLNSC CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding);  
+        
+    END IF;
 		
-	WHEN Environment.bankcode ='MZGB' THEN 
-		SET URL = MyURL||'?username=mzbhttpotp&password=mzb12345&to=91'||inref.mobileNo||'&from=MZBBBK&text=Dear Customer, '||S_OTP||' is the OTP to link your MZBANK Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP. MZBBBK';
-		
-	WHEN Environment.bankcode ='ELGB' THEN 
-		SET URL = MyURL||'?username=edbhttpotp&password=edb12345&to=91'||inref.mobileNo||'&from=EDBCBK&text=Dear Customer, '||S_OTP||' is the OTP to link your Ellaquai Dehati Bank with Account Aggregator. Do not share it with anyone. Bank Never asks for OTP. EDBank.';
-		
-    WHEN Environment.bankcode ='RMGB' THEN  
-		SET URL = MyURL||'?username=rmgbhttpotp&password=rmgb1234&to=91'||inref.mobileNo||'&from=RMGBBK&text=Dear Customer, '||S_OTP||' is the OTP to link your RMGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.  ';
-		
-	WHEN Environment.bankcode ='ACRB' THEN  
-		SET URL = MyURL||'?username=aprbhttpotp&password=aprb1234&to=91'||inref.mobileNo||'&from=APRBBK&text=Dear Customer,'||S_OTP||' is the OTP to link your ACRB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP. ARUNACHAL PRADESH RURAL BANK';
-		
-	WHEN Environment.bankcode ='MGRB' THEN  
-		SET URL = MyURL||'?username=mrbhttpotp&password=mrb12345&to=91'||inref.mobileNo||'&from=MRBBBK&text= Dear Customer, '||S_OTP||' is the OTP to link your MRB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';	
-		
-	WHEN Environment.bankcode ='KVGB' THEN  
-		SET URL = MyURL||'?username=kvgbhttpotp&password=kvgb1234&to=91'||inref.mobileNo||'&from=KVGBBK&text=Dear Customer, '||S_OTP||' is the OTP to link your KVG Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP. - KVGBank';
-		
-    WHEN Environment.bankcode ='UTGB' THEN  
-		SET URL = MyURL||'?username=ugbhttpotp&password=ugbh1234&to=91'||inref.mobileNo||'&from=UGBBNK&text= Dear Customer,'||S_OTP||' is the OTP to link your UTGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-			
-	WHEN Environment.bankcode ='GSCB' THEN  
-		SET URL = MyURL||'?username=gscbhttpotp&password=gscb1234&to=91'||inref.mobileNo||'&from=gscbbk&text=Dear Customer,'||S_OTP||' is the OTP to link your GSC Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';		
-			
-	WHEN Environment.bankcode ='SRGB' THEN  
-		SET URL = MyURL||'?username=srgbhttpotp&password=srgb1234&to=91'||inref.mobileNo||'&from=SGBBNK&text= Dear Customer,'||S_OTP||' is the OTP to link your SGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-		 
-	WHEN Environment.bankcode ='MBGB' THEN  
-		SET URL = MyURL||'?username=mbgbhttpotp&password=mbgb1234&to=91'||inref.mobileNo||'&from=MBGBBK&text= Dear Customer, '||S_OTP||' is the OTP to link your MG Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-						
-	WHEN Environment.bankcode ='JRGB' THEN  
-		SET URL =MyURL||'?username=vgbhttpotp&password=vcgb1234&to=91'||inref.mobileNo||'&from=JRGBNK&text=Dear Customer, '||S_OTP||' is the OTP to link your JRGBank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-		
-	WHEN Environment.bankcode ='UKGB' THEN  
-		SET URL =MyURL||'?username=ukgbhttpotp&password=ukgb1234&to=91'||inref.mobileNo||'&from=UTKLGB&text=Dear Customer, '||S_OTP||' is the OTP to link your UKGB Bank Accounts with Account Aggregator. Do not share it with anyone. Bank NEVER asks for OTP.';
-									
-	END CASE; 
-	
-
-    --------------------------------------------------------------------------------------------------------------------------------
-	SET Environment.URL = URL;
-	SET OutputLocalEnvironment.Destination.HTTP.RequestURL = URL;
-	PROPAGATE TO TERMINAL 1;
-	
-	
-	CALL log4j_1_1('Account_Linking_Request', 'Account_Linking_Request', 'INFO','----------------start logging --------------------') INTO rc;
-	CALL log4j_1_1('Account_Linking_Request', 'Account_Linking_Request', 'INFO','Request data:'||payload||','||'BANK code:'||bankname.C.BANK_CODE||','||'proxy URL with parameters:-'||URL||','||'LogRef:'||Reference_log) INTO rc;
---	CALL log4j_1_1('Account_Linking_Request', 'Account_Linking_Request', 'INFO','BANK code:'||bankname.C.BANK_CODE) INTO rc;
---	CALL log4j_1_1('Account_Linking_Request', 'Account_Linking_Request', 'INFO','proxy URL with parameters:-'||URL) INTO rc;
-	CALL log4j_1_1('Account_Linking_Request', 'Account_Linking_Request', 'INFO','----------------END logging --------------------') INTO rc; 
-		END;
-END MODULE; 
-
-
-
-
-
-
-
-
-
-
-
-
-
+--		DECLARE responseString CHARACTER FIELDVALUE(Environment.Variables.TCPResponse);
+--		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS Resp_STRING:'||Response) INTO rc;
+        
+     
+        
+--        CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','Response:'||Response) INTO rc; 
+		CALL log4j_1_1('BANL', 'BeneficiaryDetails', 'INFO','-------------------------END logging -------------------------') INTO rc;   
+	END;
+END MODULE;
