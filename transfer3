@@ -1,55 +1,59 @@
-[iibadmin@dciibprod-uat workflow]$ ps -ef | grep "Bhavesh_test.xml"
-iibadmin 2503012 2478687  0 16:32 pts/2    00:00:00 grep --color=auto Bhavesh_test.xml
-[iibadmin@dciibprod-uat workflow]$ /opt/mqm/Capitalware/UFM/script/Bhavesh_test
-Thu Mar 20 16:34:33 IST 2025
-Starting UFM Bhavesh_test
-[iibadmin@dciibprod-uat workflow]$ nohup: redirecting stderr to stdout
 
-[iibadmin@dciibprod-uat workflow]$
-[iibadmin@dciibprod-uat workflow]$ ps -ef | grep "Bhavesh_test.xml"
-iibadmin 2504264       1  0 16:34 pts/2    00:00:00 /bin/sh /opt/mqm/Capitalware/UFM/UFM.sh /opt/mqm/Capitalware/UFM/workflow/Bhavesh_test.xml
-iibadmin 2504267 2504264 39 16:34 pts/2    00:00:02 java -Xms64m -Xmx512m -Dcom.ibm.mq.cfg.useIBMCipherMappings=false -Dcom.ibm.jsse2.disableSSLv3=false com.capitalware.ufm.UFM /opt/mqm/Capitalware/UFM/workflow/Bhavesh_test.xml
-iibadmin 2504309 2478687  0 16:34 pts/2    00:00:00 grep --color=auto Bhavesh_test.xml
-[iibadmin@dciibprod-uat workflow]$ cd /var/iib/interface/bhavesh/rtgs/outward/RDNB/
-[iibadmin@dciibprod-uat RDNB]$ ll
-total 0
-[iibadmin@dciibprod-uat RDNB]$ ll
-total 0
-[iibadmin@dciibprod-uat RDNB]$ cd /var/iib/interface/bhavesh/rtgs/outward/RR42-OUTWARD/
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$ ll
-total 0
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ABC.TXT
--rw-rw-r-- 1 iibadmin iibadmin 0 Mar 20 16:08 ACDB.TXT
-[iibadmin@dciibprod-uat RR42-OUTWARD]$
+
+  /opt/mqm/Capitalware/UFM/script/Pankaj_test
+UFM_COUNT=`ps -ef |grep ${LOGNAME} | grep -v grep | grep "/opt/mqm/Capitalware/UFM/workflow/Pankaj_test.xml"|wc -l`
+/usr/bin/date
+if [ ${UFM_COUNT} -gt 0 ]
+then
+        echo "UFM Pankaj_test is already Running.........."
+else
+        echo "Starting UFM Pankaj_test"
+        nohup /opt/mqm/Capitalware/UFM/UFM.sh /opt/mqm/Capitalware/UFM/workflow/Pankaj_test.xml > /dev/null &
+fi
+	  
+	  
+	  
+	  <?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
+<UFM_Workflow>
+  
+  <Actions>
+
+    <Watch pollinterval="5">
+      <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/pankaj</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+            <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.NEFT.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.NEFT.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+	 <Directory>/var/iib/interface/pallavi</Directory>
+        </Actions>
+      </WatchItem>
+
+
+
+
+
+
+    </Watch>
+
+  </Actions>
+</UFM_Workflow>
+
+IIB_MQFILE.xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE UFM_MQ SYSTEM "UFM_MQ.dtd">
+<UFM_MQ>
+        <QMgrName>IIBPRODQMGR</QMgrName>
+    <Hostname>10.43.49.53</Hostname>
+    <ChannelName>PROD.DEV.SVRCONN</ChannelName>
+    <Port>1416</Port>
+</UFM_MQ>
+
+
