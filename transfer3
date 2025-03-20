@@ -1,30 +1,13 @@
-
-
-  /opt/mqm/Capitalware/UFM/script/Pankaj_test
-UFM_COUNT=`ps -ef |grep ${LOGNAME} | grep -v grep | grep "/opt/mqm/Capitalware/UFM/workflow/Pankaj_test.xml"|wc -l`
-/usr/bin/date
-if [ ${UFM_COUNT} -gt 0 ]
-then
-        echo "UFM Pankaj_test is already Running.........."
-else
-        echo "Starting UFM Pankaj_test"
-        nohup /opt/mqm/Capitalware/UFM/UFM.sh /opt/mqm/Capitalware/UFM/workflow/Pankaj_test.xml > /dev/null &
-fi
-	  
-	  
-	  
-	  <?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE UFM_Workflow SYSTEM "UFM_Workflow.dtd">
 <UFM_Workflow>
-  
   <Actions>
-
     <Watch pollinterval="5">
       <WatchItem type="D">
         <Directory sendonstartup="Y">/var/iib/interface/pankaj</Directory>
         <Extension>TXT</Extension>
         <Actions>
-            <MQSend delete="Y" format="S">
+          <MQSend delete="Y" format="S">
             <File>${WATCH_FOUND_FILE}</File>
             <MQ>
               <MQFile>IIB_MQFILE.xml</MQFile>
@@ -32,28 +15,12 @@ fi
               <BackOutQName>CBS170.TO.IIBRDNB.NEFT.OUT.FAIL</BackOutQName>
             </MQ>
           </MQSend>
-	 <Directory>/var/iib/interface/pallavi</Directory>
+          <Move>
+            <Source>${WATCH_FOUND_FILE}</Source>
+            <Destination>/var/iib/interface/pallavi/</Destination>
+          </Move>
         </Actions>
       </WatchItem>
-
-
-
-
-
-
     </Watch>
-
   </Actions>
 </UFM_Workflow>
-
-IIB_MQFILE.xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE UFM_MQ SYSTEM "UFM_MQ.dtd">
-<UFM_MQ>
-        <QMgrName>IIBPRODQMGR</QMgrName>
-    <Hostname>10.43.49.53</Hostname>
-    <ChannelName>PROD.DEV.SVRCONN</ChannelName>
-    <Port>1416</Port>
-</UFM_MQ>
-
-
