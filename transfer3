@@ -1,294 +1,115 @@
-BROKER SCHEMA com.cedge.BeneNameMain
-
-PATH com.cedge.BeneNameFinder_EXP; 
-
-CREATE COMPUTE MODULE BenNameFinder_Compute
-	DECLARE Config EXTERNAL CHARACTER;
-	DECLARE PROP_LOC EXTERNAL CHARACTER '';
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		DECLARE httpMethod CHARACTER;
-    
-    -- Get the HTTP method from the request
-    SET httpMethod = SUBSTRING(InputRoot.HTTPInputHeader."X-Original-HTTP-Command" FROM 1 FOR 4);
-
-    -- Allow only POST requests
-    IF httpMethod <> 'POST' THEN
-        SET OutputRoot.HTTPReplyHeader."Content-Type" = 'application/json';
-        SET OutputRoot.HTTPReplyHeader."X-Error-Message" = '405 Method Not Allowed';
-        SET OutputRoot.HTTPResponseHeader.StatusCode = 405;
-        
-        RETURN FALSE;
-    END IF;
-    
-		-- CALL CopyMessageHeaders();
-		 CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
-
-	CREATE PROCEDURE CopyMessageHeaders() BEGIN
-		DECLARE I INTEGER 1; 
-		DECLARE J INTEGER;
-		SET J = CARDINALITY(InputRoot.*[]);
-		WHILE I < J DO
-			SET OutputRoot.*[I] = InputRoot.*[I];
-			SET I = I + 1;
-		END WHILE;
-	END;
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		DECLARE inref REFERENCE TO InputRoot.XMLNSC.BeneNameLookUpApiRequest;
-		DECLARE payload, bankPrefix, IP, PORT,CBS_Details,requestString,result CHARACTER;
-		
-		DECLARE rc BOOLEAN; 
-		
-		CALL initLog4j(Config) INTO rc; 
-		SET payload = CAST(ASBITSTREAM(InputRoot.XMLNSC CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding); 
-		SET Environment.payload = payload;
-		 CALL log4j_1_1('BANL', 'BeneficiaryDetails', 'INFO','-------------------------START logging -------------------------') INTO rc;
-         CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','Request data:'||payload) INTO rc;
-         
-		SET Environment.Variables.IFSC = inref.IFSC;
-		SET Environment.Variables.AccountNumber = inref.account_number;
-		
-        SET bankPrefix = SUBSTRING(inref.IFSC FROM 1 FOR 4);
-		SET Environment.PROPFILE = PROP_LOC;
-		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','BankName:'||bankPrefix) INTO rc;
-		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','PropertieFilePath:'||PROP_LOC) INTO rc;
-		
-			 CALL GetPROP(bankPrefix,PROP_LOC) INTO CBS_Details;  
-			
-			 CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS IP and PORT:'||CBS_Details) INTO rc;
-             SET Environment.Variables.IP = SUBSTRING(CBS_Details BEFORE ' ');
-             SET Environment.Variables.PORT = SUBSTRING(CBS_Details AFTER ' ');
-             
-             
-        DECLARE accountNum CHARACTER FIELDVALUE(InputRoot.XMLNSC.BeneNameLookUpApiRequest.account_number);    
-        SET requestString = 'TX:: 0156                    **  000026    003000100000006163060460000000000     0         00000000        000000000000000000000000000000000000'||accountNum||'   5000000A';
-        SET Environment.Variables.TCPRequest = requestString;
-        CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS Req_STRING:'||requestString) INTO rc;
-        
-		       
-	END; 	
-END MODULE;
- CREATE FUNCTION GetPROP(IN bankPrefix CHARACTER, IN PROP_LOC CHARACTER) RETURNS CHARACTER 
-LANGUAGE JAVA
-EXTERNAL NAME "com.cedge.BeneNameMain.CBS_Details.getIpAndPort";
 
 
----------------------------------------------------------------------------
-package com.cedge.BeneNameMain;
+/opt/mqm/Capitalware/UFM/script/Bhavesh_test
+UFM_COUNT=`ps -ef |grep ${LOGNAME} | grep -v grep | grep "/opt/mqm/Capitalware/UFM/workflow/Bhavesh_test.xml"|wc -l`
+/usr/bin/date
+if [ ${UFM_COUNT} -gt 0 ]
+then
+        echo "UFM Bhavesh_test is already Running.........."
+else
+        echo "Starting UFM Bhavesh_test"
+        nohup /opt/mqm/Capitalware/UFM/UFM.sh /opt/mqm/Capitalware/UFM/workflow/Bhavesh_test.xml > /dev/null &
+fi
 
-import com.ibm.broker.javacompute.MbJavaComputeNode;
-import java.io.*;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
-import com.ibm.broker.plugin.*;
 
-public class BenNameFinder_JavaCompute extends MbJavaComputeNode {
 
-    public void evaluate(MbMessageAssembly assembly) throws MbException {
-        MbMessage env = assembly.getGlobalEnvironment();
-        MbElement root = env.getRootElement();
+/opt/mqm/Capitalware/UFM/UFM.sh /opt/mqm/Capitalware/UFM/workflow/Bhavesh_test.xml 
 
-        // Retrieve values from Environment variables
-        String requestMessage = getEnvironmentVariable(root, "Variables/TCPRequest");
-        String serverIP = getEnvironmentVariable(root, "Variables/IP");
-        String serverPortStr = getEnvironmentVariable(root, "Variables/PORT");
+[iibadmin@dciibprod-uat workflow]$ vi Bhavesh_test.xml
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.NEFT.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.NEFT.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-        // Validate environment variables
-        if (requestMessage == null || serverIP == null || serverPortStr == null) {
-            throwException("400", "Missing required environment variables (TCPRequest, IP, PORT)");
-        }
+                <WatchItem type="D">
+        <Directory sendonstartup="Y">[iibadmin@dciibprod-uat workflow]$ vi Bhavesh_test.xml
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.NEFT.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.NEFT.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-        int serverPort = 0;
-        try {
-            serverPort = Integer.parseInt(serverPortStr);
-            if (serverPort < 1 || serverPort > 65535) {
-                throwException("400", "Port number out of valid range (1-65535): " + serverPortStr);
-            }
-        } catch (NumberFormatException e) {
-            throwException("400", "Invalid port number format: " + serverPortStr);
-        }
+                <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/bhavesh/rtgs/outward/RDNB/</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.RTGS.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-        System.out.println("Connecting to server: " + serverIP + " on port: " + serverPort);
-        System.out.println("Sending TCP request: " + requestMessage);
+          <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/bhavesh/rtgs/outward/RR42-OUTWARD/</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.RTGS.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-        // Create socket connection
-        try (Socket socket = new Socket(serverIP, serverPort);
-             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
+<!--********************************TRIAL END*******************************************************-->
+    </Watch>
+  </Actions>
+</UFM_Workflow>
+</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.RTGS.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-            // Set socket timeout (10 seconds)
-            socket.setSoTimeout(10000);
+          <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/bhavesh/rtgs/outward/RR42-OUTWARD/</Directory>
+        <Extension>TXT</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>CBS170.TO.IIBRDNB.RTGS.OUT</QueueName>
+              <BackOutQName>CBS170.TO.IIBRDNB.RTGS.OUT.FAIL</BackOutQName>
+            </MQ>
+          </MQSend>
+        </Actions>
+      </WatchItem>
 
-            // Send request data
-            bufferedWriter.write(requestMessage);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
+<!--********************************TRIAL END*******************************************************-->
+    </Watch>
+  </Actions>
+</UFM_Workflow>
 
-            // Read response from TCP server
-            String response = bufferedReader.readLine();
-            if (response == null || response.isEmpty()) {
-                throwException("500", "Received empty response from server");
-            }
 
-            System.out.println("Received TCP response: " + response);
-
-            // Store response in Environment
-            root.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "TCPResponse", response);
-
-        } catch (SocketTimeoutException e) {
-            throwException("408", "TCP connection timed out");
-        } catch (IOException e) {
-            throwException("500", "I/O Error: " + e.getMessage());
-        } catch (Exception e) {
-            throwException("500", "Unexpected Error: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Utility method to retrieve environment variables safely.
-     */
-    private String getEnvironmentVariable(MbElement root, String path) throws MbException {
-        MbElement element = root.getFirstElementByPath(path);
-        return (element != null) ? element.getValueAsString() : null;
-    }
-
-    /**
-     * Utility method to throw an exception with an error code and message.
-     */
-    private void throwException(String errorCode, String errorMessage) throws MbUserException {
-        System.err.println("Error [" + errorCode + "]: " + errorMessage);
-        throw new MbUserException(this, "evaluate", "", "", "Error Code: " + errorCode + ", Message: " + errorMessage, null);
-    }
-}
-----------------------------------------------------
-package com.cedge.BeneNameMain;
-
-import java.io.*;
-
-public class CBS_Details {
-
-	public static String getIpAndPort(String bankPrefix, String propFilePath) {
-
-		if (propFilePath == null || propFilePath.isEmpty()) {
-			return "Error: PROPFILE UDP is not set";
-		}
-
-		File file = new File(propFilePath);
-		if (!file.exists() || !file.canRead()) {
-			return "Error: File does not exist or cannot be read at path: " + propFilePath;
-		}
-
-		if (bankPrefix == null || bankPrefix.trim().length() != 4) {
-			return "Error: Invalid bank prefix. It must be exactly 4 characters.";
-		}
-
-		String output = "";
-
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] parts = line.split("\\|");
-
-				if (parts.length < 3) {
-					continue;
-				}
-
-				String prefix = parts[0].trim();
-				String ip = parts[1].trim();
-				String port = parts[2].trim();
-
-				if (prefix.equalsIgnoreCase(bankPrefix)) {
-					output = ip + " " + port;
-					break;
-				}
-			}
-		} catch (IOException e) {
-			return "Error reading file: " + e.getMessage();
-		}
-
-		return output.isEmpty() ? "No matching bank found for prefix: " + bankPrefix : output;
-	}
-
-	public static void main(String[] args) {
-		// Test the function manually (not needed in ACE, but useful for debugging)
-		String propFilePath = "/var/config/cbs_details.txt"; // Replace with actual path
-		String bankPrefix = "HDFC"; // Example prefix
-
-		String result = getIpAndPort(bankPrefix, propFilePath);
-		System.out.println("Result: " + result);
-	}
-}
----------------------------------------------------------
-BROKER SCHEMA com.cedge.BeneNameMain
-PATH com.cedge.BeneNameFinder_EXP; 
-
-CREATE COMPUTE MODULE BenNameFinder_Compute1
-	DECLARE Config EXTERNAL CHARACTER;
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		-- CALL CopyMessageHeaders();
-		 CALL CopyEntireMessage();
-		RETURN TRUE;
-	END;
-
-	CREATE PROCEDURE CopyMessageHeaders() BEGIN
-		DECLARE I INTEGER 1;
-		DECLARE J INTEGER;
-		SET J = CARDINALITY(InputRoot.*[]);
-		WHILE I < J DO
-			SET OutputRoot.*[I] = InputRoot.*[I];
-			SET I = I + 1;
-		END WHILE;
-	END;
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		DECLARE NAME, AccountNumber,IFSC,Response CHARACTER;
-		DECLARE rc BOOLEAN; 
-		CALL initLog4j(Config) INTO rc;  
-		
-		 DECLARE ErrorMessage, TCPResponse CHARACTER;
-		 
-    SET ErrorMessage = InputRoot.XMLNSC.Fail;
-    SET TCPResponse = InputRoot.OutputRoot.TCPResponse;
-		
-
---    SET OutputRoot.XMLNSC.Status = CASE 
---        WHEN ErrorCode IS NOT NULL THEN 'FAILURE'
---        ELSE 'SUCCESS'
---    END;
-
-   
-    IF TCPResponse IS NOT NULL AND ErrorMessage IS NULL THEN
-    	
-    	SET NAME = SUBSTRING(TCPResponse FROM 181 FOR 45);
-         
-        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.Status = 'Success';
-        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.NAME = NAME;
-        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.AccountNumber = Environment.Variables.AccountNumber;
-        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.IFSC =Environment.Variables.IFSC;
-        -- Populate Error Response
---        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ErrorCode = ErrorCode;
---        SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ErrorMessage = ErrorMessage;
-        
-    ELSE
-    	SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.Status = 'UNSUCCESSFUL';
-    	SET OutputRoot.XMLNSC.BeneNameLookUpApiResponse.ResponseMessage = SUBSTRING(ErrorMessage AFTER 'Message: ');
-    	SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = SUBSTRING(ErrorMessage AFTER 'Error Code: ' FOR 3);
-               
---        SET Response = CAST(ASBITSTREAM(OutputRoot.XMLNSC CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding);  
-        
-    END IF;
-		
---		DECLARE responseString CHARACTER FIELDVALUE(Environment.Variables.TCPResponse);
---		CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','CBS Resp_STRING:'||Response) INTO rc;
-        
-     
-        
---        CALL log4j_1_1('LOGGING', 'BeneficiaryDetails', 'INFO','Response:'||Response) INTO rc; 
-		CALL log4j_1_1('BANL', 'BeneficiaryDetails', 'INFO','-------------------------END logging -------------------------') INTO rc;   
-	END;
-END MODULE;
