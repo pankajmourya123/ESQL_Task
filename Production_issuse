@@ -1,0 +1,19 @@
+The below mentioned UTR not found at RTGS_in table but found at payload with status 'S' kindly check and confirm utr is process or not;
+The below mentioned UTR not found at RTGS_outward table but found at payload with status 'S' kindly check and confirm utr is process or not;
+
+The below mentioned UTR not found at neft_in table but found at payload with status 'S' kindly check and confirm utr is process or not;
+The below mentioned UTR not found at neft_outward table but found at payload with status 'S' kindly check and confirm utr is process or not;
+
+agar aisa koi utr hai jiska naa app log naa toh expection log print ho raha hai aur voo payload table mai dihk raha hai matalab voo apne iib hit toh huaa hai matlab hamare pass aaya hai
+ab yaha hum voo messsage check karenge ki usmai voo utr hai kya  aur uska kya time hai amount hai 
+WAY 1)apne RTGS_in table  usse time pe konsa tarnsaction aaya hai voo check krenge ab aur amount bhi match karenge ab apne case mai kya hoo raha hai 
+
+BKID H 25077920780
+BKID A 25077920780 bhej huaa transaction 
+
+WAY 2)BKID A 25077920780  hum phir se hit karenge (aapne application pe) aur agar aisa log aa raha hai ki tarnsaction duplicate means this transaction is already processed .
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+(DFDL Error min occurance wala mandatory field)
+
+
