@@ -1,0 +1,31 @@
+Task move file from one directory to another directory
+
+check file pressimission and ownership 
+chmod 777 file_path
+chown mqm:mqm file_path
+
+
+ways to start workflow
+
+ WAY 1
+1) copy script path ENTER 
+2) ps -ef | grep "pankaj"
+3) make TXT in source floder and use ll command
+
+----------------------------------------------------------------------------------------------
+WAY 2
+run 
+UFM.SH  workflow path
+----------------------------------------------------------------------------------------------
+WAY 3
+add your script into crontab and run crontab 
+crontab -l 
+crontab -e
+crontab 
+----------------------------------------------------------------------------------------------
+WAY 4 
+./script.sh
+
+---------------------------------------------------------------------------------------------
+WAY 5
+copy whole script content in terminl and enter 
