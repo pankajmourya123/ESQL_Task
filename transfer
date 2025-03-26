@@ -1,71 +1,71 @@
-CREATE COMPUTE MODULE tpflow_Compute
-	DECLARE num EXTERNAL Integer 11;
+
+DECLARE nodesherll SHARED INTEGER 0;
+DECLARE flowsharll SHARED ROW ;
+
+CREATE COMPUTE MODULE longlived_Compute
+	
 	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN	
-
-
+	BEGIN
+		-- CALL CopyMessageHeaders();
 		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
 
-	END;	
-
-
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		set OutputRoot=InputRoot;
+		
+		set  nodesherll=nodesherll+1;
+		
+		set flowsharll.counter=0;
+		set flowsharll.counter=flowsharll.counter+1;
+		
 	END;
 END MODULE;
 
----------------------------------------------------------------------------
 
-CREATE COMPUTE MODULE tpflow_Compute
-	DECLARE num EXTERNAL Integer 11;
+CREATE COMPUTE MODULE longlived_Compute1
 	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN	
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
 
-
-		CALL CopyEntireMessage();
-        RETURN TRUE;
-	END;	
-
-
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		set OutputRoot=InputRoot;
+		
+		
+		 SET OutputRoot.JSON.Data.secondcomputenodell = nodesherll;
+		 SET OutputRoot.JSON.Data.secondcomputeflowll =flowsharll.counter;
 	END;
 END MODULE;
-
-------------------------------------------------------------------------------------
-CREATE COMPUTE MODULE tpflow_Compute
-	DECLARE num EXTERNAL Integer 11;
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN	
-
-
-		CALL CopyEntireMessage();
-RETURN FALSE;
-	END;	
+http://localhost:7800/ll2
+{
+    "secondcomputenodell": 12,
+    "secondcomputeflowll": 1
+}
 
 
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		set OutputRoot=InputRoot;
-	END;
-END MODULE;
-----------------------------------------------------------------------------------------
-CREATE COMPUTE MODULE tpflow_Compute
-	DECLARE num EXTERNAL Integer 11;
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN	
-
-
-		CALL CopyEntireMessage();
-		RETURN UNKNOWN;
-
-	END;	
-
-
-
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		set OutputRoot=InputRoot;
-	END;
-END MODULE;
+http://localhost:7800/ll1
+{
+    "secondcomputenodell": 16,
+    "secondcomputeflowll": 1
+}
