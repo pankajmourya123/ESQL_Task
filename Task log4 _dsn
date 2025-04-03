@@ -1,0 +1,12 @@
+step 1--dwonlaod
+step 2 unzip
+step 3 shared -class jar files 
+step 4-ddt xmlin xml files
+step 5-xml in udp 
+---------------------------------------------------------------------------
+step 1 -odbc.ini 
+setep 2-- add (ip and port dsn name all other things)
+step 3 -- mqsisetdbparams 
+step 4 -stop and start
+step 5 -data source name (in property)
+step 6 - mqsicvp (to check it is conected or not );
