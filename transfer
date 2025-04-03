@@ -1,31 +1,87 @@
-DECLARE nodesherll SHARED INTEGER 0;
-DECLARE flowsharll SHARED ROW;
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="TestWSDLFile" targetNamespace="http://www.example.org/TestWSDLFile/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/TestWSDLFile/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/TestWSDLFile/">
+      <xsd:element name="NewOperation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part element="tns:NewOperation" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part element="tns:NewOperationResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="TestWSDLFile">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:NewOperationRequest"/>
+      <wsdl:output message="tns:NewOperationResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TestWSDLFileSOAP" type="tns:TestWSDLFile">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="NewOperation">
+      <soap:operation soapAction="http://www.example.org/TestWSDLFile/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TestWSDLFile">
+    <wsdl:port binding="tns:TestWSDLFileSOAP" name="TestWSDLFileSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
 
-CREATE COMPUTE MODULE ComputeNode1
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Node-Shared Variable (Will reset for different compute nodes)
-        SET nodesherll = nodesherll + 1;
-
-        -- Flow-Shared Variable (Will persist across all compute nodes in the flow)
-        IF NOT EXISTS(flowsharll.counter) THEN
-            SET flowsharll.counter = 0;
-        END IF;
-        SET flowsharll.counter = flowsharll.counter + 1;
-
-        -- Store results in JSON output
-        SET OutputRoot.JSON.Data.NodeSharedValue = nodesherll;
-        SET OutputRoot.JSON.Data.FlowSharedValue = flowsharll.counter;
-    END;
-END MODULE;
-
-CREATE COMPUTE MODULE ComputeNode2
-    CREATE FUNCTION Main() RETURNS BOOLEAN
-    BEGIN
-        -- Node-Shared Variable (Will not get updated from ComputeNode1)
-        SET OutputRoot.JSON.Data.NodeSharedValue = nodesherll;
-
-        -- Flow-Shared Variable (Will persist from ComputeNode1)
-        SET OutputRoot.JSON.Data.FlowSharedValue = flowsharll.counter;
-    END;
-END MODULE;
+---------------------------------------------------------------------------------------------------------------------------------------
+<RequestPayload>
+    <AppHdr  xmlns:xsi="urn:iso:std:iso:20022:tech:xsd:Header" xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">
+        <Fr>
+            <FIId>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>RBIP0NEFTSC</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </FIId>
+        </Fr>
+        <To>
+            <FIId>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>GSCB0000001</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </FIId>
+        </To>
+        <BizMsgIdr>GSCB202412105310110020</BizMsgIdr>
+        <MsgDefIdr>admi.004.001.02</MsgDefIdr>
+        <BizSvc>NEFT</BizSvc>
+        <CreDt>2024-12-10T12:26:49Z</CreDt>
+    </AppHdr>
+    <Document xmlns="urn:iso:std:iso:20022:tech:xsd:admi.004.001.02">
+        <SysEvtNtfctn>
+            <EvtInf>
+                <EvtCd>F27</EvtCd>
+                <EvtParam>PBAPI000000</EvtParam>
+                <EvtDesc>Message sent successfully.</EvtDesc>
+                <EvtTm>2024-12-10T12:26:49</EvtTm>
+            </EvtInf>
+        </SysEvtNtfctn>
+    </Document>
+</RequestPayload>
