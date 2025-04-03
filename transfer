@@ -1,38 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="TestWSDLFile" targetNamespace="http://www.example.org/TestWSDLFile/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/TestWSDLFile/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://www.example.org/RequestService/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  targetNamespace="http://www.example.org/RequestService/">
+
+  <!-- Define Request and Response Schema -->
   <wsdl:types>
-    <xsd:schema targetNamespace="http://www.example.org/TestWSDLFile/">
-      <xsd:element name="NewOperation">
+    <xsd:schema targetNamespace="http://www.example.org/RequestService/">
+      <xsd:element name="ProcessRequest">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="in" type="xsd:string"/>
+            <xsd:element name="RequestPayload" type="xsd:string"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="NewOperationResponse">
+
+      <xsd:element name="ProcessResponse">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="out" type="xsd:string"/>
+            <xsd:element name="ResponseMessage" type="xsd:string"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="NewOperationRequest">
-    <wsdl:part element="tns:NewOperation" name="parameters"/>
+
+  <!-- Define Messages -->
+  <wsdl:message name="ProcessRequestMessage">
+    <wsdl:part name="parameters" element="tns:ProcessRequest"/>
   </wsdl:message>
-  <wsdl:message name="NewOperationResponse">
-    <wsdl:part element="tns:NewOperationResponse" name="parameters"/>
+
+  <wsdl:message name="ProcessResponseMessage">
+    <wsdl:part name="parameters" element="tns:ProcessResponse"/>
   </wsdl:message>
-  <wsdl:portType name="TestWSDLFile">
-    <wsdl:operation name="NewOperation">
-      <wsdl:input message="tns:NewOperationRequest"/>
-      <wsdl:output message="tns:NewOperationResponse"/>
+
+  <!-- Define PortType -->
+  <wsdl:portType name="RequestServicePortType">
+    <wsdl:operation name="ProcessRequest">
+      <wsdl:input message="tns:ProcessRequestMessage"/>
+      <wsdl:output message="tns:ProcessResponseMessage"/>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="TestWSDLFileSOAP" type="tns:TestWSDLFile">
+
+  <!-- Define Binding -->
+  <wsdl:binding name="RequestServiceBinding" type="tns:RequestServicePortType">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="NewOperation">
-      <soap:operation soapAction="http://www.example.org/TestWSDLFile/NewOperation"/>
+    <wsdl:operation name="ProcessRequest">
+      <soap:operation soapAction="http://www.example.org/RequestService/ProcessRequest"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -41,47 +56,12 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="TestWSDLFile">
-    <wsdl:port binding="tns:TestWSDLFileSOAP" name="TestWSDLFileSOAP">
-      <soap:address location="http://www.example.org/"/>
+
+  <!-- Define Service -->
+  <wsdl:service name="RequestService">
+    <wsdl:port name="RequestServiceSOAP" binding="tns:RequestServiceBinding">
+      <soap:address location="http://www.example.org/RequestService"/>
     </wsdl:port>
   </wsdl:service>
-</wsdl:definitions>
 
----------------------------------------------------------------------------------------------------------------------------------------
-<RequestPayload>
-    <AppHdr  xmlns:xsi="urn:iso:std:iso:20022:tech:xsd:Header" xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">
-        <Fr>
-            <FIId>
-                <FinInstnId>
-                    <ClrSysMmbId>
-                        <MmbId>RBIP0NEFTSC</MmbId>
-                    </ClrSysMmbId>
-                </FinInstnId>
-            </FIId>
-        </Fr>
-        <To>
-            <FIId>
-                <FinInstnId>
-                    <ClrSysMmbId>
-                        <MmbId>GSCB0000001</MmbId>
-                    </ClrSysMmbId>
-                </FinInstnId>
-            </FIId>
-        </To>
-        <BizMsgIdr>GSCB202412105310110020</BizMsgIdr>
-        <MsgDefIdr>admi.004.001.02</MsgDefIdr>
-        <BizSvc>NEFT</BizSvc>
-        <CreDt>2024-12-10T12:26:49Z</CreDt>
-    </AppHdr>
-    <Document xmlns="urn:iso:std:iso:20022:tech:xsd:admi.004.001.02">
-        <SysEvtNtfctn>
-            <EvtInf>
-                <EvtCd>F27</EvtCd>
-                <EvtParam>PBAPI000000</EvtParam>
-                <EvtDesc>Message sent successfully.</EvtDesc>
-                <EvtTm>2024-12-10T12:26:49</EvtTm>
-            </EvtInf>
-        </SysEvtNtfctn>
-    </Document>
-</RequestPayload>
+</wsdl:definitions>
