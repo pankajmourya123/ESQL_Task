@@ -1,3 +1,9 @@
 Multiple annotations found at this line:
 	- One or more inline schemas containing schema declarations were detected. Only WSDLs with external schemas are supported within Applications or Libraries.
 	- The WSDL file 'TestWSDLFile.wsdl' was not added through the Message Model wizard. This error can be fixed by invoking the Message Model wizard and importing this WSDL file as a 
+
+
+Multiple annotations found at this line:
+	- The WSDL file 'NewWSDLFile.wsdl' was not added to the message set through the WSDL importers. This error can be fixed by creating message definitions from the WSDL file and then removing the 
+	 original file.
+	- Type definitions can only be included within mxsd files, which can then be imported by the WSDL definition.
