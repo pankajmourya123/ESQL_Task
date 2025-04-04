@@ -1,0 +1,57 @@
+old dc                                                       new dc                                                                                          iib 
+
+10.42.0.220 (APOC__CHTB CHITTOOR DCCB)                    10.42.176.22  (MP__DCAW)(MP__DCAC) (YES__HSN)                                                     10.42.61.12
+10.42.0.161 (MP__DCAC)                                    10.42.176.21  (MP__DCAO) (APCOB__VDCB Vishakhapattanam DCCB)(APCOB__CHTB CHITTOOR DCCB )          10.42.61.209 
+10.42.0.165 (MP__DCAO) 
+10.42.0.169 (MP__DCAW ) 
+10.42.0.218 (APCOB__VDCB Vishakhapattanam DCCB)
+
+
+YES__HSN old dc yeh akela tha isylie old dc floder hi nhi bana bhai
+
+ON 10.42.176.21 IIBAPCOB.TO.CBS21.IN queu is created for (APCOB__VDCB Vishakhapattanam DCCB)(APCOB__CHTB CHITTOOR DCCB ) for both inward and outward 
+
+(YES__HSN)  in YES flow what happens           CBS   ----     IIB  ------  PROXY    ---  SFMS  there in  iibyes_inward and iibyes_outward  where proxyserver is there we have does not change the
+queue name 
+
+<WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/yes/rtgs/outward/file_backup/HSN/R42</Directory>
+        <Extension>xml</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBYES.TO.SFTP158.OUT</QueueName>
+              <BackOutQName>IIBYES.TO.SFTP158.OUT.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/home/yesprod/YesBank_Converter/Input/YES_HSN/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+	  
+	  here we have not change the queue name 
+	  
+	  but here we change queue because here is cbs remote path is there so as dc migration we change the queue name 
+	  <WatchItem type="D">
+        <Directory sendonstartup="Y">/var/iib/interface/yes/neft/outward/file_backup/HSN/N06</Directory>
+        <Extension>Done</Extension>
+        <Actions>
+          <MQSend delete="Y" format="S">
+            <File>${WATCH_FOUND_FILE}</File>
+            <MQ>
+              <MQFile>IIB_MQFILE.xml</MQFile>
+              <QueueName>IIBYES.TO.CBS22.DONE</QueueName>
+              <BackOutQName>IIBYES.TO.CBS22.DONE.FAIL</BackOutQName>
+            </MQ>
+            <Remote>
+              <Directory>/fns/sd/r/spool/Interfaces/NEFT/OUTGOING/</Directory>
+            </Remote>
+          </MQSend>
+        </Actions>
+      </WatchItem>
+	  
+	  this all the stuff occurs only in case yes bank flow 
+	  yaad rakh cbs ka inward outward ka queu name aur iib inward aur iib outward same hona chaihye 
