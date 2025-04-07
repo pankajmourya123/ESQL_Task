@@ -1,49 +1,29 @@
-DECLARE soapenv NAMESPACE 'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/';
-
-DECLARE tran NAMESPACE 'xmlns:tran="http://tempuri.org/Transaction'; 
-
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE tran NAMESPACE 'http://tempuri.org/Transaction';
 
 CREATE COMPUTE MODULE MySoapFlow_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
+		-- Input reference
 		DECLARE inref1 REFERENCE TO InputRoot.SOAP.Body.transactionreq;
 		DECLARE inref2 REFERENCE TO InputRoot.SOAP.Body.*:transactionreq;		
 
+		-- Create Response
+		CREATE FIELD OutputRoot.SOAP.Body.tran:transactionres;
+		
+		-- Set namespace declarations
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran = tran;
 
-		CREATE FIELD OutputRoot.SOAP.Body.*:transactionres;
-
-		Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
-
-		set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
-
+		-- Prepare output reference
 		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:transactionres;
 
-		SET outRef.tran:Status ='Transaction is sucessful';
+		-- Set response values
+		SET outRef.tran:TransactionId = '12345';
+		SET outRef.tran:TransactionName = 'OnlinePurchase';
+		SET outRef.tran:Amount = '500';
+		SET outRef.tran:Status = 'Transaction is successful';
 
 		RETURN TRUE;
-	END;	
-
-
+	END;
 END MODULE;
-
-
-<html><meta http-equiv='X-UA-Compatible' content='IE=9' />
-<style type='text/css'>
-.r {border:Solid 2px White;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
-.b {color:White;background-color:rgb(40,0,0);font-family:arial;}
-.t {text-align:left;}
-</style>
-<head><title>ContentKeeper</title></head>
-<body class='b'>
-<center>
-<br><h2>Access to localhost has been stopped</h1>
-<table class='r t'> 
-<tr><td>URL</td><th>localhost</th></tr>
-<tr><td>Category</td><th> Blocked Websites (Custom)</th></tr>
-<tr><td>Policy</td><th>Policy=cedge_default; IP Address=10.1.70.0</th></tr>
-<tr><td>Source IP</td><th>10.1.70.139</th></tr>
-<tr><td>Time</td><th>Mon Apr  7 11:17:57 2025</th></tr>
-</table>
-</body>
-</html>
-
