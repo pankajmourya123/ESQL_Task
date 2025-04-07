@@ -1,39 +1,30 @@
-
-
-
-
-
-DECLARE soapenv NAMESPACE 'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/';
-
-DECLARE tran NAMESPACE 'xmlns:tran="http://tempuri.org/Transaction';
-
+-- Step 1: Correct namespace declarations (without xmlns)
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE tran NAMESPACE 'http://tempuri.org/Transaction';
 
 CREATE COMPUTE MODULE MySoapFlow_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
-		DECLARE inref1 REFERENCE TO InputRoot.SOAP.Body.transactionreq;
+		-- Step 2: Reference to input (optional here, but kept for later use)
+		DECLARE inref REFERENCE TO InputRoot.SOAP.Body.tran:transactionreq;
 
-		DECLARE inref2 REFERENCE TO InputRoot.SOAP.Body.*:transactionreq;
+		-- Step 3: Set output namespaces
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran = tran;
 
-		Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
-
-		set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
-
-		CREATE FIELD OutputRoot.SOAP.Body.*:transactionres;
+		-- Step 4: Create response element with correct namespace
+		CREATE FIELD OutputRoot.SOAP.Body.tran:transactionres;
 		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:transactionres;
 
-		SET outRef.tran:TransactionId = '12345';
+		-- Step 5: Set values (you can also pull from inref)
+		SET outRef.tran:TransactionId = inref.tran:TransactionId; -- input se value li
 		SET outRef.tran:TransactionName = 'OnlinePurchase';
 		SET outRef.tran:Amount = '500';
 		SET outRef.tran:Status = 'Transaction is successful';
 
 		RETURN TRUE;
 	END;
-
-
 END MODULE;
-
-input 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tran="http://tempuri.org/Transaction">
    <soapenv:Header/>
    <soapenv:Body>
@@ -42,13 +33,3 @@ input
       </tran:transactionreq>
    </soapenv:Body>
 </soapenv:Envelope>
-
-
-output 
-
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-    <soapenv:Body></soapenv:Body>
-</soapenv:Envelope>
-
-testing in postman
