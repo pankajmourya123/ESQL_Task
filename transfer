@@ -1,24 +1,27 @@
-DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
-DECLARE tran NAMESPACE 'http://tempuri.org/Transaction';
+
+
+
+
+
+DECLARE soapenv NAMESPACE 'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/';
+
+DECLARE tran NAMESPACE 'xmlns:tran="http://tempuri.org/Transaction';
+
 
 CREATE COMPUTE MODULE MySoapFlow_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
-		-- Input reference
 		DECLARE inref1 REFERENCE TO InputRoot.SOAP.Body.transactionreq;
-		DECLARE inref2 REFERENCE TO InputRoot.SOAP.Body.*:transactionreq;		
 
-		-- Create Response
-		CREATE FIELD OutputRoot.SOAP.Body.tran:transactionres;
-		
-		-- Set namespace declarations
-		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
-		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran = tran;
+		DECLARE inref2 REFERENCE TO InputRoot.SOAP.Body.*:transactionreq;
 
-		-- Prepare output reference
+		Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
+
+		set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
+
+		CREATE FIELD OutputRoot.SOAP.Body.*:transactionres;
 		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:transactionres;
 
-		-- Set response values
 		SET outRef.tran:TransactionId = '12345';
 		SET outRef.tran:TransactionName = 'OnlinePurchase';
 		SET outRef.tran:Amount = '500';
@@ -26,4 +29,26 @@ CREATE COMPUTE MODULE MySoapFlow_Compute
 
 		RETURN TRUE;
 	END;
+
+
 END MODULE;
+
+input 
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tran="http://tempuri.org/Transaction">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tran:transactionreq>
+         <tran:TransactionId>101</tran:TransactionId>
+      </tran:transactionreq>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+output 
+
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body></soapenv:Body>
+</soapenv:Envelope>
+
+testing in postman
