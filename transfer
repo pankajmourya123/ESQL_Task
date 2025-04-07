@@ -1,68 +1,127 @@
-<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Transaction" targetNamespace="http://tempuri.org/Transaction" xmlns="http://tempuri.org/Transaction" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org/Transaction" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <wsdl:types>
-    <xsd:schema targetNamespace="http://tempuri.org/Transaction" xmlns:mrm="http://tempuri.org/Transaction">
-      <xsd:complexType name="transactionreq">
-        <xsd:sequence>
-          <xsd:element ref="TransactionId"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="transactionres">
-        <xsd:sequence>
-          <xsd:element ref="TransactionId"/>
-          <xsd:element ref="Transactionname"/>
-          <xsd:element ref="Amount"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="fault">
-        <xsd:sequence>
-          <xsd:element ref="Fcode"/>
-          <xsd:element ref="Fstring"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:element name="TransactionId" type="xsd:string"/>
-      <xsd:element name="Transactionname" type="xsd:string"/>
-      <xsd:element name="Amount" type="xsd:string"/>
-      <xsd:element name="Fstring" type="xsd:string"/>
-      <xsd:element name="Fcode" type="xsd:string"/>
-      <xsd:element name="transactionreq" type="transactionreq"/>
-      <xsd:element name="transactionres" type="transactionres"/>
-      <xsd:element name="fault" type="fault"/>
-    </xsd:schema>
-  </wsdl:types>
-  <wsdl:message name="transaction1_in">
-    <wsdl:part element="transactionreq" name="transactionreq"/>
-  </wsdl:message>
-  <wsdl:message name="transaction1_out">
-    <wsdl:part element="transactionres" name="transactionres"/>
-  </wsdl:message>
-  <wsdl:message name="transaction1_fault1">
-    <wsdl:part element="fault" name="fault"/>
-  </wsdl:message>
-  <wsdl:portType name="TransactionPortType">
-    <wsdl:operation name="transaction1">
-      <wsdl:input message="transaction1_in" name="transaction1_Input"/>
-      <wsdl:output message="transaction1_out" name="transaction1_Output"/>
-      <wsdl:fault message="transaction1_fault1" name="transaction1_Fault"/>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="TransactionSOAP_HTTP_Binding" type="TransactionPortType">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="transaction1">
-      <soap:operation soapAction=""/>
-      <wsdl:input name="transaction1_Input">
-        <soap:body parts="transactionreq" use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="transaction1_Output">
-        <soap:body parts="transactionres" use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="transaction1_Fault">
-        <soap:fault name="transaction1_Fault" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="TransactionSOAP_HTTP_Service">
-    <wsdl:port binding="TransactionSOAP_HTTP_Binding" name="TransactionSOAP_HTTP_Port">
-      <soap:address location="http://localhost:7800/TransactionSOAP_HTTP_Service"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
+
+
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE tran NAMESPACE 'http://tempuri.org/Transaction';
+
+CREATE COMPUTE MODULE MySoapFlow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		DECLARE inref REFERENCE TO InputRoot.SOAP.Body.tran:transactionreq;  
+   
+
+
+		If inref.tran:TransactionId = 'NULL' THEN
+			SET OutputRoot.SOAP.fault.Fcode='tran:400';
+			SET OutputRoot.SOAP.fault.Fstring='Transactionoid is missing';
+			RETURN True;
+		END IF;  
+  
+	
+
+
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran = tran;		
+
+
+		CREATE FIELD OutputRoot.SOAP.Body.tran:transactionres;
+		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:transactionres;		
+
+
+		SET outRef.tran:TransactionId = inref.tran:TransactionId;
+		SET outRef.tran:Transactionname = 'OnlinePurchase';
+		SET outRef.tran:Amount = '500';
+		--SET outRef.tran:Status = 'Transaction is successful';
+
+		RETURN TRUE;
+	END;
+END MODULE;
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tran="http://tempuri.org/Transaction">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tran:transactionreq>
+         <tran:TransactionId>NULL</tran:TransactionId>
+      </tran:transactionreq>
+   </soapenv:Body>
+</soapenv:Envelope>
+ExceptionList
+	RecoverableException
+			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
+			Line:INTEGER:1607
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmSOAPInputNode
+			Name:CHARACTER:MySoapFlow#FCMComposite_1_3
+			Label:CHARACTER:MySoapFlow.SOAP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:MySoapFlow.SOAP Input
+			RecoverableException
+					File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\BasicNodes\ImbCheckNode.cpp
+					Line:INTEGER:308
+					Function:CHARACTER:ImbValidateNode::evaluate
+					Type:CHARACTER:ComIbmValidateNode
+					Name:CHARACTER:MySoapFlow#FCMComposite_1_6
+					Label:CHARACTER:MySoapFlow.Validate
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:2230
+					Text:CHARACTER:Caught exception and rethrowing
+					Insert
+							Type:INTEGER:5
+							Text:CHARACTER:MySoapFlow.Validate
+					ParserException
+							File:CHARACTER:C:\ci\product-build\WMB\src\WebServices\WSBase\ImbSOAPParser.cpp
+							Line:INTEGER:1450
+							Function:CHARACTER:ImbSOAPParser::refreshBitStreamFromElementsInner
+							Type:CHARACTER:
+							Name:CHARACTER:
+							Label:CHARACTER:
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:3605
+							Text:CHARACTER:SOAP tree cannot be serialized
+							ParserException
+									File:CHARACTER:C:\ci\product-build\WMB\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCParser.cpp
+									Line:INTEGER:957
+									Function:CHARACTER:ImbXMLNSCParser::refreshBitStreamFromElementsCommon
+									Type:CHARACTER:ComIbmSOAPInputNode
+									Name:CHARACTER:MySoapFlow#FCMComposite_1_3
+									Label:CHARACTER:MySoapFlow.SOAP Input
+									Catalog:CHARACTER:BIPmsgs
+									Severity:INTEGER:3
+									Number:INTEGER:5010
+									Text:CHARACTER:XML Writing Errors have occurred
+									ParserException
+											File:CHARACTER:C:\ci\product-build\WMB\src\MTI\MTIforBroker\GenXmlParser4\ImbXMLNSCDocHandler.cpp
+											Line:INTEGER:784
+											Function:CHARACTER:ImbXMLNSCDocHandler::handleParseErrors
+											Type:CHARACTER:ComIbmSOAPInputNode
+											Name:CHARACTER:MySoapFlow#FCMComposite_1_3
+											Label:CHARACTER:MySoapFlow.SOAP Input
+											Catalog:CHARACTER:BIPmsgs
+											Severity:INTEGER:3
+											Number:INTEGER:5026
+											Text:CHARACTER:A schema validation error has occurred while validating the message tree
+											Insert
+													Type:INTEGER:2
+													Text:CHARACTER:5008
+											Insert
+													Type:INTEGER:2
+													Text:CHARACTER:2
+											Insert
+													Type:INTEGER:2
+													Text:CHARACTER:1
+											Insert
+													Type:INTEGER:2
+													Text:CHARACTER:25
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:cvc-complex-type.2.4.e: Unexpected element. Element "fault" is not one of the choices.
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:/XMLNSC/SOAP_Domain_Msg
