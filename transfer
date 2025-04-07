@@ -1,9 +1,39 @@
-Multiple annotations found at this line:
-	- One or more inline schemas containing schema declarations were detected. Only WSDLs with external schemas are supported within Applications or Libraries.
-	- The WSDL file 'TestWSDLFile.wsdl' was not added through the Message Model wizard. This error can be fixed by invoking the Message Model wizard and importing this WSDL file as a 
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+
+DECLARE tran NAMESPACE 'http://tempuri.org/TransactionDetails';
 
 
-Multiple annotations found at this line:
-	- The WSDL file 'NewWSDLFile.wsdl' was not added to the message set through the WSDL importers. This error can be fixed by creating message definitions from the WSDL file and then removing the 
-	 original file.
-	- Type definitions can only be included within mxsd files, which can then be imported by the WSDL definition.
+
+CREATE COMPUTE MODULE Soap_Service_msgflow_Compute
+
+CREATE FUNCTION Main() RETURNS BOOLEAN
+
+BEGIN
+
+
+
+-getting request for webservice
+
+DECLARE inRef REFERENCE TO InputRoot.SOAP.Body.*:AddTransactionRequest;
+
+INSERT INTO Database.TRANSACTION_DETAILS VALUES (inRef.tran:Trans_no,inRef.tran:Trans_date,inRef.tran:Store_no,inRef.tran:Quantity,inRef.tran:Total_Amount,inRef.tran:Delivery_Address);
+
+		
+
+----creating response for web service
+
+CREATE FIELD OutputRoot.SOAP.Body.tran:AddTransactionResponse;
+
+Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
+
+set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
+
+DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:AddTransactionResponse;
+
+SET outRef.tran:Status ='Transaction is sucessful';
+
+		RETURN TRUE;
+
+	END;
+
+END MODULE;
