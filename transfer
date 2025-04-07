@@ -1,40 +1,28 @@
-DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE soapenv NAMESPACE 'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/';
 
-DECLARE tran NAMESPACE 'http://tempuri.org/TransactionDetails';
-
-
-
-CREATE COMPUTE MODULE Soap_Service_msgflow_Compute
-
-CREATE FUNCTION Main() RETURNS BOOLEAN
-
-BEGIN
+DECLARE tran NAMESPACE 'xmlns:tran="http://tempuri.org/Transaction'; 
 
 
+CREATE COMPUTE MODULE MySoapFlow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inref1 REFERENCE TO InputRoot.SOAP.Body.transactionreq;
+		DECLARE inref2 REFERENCE TO InputRoot.SOAP.Body.*:transactionreq;		
 
--getting request for webservice
 
-DECLARE inRef REFERENCE TO InputRoot.SOAP.Body.*:AddTransactionRequest;
+		CREATE FIELD OutputRoot.SOAP.Body.*:transactionres;
 
-INSERT INTO Database.TRANSACTION_DETAILS VALUES (inRef.tran:Trans_no,inRef.tran:Trans_date,inRef.tran:Store_no,inRef.tran:Quantity,inRef.tran:Total_Amount,inRef.tran:Delivery_Address);
+		Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
 
-		
+		set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
 
-----creating response for web service
+		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:transactionres;
 
-CREATE FIELD OutputRoot.SOAP.Body.tran:AddTransactionResponse;
-
-Set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv =soapenv;
-
-set OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tran =tran;
-
-DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body.tran:AddTransactionResponse;
-
-SET outRef.tran:Status ='Transaction is sucessful';
+		SET outRef.tran:Status ='Transaction is sucessful';
 
 		RETURN TRUE;
+	END;	
 
-	END;
 
 END MODULE;
 
