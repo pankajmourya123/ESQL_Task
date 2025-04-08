@@ -1,36 +1,151 @@
-<RequestPayload>
-    <AppHdr  xmlns:xsi="urn:iso:std:iso:20022:tech:xsd:Header" xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">
-        <Fr>
-            <FIId>
-                <FinInstnId>
-                    <ClrSysMmbId>
-                        <MmbId>RBIP0NEFTSC</MmbId>
-                    </ClrSysMmbId>
-                </FinInstnId>
-            </FIId>
-        </Fr>
-        <To>
-            <FIId>
-                <FinInstnId>
-                    <ClrSysMmbId>
-                        <MmbId>GSCB0000001</MmbId>
-                    </ClrSysMmbId>
-                </FinInstnId>
-            </FIId>
-        </To>
-        <BizMsgIdr>GSCB202412105310110020</BizMsgIdr>
-        <MsgDefIdr>admi.004.001.02</MsgDefIdr>
-        <BizSvc>NEFT</BizSvc>
-        <CreDt>2024-12-10T12:26:49Z</CreDt>
-    </AppHdr>
-    <Document xmlns="urn:iso:std:iso:20022:tech:xsd:admi.004.001.02">
-        <SysEvtNtfctn>
-            <EvtInf>
-                <EvtCd>F27</EvtCd>
-                <EvtParam>PBAPI000000</EvtParam>
-                <EvtDesc>Message sent successfully.</EvtDesc>
-                <EvtTm>2024-12-10T12:26:49</EvtTm>
-            </EvtInf>
-        </SysEvtNtfctn>
-    </Document>
-</RequestPayload>
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="CreDt" type="xsd:string"/>
+  <xsd:element name="EvtCd" type="xsd:string"/>
+  <xsd:element name="BizMsgIdr" type="xsd:string"/>
+  <xsd:element name="ClrSysMmbId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="MmbId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Fr">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FIId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Document">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SysEvtNtfctn"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MmbId" type="xsd:string"/>
+  <xsd:element name="BizSvc" type="xsd:string"/>
+  <xsd:element name="EvtInf">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="EvtCd"/>
+        <xsd:element ref="EvtParam"/>
+        <xsd:element ref="EvtDesc"/>
+        <xsd:element ref="EvtTm"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MsgDefIdr" type="xsd:string"/>
+  <xsd:element name="FinInstnId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ClrSysMmbId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtDesc" type="xsd:string"/>
+  <xsd:element name="SysEvtNtfctn">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="EvtInf"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="To">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FIId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AppHdr">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Fr"/>
+        <xsd:element ref="To"/>
+        <xsd:element ref="BizMsgIdr"/>
+        <xsd:element ref="MsgDefIdr"/>
+        <xsd:element ref="BizSvc"/>
+        <xsd:element ref="CreDt"/>
+      </xsd:sequence>
+      <xsd:attribute name="xmlns:xsi" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtParam" type="xsd:string"/>
+  <xsd:element name="FIId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FinInstnId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RequestPayload">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="AppHdr"/>
+        <xsd:element ref="Document"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtTm" type="xsd:string"/>
+</xsd:schema>
+-------------------------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="NewWSDLFile" targetNamespace="http://www.example.org/NewWSDLFile/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/NewWSDLFile/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/NewWSDLFile/">
+      <xsd:element name="NewOperation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part element="tns:NewOperation" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part element="tns:NewOperationResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="NewWSDLFile">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:NewOperationRequest"/>
+      <wsdl:output message="tns:NewOperationResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NewWSDLFileSOAP" type="tns:NewWSDLFile">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="NewOperation">
+      <soap:operation soapAction="http://www.example.org/NewWSDLFile/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="NewWSDLFile">
+    <wsdl:port binding="tns:NewWSDLFileSOAP" name="NewWSDLFileSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+Description	Resource	Path	Location	Type
+CTDX1103E : XSD: The value 'xmlns:xsi' of attribute 'name' must conform to pattern '(\i\c*) & ([\i-[:]][\c-[:]]*)' as constrained by 'http://www.w3.org/2001/XMLSchema#NCName'	admi.xsd	/MySoapService	line 71	XSD Schema Validation Problem
+One or more inline schemas containing schema declarations were detected.  Only WSDLs with external schemas are supported within Applications or Libraries.  	NewWSDLFile.wsdl	/MySoapService	line 1	WSDL Validation Problem
+The WSDL file 'NewWSDLFile.wsdl' was not added through the Message Model wizard.  This error can be fixed by invoking the Message Model wizard and importing this WSDL file as a SOAP XML.	NewWSDLFile.wsdl	/MySoapService	line 1	WSDL Validation Problem
+
+----------------------------------------------------------------------
+Multiple annotations found at this line:
+	- One or more inline schemas containing schema declarations were detected. Only WSDLs with external schemas are supported within Applications or Libraries.
+	- The WSDL file 'NewWSDLFile.wsdl' was not added through the Message Model wizard. This error can be fixed by invoking the Message Model wizard and importing this WSDL file as a 
+	 SOAP XML.
