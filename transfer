@@ -1,98 +1,99 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/Admin" xmlns:tns="http://www.example.org/Admin" elementFormDefault="qualified">
-<xs:import schemaLocation="schema1.xsd" namespace="urn:iso:std:iso:20022:tech:xsd:head.001.001.02" />
-  <xs:import schemaLocation="schema2.xsd" namespace="urn:iso:std:iso:20022:tech:xsd:admi.004.001.02" />
-  <xs:element name="RequestPayload">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="urn:iso:std:iso:20022:tech:xsd:head.001.001.02" ref="q1:AppHdr" />
-        <xs:element xmlns:q2="urn:iso:std:iso:20022:tech:xsd:admi.004.001.02" ref="q2:Document" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AppHdr">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Fr">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="FIId">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="FinInstnId">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="ClrSysMmbId">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element name="MmbId" type="xs:string" />
-                              </xs:sequence>
-                            </xs:complexType>
-                          </xs:element>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="To">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="FIId">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="FinInstnId">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="ClrSysMmbId">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element name="MmbId" type="xs:string" />
-                              </xs:sequence>
-                            </xs:complexType>
-                          </xs:element>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="BizMsgIdr" type="xs:string" />
-        <xs:element name="MsgDefIdr" type="xs:string" />
-        <xs:element name="BizSvc" type="xs:string" />
-        <xs:element name="CreDt" type="xs:dateTime" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Document">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="SysEvtNtfctn">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="EvtInf">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="EvtCd" type="xs:string" />
-                    <xs:element name="EvtParam" type="xs:string" />
-                    <xs:element name="EvtDesc" type="xs:string" />
-                    <xs:element name="EvtTm" type="xs:dateTime" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-</schema>
-
 Description	Resource	Path	Location	Type
-CTDX1100E : DOM: The prefix "xs" for element "xs:import" is not bound.	Admin.xsd	/Mysoap	line 1	XSD Schema Validation Problem
+CTDX1103E : XSD: The element 'http://www.example.org/Admin#schema' is not permitted as constrained by 'XML Schema '; expecting schema	Admin.xsd	/saopapp	line 1	XSD Schema Validation Problem
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/Admin"
+	xmlns:tns="http://www.example.org/Admin" elementFormDefault="qualified">
+	<tns:element name="RequestPayload">
+		<tns:complexType>
+			<tns:sequence>
+				<tns:element name="AppHdr">
+					<tns:complexType>
+						<tns:sequence>
+							<tns:element name="Fr">
+								<tns:complexType>
+									<tns:sequence>
+										<tns:element name="FIId">
+											<tns:complexType>
+												<tns:sequence>
+													<tns:element name="FinInstnId">
+														<tns:complexType>
+															<tns:sequence>
+																<tns:element name="ClrSysMmbId">
+																	<tns:complexType>
+																		<tns:sequence>
+																			<tns:element type=" tns: string"
+																				name="MmbId" />
+																		</tns:sequence>
+																	</tns:complexType>
+																</tns:element>
+															</tns:sequence>
+														</tns:complexType>
+													</tns:element>
+												</tns:sequence>
+											</tns:complexType>
+										</tns:element>
+									</tns:sequence>
+								</tns:complexType>
+							</tns:element>
+							<tns:element name="To">
+								<tns:complexType>
+									<tns:sequence>
+										<tns:element name="FIId">
+											<tns:complexType>
+												<tns:sequence>
+													<tns:element name="FinInstnId">
+														<tns:complexType>
+															<tns:sequence>
+																<tns:element name="ClrSysMmbId">
+																	<tns:complexType>
+																		<tns:sequence>
+																			<tns:element type=" tns: string"
+																				name="MmbId" />
+																		</tns:sequence>
+																	</tns:complexType>
+																</tns:element>
+															</tns:sequence>
+														</tns:complexType>
+													</tns:element>
+												</tns:sequence>
+											</tns:complexType>
+										</tns:element>
+									</tns:sequence>
+								</tns:complexType>
+							</tns:element>
+							<tns:element type=" tns: string" name="BizMsgIdr" />
+							<tns:element type=" tns: Date" name="MsgDefIdr" />
+							<tns:element type=" tns: string" name="BizSvc" />
+							<tns:element type=" tns: string" name="CreDt" />
+						</tns:sequence>
+						<tns:attribute type="tns:string" name="xmlns:tnsi" />
+					</tns:complexType>
+				</tns:element>
+				<tns:element name="Document">
+					<tns:complexType>
+						<tns:sequence>
+							<tns:element name="SysEvtNtfctn">
+								<tns:complexType>
+									<tns:sequence>
+										<tns:element name="EvtInf">
+											<tns:complexType>
+												<tns:sequence>
+													<tns:element type=" tns: string" name="EvtCd" />
+													<tns:element type=" tns: string" name="EvtParam" />
+													<tns:element type=" tns: string" name="EvtDesc" />
+													<tns:element type=" tns: string" name="EvtTm" />
+												</tns:sequence>
+											</tns:complexType>
+										</tns:element>
+									</tns:sequence>
+								</tns:complexType>
+							</tns:element>
+						</tns:sequence>
+						<tns:attribute type="tns:string" name="xmlns" />
+					</tns:complexType>
+				</tns:element>
+			</tns:sequence>
+		</tns:complexType>
+	</tns:element>
+</tns:schema>
