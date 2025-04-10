@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.example.org/NewXMLSchema" xmlns:xs="http://www.example.org/Admin">
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.example.org/NewXMLSchema"
+  targetNamespace="http://www.example.org/NewXMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
   <xs:element name="schema">
     <xs:complexType>
       <xs:sequence>
@@ -61,8 +67,8 @@
                                                                                                                       <xs:complexType>
                                                                                                                         <xs:simpleContent>
                                                                                                                           <xs:extension base="xs:string">
-                                                                                                                            <xs:attribute type="xs:string" name="type" use="optional"/>
-                                                                                                                            <xs:attribute type="xs:string" name="name" use="optional"/>
+                                                                                                                            <xs:attribute name="type" type="xs:string" use="optional"/>
+                                                                                                                            <xs:attribute name="name" type="xs:string" use="optional"/>
                                                                                                                           </xs:extension>
                                                                                                                         </xs:simpleContent>
                                                                                                                       </xs:complexType>
@@ -74,7 +80,7 @@
                                                                                                           </xs:complexType>
                                                                                                         </xs:element>
                                                                                                       </xs:sequence>
-                                                                                                      <xs:attribute type="xs:string" name="name" use="optional"/>
+                                                                                                      <xs:attribute name="name" type="xs:string" use="optional"/>
                                                                                                     </xs:complexType>
                                                                                                   </xs:element>
                                                                                                 </xs:sequence>
@@ -84,8 +90,8 @@
                                                                                         </xs:complexType>
                                                                                       </xs:element>
                                                                                     </xs:sequence>
-                                                                                    <xs:attribute type="xs:string" name="name" use="optional"/>
-                                                                                    <xs:attribute type="xs:string" name="type" use="optional"/>
+                                                                                    <xs:attribute name="name" type="xs:string" use="optional"/>
+                                                                                    <xs:attribute name="type" type="xs:string" use="optional"/>
                                                                                   </xs:complexType>
                                                                                 </xs:element>
                                                                               </xs:sequence>
@@ -95,7 +101,7 @@
                                                                       </xs:complexType>
                                                                     </xs:element>
                                                                   </xs:sequence>
-                                                                  <xs:attribute type="xs:string" name="name" use="optional"/>
+                                                                  <xs:attribute name="name" type="xs:string" use="optional"/>
                                                                 </xs:complexType>
                                                               </xs:element>
                                                             </xs:sequence>
@@ -105,8 +111,8 @@
                                                     </xs:complexType>
                                                   </xs:element>
                                                 </xs:sequence>
-                                                <xs:attribute type="xs:string" name="name" use="optional"/>
-                                                <xs:attribute type="xs:string" name="type" use="optional"/>
+                                                <xs:attribute name="name" type="xs:string" use="optional"/>
+                                                <xs:attribute name="type" type="xs:string" use="optional"/>
                                               </xs:complexType>
                                             </xs:element>
                                           </xs:sequence>
@@ -116,8 +122,8 @@
                                         <xs:complexType>
                                           <xs:simpleContent>
                                             <xs:extension base="xs:string">
-                                              <xs:attribute type="xs:QName" name="type" use="optional"/>
-                                              <xs:attribute type="xs:string" name="name" use="optional"/>
+                                              <xs:attribute name="type" type="xs:QName" use="optional"/>
+                                              <xs:attribute name="name" type="xs:string" use="optional"/>
                                             </xs:extension>
                                           </xs:simpleContent>
                                         </xs:complexType>
@@ -126,7 +132,7 @@
                                   </xs:complexType>
                                 </xs:element>
                               </xs:sequence>
-                              <xs:attribute type="xs:string" name="name" use="optional"/>
+                              <xs:attribute name="name" type="xs:string" use="optional"/>
                             </xs:complexType>
                           </xs:element>
                         </xs:sequence>
@@ -136,15 +142,13 @@
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
-            <xs:attribute type="xs:string" name="name"/>
+            <xs:attribute name="name" type="xs:string"/>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
-      <xs:attribute type="xs:anyURI" name="targetNamespace"/>
-      <xs:attribute type="xs:string" name="elementFormDefault"/>
+      <xs:attribute name="targetNamespace" type="xs:anyURI"/>
+      <xs:attribute name="elementFormDefault" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-</xs:schema>
 
-Description	Resource	Path	Location	Type
-CTDX1103E : XSD: The element 'http://www.example.org/Admin#schema' is not permitted as constrained by 'XML Schema '; expecting schema	Admin.xsd	/saopapp	line 1	XSD Schema Validation Problem
+</xs:schema>
