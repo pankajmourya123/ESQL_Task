@@ -1,154 +1,91 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema 
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://www.example.org/NewXMLSchema"
-  targetNamespace="http://www.example.org/NewXMLSchema"
-  elementFormDefault="qualified"
-  attributeFormDefault="unqualified">
-
-  <xs:element name="schema">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="element">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="complexType">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="sequence">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element name="complexType">
-                                  <xs:complexType>
-                                    <xs:sequence>
-                                      <xs:element name="sequence">
-                                        <xs:complexType>
-                                          <xs:sequence>
-                                            <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
-                                              <xs:complexType mixed="true">
-                                                <xs:sequence>
-                                                  <xs:element name="complexType" minOccurs="0">
-                                                    <xs:complexType>
-                                                      <xs:sequence>
-                                                        <xs:element name="sequence">
-                                                          <xs:complexType>
-                                                            <xs:sequence>
-                                                              <xs:element name="element">
-                                                                <xs:complexType>
-                                                                  <xs:sequence>
-                                                                    <xs:element name="complexType">
-                                                                      <xs:complexType>
-                                                                        <xs:sequence>
-                                                                          <xs:element name="sequence">
-                                                                            <xs:complexType>
-                                                                              <xs:sequence>
-                                                                                <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
-                                                                                  <xs:complexType mixed="true">
-                                                                                    <xs:sequence>
-                                                                                      <xs:element name="complexType" minOccurs="0">
-                                                                                        <xs:complexType>
-                                                                                          <xs:sequence>
-                                                                                            <xs:element name="sequence">
-                                                                                              <xs:complexType>
-                                                                                                <xs:sequence>
-                                                                                                  <xs:element name="element">
-                                                                                                    <xs:complexType>
-                                                                                                      <xs:sequence>
-                                                                                                        <xs:element name="complexType">
-                                                                                                          <xs:complexType>
-                                                                                                            <xs:sequence>
-                                                                                                              <xs:element name="sequence">
-                                                                                                                <xs:complexType>
-                                                                                                                  <xs:sequence>
-                                                                                                                    <xs:element name="element">
-                                                                                                                      <xs:complexType>
-                                                                                                                        <xs:simpleContent>
-                                                                                                                          <xs:extension base="xs:string">
-                                                                                                                            <xs:attribute name="type" type="xs:string" use="optional"/>
-                                                                                                                            <xs:attribute name="name" type="xs:string" use="optional"/>
-                                                                                                                          </xs:extension>
-                                                                                                                        </xs:simpleContent>
-                                                                                                                      </xs:complexType>
-                                                                                                                    </xs:element>
-                                                                                                                  </xs:sequence>
-                                                                                                                </xs:complexType>
-                                                                                                              </xs:element>
-                                                                                                            </xs:sequence>
-                                                                                                          </xs:complexType>
-                                                                                                        </xs:element>
-                                                                                                      </xs:sequence>
-                                                                                                      <xs:attribute name="name" type="xs:string" use="optional"/>
-                                                                                                    </xs:complexType>
-                                                                                                  </xs:element>
-                                                                                                </xs:sequence>
-                                                                                              </xs:complexType>
-                                                                                            </xs:element>
-                                                                                          </xs:sequence>
-                                                                                        </xs:complexType>
-                                                                                      </xs:element>
-                                                                                    </xs:sequence>
-                                                                                    <xs:attribute name="name" type="xs:string" use="optional"/>
-                                                                                    <xs:attribute name="type" type="xs:string" use="optional"/>
-                                                                                  </xs:complexType>
-                                                                                </xs:element>
-                                                                              </xs:sequence>
-                                                                            </xs:complexType>
-                                                                          </xs:element>
-                                                                        </xs:sequence>
-                                                                      </xs:complexType>
-                                                                    </xs:element>
-                                                                  </xs:sequence>
-                                                                  <xs:attribute name="name" type="xs:string" use="optional"/>
-                                                                </xs:complexType>
-                                                              </xs:element>
-                                                            </xs:sequence>
-                                                          </xs:complexType>
-                                                        </xs:element>
-                                                      </xs:sequence>
-                                                    </xs:complexType>
-                                                  </xs:element>
-                                                </xs:sequence>
-                                                <xs:attribute name="name" type="xs:string" use="optional"/>
-                                                <xs:attribute name="type" type="xs:string" use="optional"/>
-                                              </xs:complexType>
-                                            </xs:element>
-                                          </xs:sequence>
-                                        </xs:complexType>
-                                      </xs:element>
-                                      <xs:element name="attribute">
-                                        <xs:complexType>
-                                          <xs:simpleContent>
-                                            <xs:extension base="xs:string">
-                                              <xs:attribute name="type" type="xs:QName" use="optional"/>
-                                              <xs:attribute name="name" type="xs:string" use="optional"/>
-                                            </xs:extension>
-                                          </xs:simpleContent>
-                                        </xs:complexType>
-                                      </xs:element>
-                                    </xs:sequence>
-                                  </xs:complexType>
-                                </xs:element>
-                              </xs:sequence>
-                              <xs:attribute name="name" type="xs:string" use="optional"/>
-                            </xs:complexType>
-                          </xs:element>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string"/>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-      <xs:attribute name="targetNamespace" type="xs:anyURI"/>
-      <xs:attribute name="elementFormDefault" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-
-</xs:schema>
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="CreDt" type="xsd:string"/>
+  <xsd:element name="EvtCd" type="xsd:string"/>
+  <xsd:element name="BizMsgIdr" type="xsd:string"/>
+  <xsd:element name="ClrSysMmbId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="MmbId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Fr">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FIId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Document">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SysEvtNtfctn"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MmbId" type="xsd:string"/>
+  <xsd:element name="BizSvc" type="xsd:string"/>
+  <xsd:element name="EvtInf">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="EvtCd"/>
+        <xsd:element ref="EvtParam"/>
+        <xsd:element ref="EvtDesc"/>
+        <xsd:element ref="EvtTm"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MsgDefIdr" type="xsd:string"/>
+  <xsd:element name="FinInstnId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ClrSysMmbId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtDesc" type="xsd:string"/>
+  <xsd:element name="SysEvtNtfctn">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="EvtInf"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="To">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FIId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AppHdr">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Fr"/>
+        <xsd:element ref="To"/>
+        <xsd:element ref="BizMsgIdr"/>
+        <xsd:element ref="MsgDefIdr"/>
+        <xsd:element ref="BizSvc"/>
+        <xsd:element ref="CreDt"/>
+      </xsd:sequence>
+      <xsd:attribute name="xm" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtParam" type="xsd:string"/>
+  <xsd:element name="FIId">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FinInstnId"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RequestPayload">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="AppHdr"/>
+        <xsd:element ref="Document"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EvtTm" type="xsd:string"/>
+</xsd:schema>
