@@ -1,0 +1,25 @@
+Server : 10.43.0.209
+User : iibuser
+
+Idbi server Stop
+
+/var/mqsi/components/IIBPRODBKR/servers/idbi/run/IDBI_POLICY
+
+CBS_IDBI_SUCB.policyxml
+10.1.4.144  — > 10.1.4.182
+
+Idbi server ON
+Idbi server Stop
+
+mqsisetdbparms IIBPRODBKR -n sftp::CBS_SUCB_SID -u neftidbi -p neftidbi
+
+Restart IIBPRODBKR 
+
+
+Bank _Up : Idbi server ON
+agar yeh sab khuch sahi huaa hai aur phir bhi khuch issue hai toh
+phele sftp @neftidbi10.1.4.182
+yaha pe account disable aaya toh  
+(sftp sab khuch karne ke baad bhi nhi ho rha hai means cdc team se usre lock huaa hai shayad )
+
+phir appliaction server aur broker restart 
