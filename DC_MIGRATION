@@ -1,3 +1,5 @@
+(sftp sab khuch karne ke baad bhi nhi ho rha hai means cdc team se usre lock huaa hai shayad )
+
 DC Migration--Yaha pe hum dc ko ek server se dusre server pe jaate hai aur voo permantely usi  server pe run hoga yaha pe waapas aane ke koi jhol nahi hai 
 DR Drill--Yaha pe hum dc ko ek server se dusre server pe jaate hai aur voo temperorly  usi  server pe run hoga yaha pe waapas aana padageur yeh 
 
