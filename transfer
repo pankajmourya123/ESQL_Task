@@ -1,49 +1,145 @@
-ExceptionList
-	RecoverableException
-			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
-			Line:INTEGER:1607
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmWSInputNode
-			Name:CHARACTER:Flow_Order#FCMComposite_1_1
-			Label:CHARACTER:Flow_Order.HTTP Input
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:Flow_Order.HTTP Input
-			RecoverableException
-					File:CHARACTER:C:\ci\product-build\WMB\src\WebServices\WSLibrary\ImbWSReplyNode.cpp
-					Line:INTEGER:975
-					Function:CHARACTER:ImbWSReplyNode::evaluate
-					Type:CHARACTER:ComIbmWSReplyNode
-					Name:CHARACTER:Flow_Order#FCMComposite_1_6
-					Label:CHARACTER:Flow_Order.HTTP Reply1
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:2230
-					Text:CHARACTER:Caught exception and rethrowing
-					Insert
-							Type:INTEGER:14
-							Text:CHARACTER:Flow_Order.HTTP Reply1
-					RecoverableException
-							File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbHandleManager.cpp
-							Line:INTEGER:1610
-							Function:CHARACTER:ImbInFlightMessageHandle::throwHandleException
-							Type:CHARACTER:
-							Name:CHARACTER:
-							Label:CHARACTER:
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:3742
-							Text:CHARACTER:ERROR, Handle Reused after reply sent.
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:455648540000000009000000bf70fb665809000000000000
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:EVHT
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:ReplyIdentifier
+Bilkul bhai! Yahaan tere liye Passthrough Node ka complete notes format mein likha gaya content hai — exam, interview, ya practical implementation har jagah kaam aayega. Koi bhi important point nahi chhoda:
+
+
+---
+
+Passthrough Node – Complete Notes
+
+
+---
+
+1. Definition:
+
+The Passthrough Node is a special node in IBM Integration Toolkit that does not perform any processing on the message. It simply passes the message as-is from the input terminal to the output terminal.
+
+
+---
+
+2. Purpose:
+
+Used to add a label or identifier to a message flow or subflow.
+
+Helps in version control of subflows when used in multiple message flows.
+
+Allows developers to track which version of a subflow is being used during runtime or after deployment.
+
+Especially useful when you're deploying different versions of the same subflow in different flows for testing or controlled rollout.
+
+
+
+---
+
+3. Key Characteristics:
+
+Message remains unchanged when it passes through this node.
+
+Mostly used for metadata tagging or version labeling.
+
+Can be traced at runtime, in BAR files, or in deployed node properties.
+
+Has zero impact on the message's content or structure.
+
+
+
+---
+
+4. Use Cases:
+
+Version labeling of subflows (e.g., ErrorHandler_v1.2).
+
+Identifying subflow instances during troubleshooting.
+
+Tracing message path without any data transformation.
+
+Used for documentation and monitoring purposes.
+
+
+
+---
+
+5. Node Terminals:
+
+
+---
+
+6. Properties:
+
+Description Properties:
+
+Basic Properties:
+
+Monitoring Properties:
+
+Events: You can define monitoring events for the node (optional).
+
+Events help in logging, debugging, or tracking message processing.
+
+Default: No monitoring events enabled.
+
+
+
+---
+
+7. Where to Find the Node:
+
+Found in the Construction drawer in IBM Integration Toolkit palette.
+
+Icon: A simple rectangular block.
+
+
+
+---
+
+8. Observability (Where label is visible):
+
+
+---
+
+9. No Impact on:
+
+Message content
+
+Message headers
+
+Processing speed (negligible latency)
+
+Error handling logic
+
+
+
+---
+
+10. Sample Flow with Passthrough:
+
+HTTPInput → Compute → Passthrough (Label: ErrorHandler_v2.0) → HTTPReply
+
+
+---
+
+11. Advantages:
+
+Helps in maintaining large-scale integration projects.
+
+Useful for team-based collaboration and deployments.
+
+Adds transparency and traceability.
+
+Avoids confusion when multiple versions of subflows are used.
+
+
+
+---
+
+12. Limitations:
+
+Does not perform any logic, transformation, or validation.
+
+Meant only for metadata/versioning use cases.
+
+
+
+---
+
+Agar tu chaahe toh isko main ek PDF format mein bhi convert karke de sakta hoon notes banane ke liye.
+
+Bata bhai, aur kuch add karna hai kya?
