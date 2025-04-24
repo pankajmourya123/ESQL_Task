@@ -1,7 +1,7 @@
-$Root/JSON/Data/order/type = 'BOOK'
 {
-  "order": {
-    "type": "BOOK",
-    "quantity": 10
-  }
+     "EmployeeRecord":{
+	      "Wage":100000,
+		  "EmployeeNumber":000001
+	 }
+ 
 }
