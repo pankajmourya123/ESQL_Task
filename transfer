@@ -1,71 +1,154 @@
-XML (Extensible Markup Language)
-
-Yeh teri actual data file hai.
-
-Isme tere business data hote hain – jaise customer details, transaction data, etc
-XSD (XML Schema Definition)
-
-Yeh ek blueprint hai XML ke liye.
-
-Batata hai ki XML file ka structure kya hoga (kaunse elements, kaunse data types, mandatory fields, etc.)
-
-XML ko validate karne ke liye use hota hai.
-Message Set / Message Definition
-
-Yeh typically integration tools (like IBM Integration Bus, App Connect, etc.) mein use hoti hai.
-
-Message Set ke andar Message Definition File hoti hai jo XSD ke format mein hoti hai.
-
-Yeh system ko batati hai ki kaunsa message ka structure kya hai, kaunse format mein parse/serialize karna hai (XML, JSON, COBOL, etc.)
-MXSD (Message Extended Schema Definition)
-
-Yeh App Connect / IIB specific format hai.
-
-Basically XSD + App Connect/IIB specific metadata.
-
-Isko use karke system runtime mein XML ko process karta hai.
-
-Tera XML file isi MXSD ke base par parse hota hai
-WSDL (Web Service Definition Language)
-
-Yeh ek contract hota hai web service ke liye.
-
-Yeh define karta hai:
-
-Kaunse operations hain
-
-Input/Output messages kya hain
-
-Kaunsa XML structure use hoga (jo XSD/MXSD se aaya)
-
-
-Jab tu MXSD se WSDL banata hai, to wo automatically uss message structure ko use karta hai.
-Format
-
-Kya hota hai
-
-Kab use hota hai
-
-XML Schema (XSD)
-
-XML file ka structure define karta hai
-
-Jab tera data XML format mein hota hai
-
-DFDL (Data Format Description Language)
-
-Text ya binary data ko model karne ke liye
-
-Jab tera data fixed-length text, CSV, binary hota hai
-
-Message Sets
-
-Purane version ke message models (used in MRM domain)
-
-Jab tu MRM (Message Repository Manager) ya IDOC domain use karta hai
-
-WebSphere Adapters
-
-SAP, Siebel jaise systems ke data model karne ke liye
-
-Jab integration external ERP system ke sath ho
+ExceptionList
+	RecoverableException
+			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
+			Line:INTEGER:1867
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmTryCatchNode
+			Name:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD#FCMComposite_1_5
+			Label:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.Try Catch
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.Try Catch
+			RecoverableException
+					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/SQLNodeLibrary/ImbComputeNode.cpp
+					Line:INTEGER:343
+					Function:CHARACTER:ImbComputeNode::evaluate
+					Type:CHARACTER:ComIbmComputeNode
+					Name:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD#FCMComposite_1_12
+					Label:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.DB_INSERT
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:2230
+					Text:CHARACTER:Caught exception and rethrowing
+					Insert
+							Type:INTEGER:14
+							Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.DB_INSERT
+					RecoverableException
+							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+							Line:INTEGER:785
+							Function:CHARACTER:SqlStatementGroup::execute
+							Type:CHARACTER:
+							Name:CHARACTER:
+							Label:CHARACTER:
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:2488
+							Text:CHARACTER:Error detected, rethrowing
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.Main
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:19.3
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:DECLARE flag BOOLEAN CopyEntireMessage();
+							RecoverableException
+									File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
+									Line:INTEGER:1337
+									Function:CHARACTER:SqlRoutine::invoke
+									Type:CHARACTER:
+									Name:CHARACTER:
+									Label:CHARACTER:
+									Catalog:CHARACTER:BIPmsgs
+									Severity:INTEGER:3
+									Number:INTEGER:2934
+									Text:CHARACTER:Error occured in procedure
+									Insert
+											Type:INTEGER:5
+											Text:CHARACTER:CopyEntireMessage
+									RecoverableException
+											File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+											Line:INTEGER:785
+											Function:CHARACTER:SqlStatementGroup::execute
+											Type:CHARACTER:
+											Name:CHARACTER:
+											Label:CHARACTER:
+											Catalog:CHARACTER:BIPmsgs
+											Severity:INTEGER:3
+											Number:INTEGER:2488
+											Text:CHARACTER:Error detected, rethrowing
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.CopyEntireMessage
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:60.8
+											Insert
+													Type:INTEGER:5
+													Text:CHARACTER:CALL insertDatabase(N07Header, N07Record, N07Body, sType, msg);
+											RecoverableException
+													File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
+													Line:INTEGER:1337
+													Function:CHARACTER:SqlRoutine::invoke
+													Type:CHARACTER:
+													Name:CHARACTER:
+													Label:CHARACTER:
+													Catalog:CHARACTER:BIPmsgs
+													Severity:INTEGER:3
+													Number:INTEGER:2934
+													Text:CHARACTER:Error occured in procedure
+													Insert
+															Type:INTEGER:5
+															Text:CHARACTER:insertDatabase
+													RecoverableException
+															File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+															Line:INTEGER:760
+															Function:CHARACTER:SqlStatementGroup::execute
+															Type:CHARACTER:
+															Name:CHARACTER:
+															Label:CHARACTER:
+															Catalog:CHARACTER:BIPmsgs
+															Severity:INTEGER:3
+															Number:INTEGER:2488
+															Text:CHARACTER:Error detected, rethrowing
+															Insert
+																	Type:INTEGER:5
+																	Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.insertDatabase
+															Insert
+																	Type:INTEGER:5
+																	Text:CHARACTER:63.3
+															Insert
+																	Type:INTEGER:5
+																	Text:CHARACTER:INSERT INTO Database.NEFT_OUT (TRAN_REF_NO, INC_UTR, TRAN_DATE, AMOUNT, IFSC_SENDER, SENDER_ACCT_TYPE, SENDER_ACCT_NO, SENDER_ACCT_NAME, ORIG_REMITTANCE, IFSC_RECVR, RECVR_ACCT_TYPE, RECVR_ACCT_NO, RECVR_ACCT_NAME, BENEF_ADDRS, SEND_TO_RECE_INFO, REJECT_CODE, REJECT_REASON, ACK_NACK, CREATION_TIME, LAST_MOD_TIME, OUT_MSG_SENT_SBI, BANKNAME, TRAN_BRANCH, ACK_NACKOUT_SEND_CBS, SUB_MSG_TYPE, ACK_NACK_TIME, RET_ORG_ERR, DUP_ORG_OUT, N10_ACKNACK, SEQINHEADER, TRAN_REF_RETURN_UTR, LAST_UPD_STAMP, CREATION_TIME_STAMP) VALUES(trRef, inc_utr, Rec.VALUEDATE, Rec.AMOUNT, Rec.SENDINGBRANCHIFSC, Rec.SENDINGCUSTOMERACCOUNTTYPE, Rec.SENDINGCUSTOMERACCOUNTNUMBER, Rec.SEDINGCUSTOMERACCOUNTNAME, orgRemt, Rec.BENEFICIARYBRANCHSIFSC, Rec.BENEFICIARYCUSTOMERACTYPE, Rec.BENEFICIARYCUSTOMERACNUMBER, Rec.BENEFICIARYCUSTOMERACNAME, benAddr, sendToRecvInfo, rejectCode, rejectReason, '0', cTime, cTime, '0', Environment.bankName, branchCode, '0', msgType, '0', '0', '0', '0', Header.SEQUENCENUMBER, relRefNum, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+															DatabaseException
+																	File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
+																	Line:INTEGER:3923
+																	Function:CHARACTER:ImbODBCStatement::checkRcInner
+																	Type:CHARACTER:
+																	Name:CHARACTER:
+																	Label:CHARACTER:
+																	Catalog:CHARACTER:BIPmsgs
+																	Severity:INTEGER:3
+																	Number:INTEGER:2321
+																	Text:CHARACTER:Root SQL exception
+																	Insert
+																			Type:INTEGER:2
+																			Text:CHARACTER:-1
+																	Insert
+																			Type:INTEGER:14
+																			Text:CHARACTER:/opt/IBM/ace-12.0.12.5/ie02/lib/libodbcinterface.so
+																	DatabaseException
+																			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
+																			Line:INTEGER:4142
+																			Function:CHARACTER:ImbODBCStatement::checkRcInner
+																			Type:CHARACTER:
+																			Name:CHARACTER:
+																			Label:CHARACTER:
+																			Catalog:CHARACTER:BIPmsgs
+																			Severity:INTEGER:3
+																			Number:INTEGER:2322
+																			Text:CHARACTER:Child SQL exception
+																			Insert
+																					Type:INTEGER:5
+																					Text:CHARACTER:23000
+																			Insert
+																					Type:INTEGER:2
+																					Text:CHARACTER:1
+																			Insert
+																					Type:INTEGER:5
+																					Text:CHARACTER:[IBM][ODBC Oracle Wire Protocol driver][Oracle]ORA-00001: unique constraint (NEFT_TEST.NEFT_OUT_UK1) violated 
