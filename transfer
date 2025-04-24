@@ -1,7 +1,49 @@
-Issue: 000001 ko JSON parse nahi kar pa raha
-
-JSON specification ke hisaab se, numbers ko:
-
-leading zeroes ke saath represent nahi kiya ja sakta (except for 0 or decimals).
-
-So, 000001 is invalid JSON number, isliye error aata hai.
+ExceptionList
+	RecoverableException
+			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
+			Line:INTEGER:1607
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:Flow_Order#FCMComposite_1_1
+			Label:CHARACTER:Flow_Order.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:Flow_Order.HTTP Input
+			RecoverableException
+					File:CHARACTER:C:\ci\product-build\WMB\src\WebServices\WSLibrary\ImbWSReplyNode.cpp
+					Line:INTEGER:975
+					Function:CHARACTER:ImbWSReplyNode::evaluate
+					Type:CHARACTER:ComIbmWSReplyNode
+					Name:CHARACTER:Flow_Order#FCMComposite_1_6
+					Label:CHARACTER:Flow_Order.HTTP Reply1
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:2230
+					Text:CHARACTER:Caught exception and rethrowing
+					Insert
+							Type:INTEGER:14
+							Text:CHARACTER:Flow_Order.HTTP Reply1
+					RecoverableException
+							File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbHandleManager.cpp
+							Line:INTEGER:1610
+							Function:CHARACTER:ImbInFlightMessageHandle::throwHandleException
+							Type:CHARACTER:
+							Name:CHARACTER:
+							Label:CHARACTER:
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:3742
+							Text:CHARACTER:ERROR, Handle Reused after reply sent.
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:455648540000000009000000bf70fb665809000000000000
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:EVHT
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:ReplyIdentifier
