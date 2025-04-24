@@ -1,145 +1,92 @@
-Bilkul bhai! Yahaan tere liye Passthrough Node ka complete notes format mein likha gaya content hai — exam, interview, ya practical implementation har jagah kaam aayega. Koi bhi important point nahi chhoda:
+Koi dikkat nahi bhai! Main abhi woh table content as plain text format mein de raha hoon — easily copy ho jaayega aur use kar paayega tu notes mein:
 
 
 ---
 
-Passthrough Node – Complete Notes
+Passthrough Node vs Label Node – Detailed Comparison (Plain Text)
 
+1. Purpose:
 
----
+Passthrough Node: Used to pass messages unchanged, mainly for subflow versioning and observability.
 
-1. Definition:
-
-The Passthrough Node is a special node in IBM Integration Toolkit that does not perform any processing on the message. It simply passes the message as-is from the input terminal to the output terminal.
-
-
----
-
-2. Purpose:
-
-Used to add a label or identifier to a message flow or subflow.
-
-Helps in version control of subflows when used in multiple message flows.
-
-Allows developers to track which version of a subflow is being used during runtime or after deployment.
-
-Especially useful when you're deploying different versions of the same subflow in different flows for testing or controlled rollout.
+Label Node: Used to define logical routing points for RouteToLabel or PROPAGATE.
 
 
 
----
+2. Processing:
 
-3. Key Characteristics:
+Passthrough Node: Does not modify the message at all.
 
-Message remains unchanged when it passes through this node.
-
-Mostly used for metadata tagging or version labeling.
-
-Can be traced at runtime, in BAR files, or in deployed node properties.
-
-Has zero impact on the message's content or structure.
+Label Node: Also does not modify the message, just defines where to route it next.
 
 
 
----
+3. Routing Logic:
 
-4. Use Cases:
+Passthrough Node: Not used in routing decisions.
 
-Version labeling of subflows (e.g., ErrorHandler_v1.2).
-
-Identifying subflow instances during troubleshooting.
-
-Tracing message path without any data transformation.
-
-Used for documentation and monitoring purposes.
+Label Node: Used in dynamic routing, along with RouteToLabel node.
 
 
 
----
+4. Flow Connection:
 
-5. Node Terminals:
+Passthrough Node: Physically connected in the flow (has In and Out terminals).
 
-
----
-
-6. Properties:
-
-Description Properties:
-
-Basic Properties:
-
-Monitoring Properties:
-
-Events: You can define monitoring events for the node (optional).
-
-Events help in logging, debugging, or tracking message processing.
-
-Default: No monitoring events enabled.
+Label Node: Not physically connected to RouteToLabel; connection is logical via LocalEnvironment.
 
 
 
----
+5. Used With:
 
-7. Where to Find the Node:
+Passthrough Node: Used for documentation, versioning, or debugging.
 
-Found in the Construction drawer in IBM Integration Toolkit palette.
-
-Icon: A simple rectangular block.
+Label Node: Used with RouteToLabel, PROPAGATE, or SOAPExtract for flow control.
 
 
 
----
+6. Terminals:
 
-8. Observability (Where label is visible):
+Passthrough Node: Has In and Out terminals.
+
+Label Node: Only has an Out terminal.
 
 
----
 
-9. No Impact on:
+7. Main Property:
 
-Message content
+Passthrough Node: Label for documentation.
 
-Message headers
+Label Node: Label Name (must be unique and referenced in LocalEnvironment).
 
-Processing speed (negligible latency)
 
-Error handling logic
+
+8. Message Modification:
+
+Passthrough Node: No.
+
+Label Node: No.
+
+
+
+9. Node Palette:
+
+Passthrough Node: Construction drawer.
+
+Label Node: Routing drawer.
+
+
+
+10. Common Use Case:
+
+Passthrough Node: Tag a subflow like "Logger_v2.0" for tracking.
+
+Label Node: Route to specific path based on country, like “India_Label”, “US_Label”.
+
+
 
 
 
 ---
 
-10. Sample Flow with Passthrough:
-
-HTTPInput → Compute → Passthrough (Label: ErrorHandler_v2.0) → HTTPReply
-
-
----
-
-11. Advantages:
-
-Helps in maintaining large-scale integration projects.
-
-Useful for team-based collaboration and deployments.
-
-Adds transparency and traceability.
-
-Avoids confusion when multiple versions of subflows are used.
-
-
-
----
-
-12. Limitations:
-
-Does not perform any logic, transformation, or validation.
-
-Meant only for metadata/versioning use cases.
-
-
-
----
-
-Agar tu chaahe toh isko main ek PDF format mein bhi convert karke de sakta hoon notes banane ke liye.
-
-Bata bhai, aur kuch add karna hai kya?
+Bhai agar chaahe toh main isko ek PDF file ya image graphic mein bhi bana sakta hoon jo aur achhe se paste ho jaaye docs ya slides mein. Bata dena.
