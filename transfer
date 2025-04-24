@@ -1,7 +1,7 @@
-{
-     "EmployeeRecord":{
-	      "Wage":100000,
-		  "EmployeeNumber":000001
-	 }
- 
-}
+Issue: 000001 ko JSON parse nahi kar pa raha
+
+JSON specification ke hisaab se, numbers ko:
+
+leading zeroes ke saath represent nahi kiya ja sakta (except for 0 or decimals).
+
+So, 000001 is invalid JSON number, isliye error aata hai.
