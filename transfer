@@ -1,154 +1,129 @@
-ExceptionList
-	RecoverableException
-			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
-			Line:INTEGER:1867
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmTryCatchNode
-			Name:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD#FCMComposite_1_5
-			Label:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.Try Catch
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.Try Catch
-			RecoverableException
-					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/SQLNodeLibrary/ImbComputeNode.cpp
-					Line:INTEGER:343
-					Function:CHARACTER:ImbComputeNode::evaluate
-					Type:CHARACTER:ComIbmComputeNode
-					Name:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD#FCMComposite_1_12
-					Label:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.DB_INSERT
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:2230
-					Text:CHARACTER:Caught exception and rethrowing
-					Insert
-							Type:INTEGER:14
-							Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD.DB_INSERT
-					RecoverableException
-							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-							Line:INTEGER:785
-							Function:CHARACTER:SqlStatementGroup::execute
-							Type:CHARACTER:
-							Name:CHARACTER:
-							Label:CHARACTER:
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:2488
-							Text:CHARACTER:Error detected, rethrowing
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.Main
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:19.3
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:DECLARE flag BOOLEAN CopyEntireMessage();
-							RecoverableException
-									File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
-									Line:INTEGER:1337
-									Function:CHARACTER:SqlRoutine::invoke
-									Type:CHARACTER:
-									Name:CHARACTER:
-									Label:CHARACTER:
-									Catalog:CHARACTER:BIPmsgs
-									Severity:INTEGER:3
-									Number:INTEGER:2934
-									Text:CHARACTER:Error occured in procedure
-									Insert
-											Type:INTEGER:5
-											Text:CHARACTER:CopyEntireMessage
-									RecoverableException
-											File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-											Line:INTEGER:785
-											Function:CHARACTER:SqlStatementGroup::execute
-											Type:CHARACTER:
-											Name:CHARACTER:
-											Label:CHARACTER:
-											Catalog:CHARACTER:BIPmsgs
-											Severity:INTEGER:3
-											Number:INTEGER:2488
-											Text:CHARACTER:Error detected, rethrowing
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.CopyEntireMessage
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:60.8
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:CALL insertDatabase(N07Header, N07Record, N07Body, sType, msg);
-											RecoverableException
-													File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
-													Line:INTEGER:1337
-													Function:CHARACTER:SqlRoutine::invoke
-													Type:CHARACTER:
-													Name:CHARACTER:
-													Label:CHARACTER:
-													Catalog:CHARACTER:BIPmsgs
-													Severity:INTEGER:3
-													Number:INTEGER:2934
-													Text:CHARACTER:Error occured in procedure
-													Insert
-															Type:INTEGER:5
-															Text:CHARACTER:insertDatabase
-													RecoverableException
-															File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-															Line:INTEGER:760
-															Function:CHARACTER:SqlStatementGroup::execute
-															Type:CHARACTER:
-															Name:CHARACTER:
-															Label:CHARACTER:
-															Catalog:CHARACTER:BIPmsgs
-															Severity:INTEGER:3
-															Number:INTEGER:2488
-															Text:CHARACTER:Error detected, rethrowing
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:com.cedge.surat.neft.out.SURAT_NEFT_OUTWARD_DB_INSERT.insertDatabase
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:63.3
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:INSERT INTO Database.NEFT_OUT (TRAN_REF_NO, INC_UTR, TRAN_DATE, AMOUNT, IFSC_SENDER, SENDER_ACCT_TYPE, SENDER_ACCT_NO, SENDER_ACCT_NAME, ORIG_REMITTANCE, IFSC_RECVR, RECVR_ACCT_TYPE, RECVR_ACCT_NO, RECVR_ACCT_NAME, BENEF_ADDRS, SEND_TO_RECE_INFO, REJECT_CODE, REJECT_REASON, ACK_NACK, CREATION_TIME, LAST_MOD_TIME, OUT_MSG_SENT_SBI, BANKNAME, TRAN_BRANCH, ACK_NACKOUT_SEND_CBS, SUB_MSG_TYPE, ACK_NACK_TIME, RET_ORG_ERR, DUP_ORG_OUT, N10_ACKNACK, SEQINHEADER, TRAN_REF_RETURN_UTR, LAST_UPD_STAMP, CREATION_TIME_STAMP) VALUES(trRef, inc_utr, Rec.VALUEDATE, Rec.AMOUNT, Rec.SENDINGBRANCHIFSC, Rec.SENDINGCUSTOMERACCOUNTTYPE, Rec.SENDINGCUSTOMERACCOUNTNUMBER, Rec.SEDINGCUSTOMERACCOUNTNAME, orgRemt, Rec.BENEFICIARYBRANCHSIFSC, Rec.BENEFICIARYCUSTOMERACTYPE, Rec.BENEFICIARYCUSTOMERACNUMBER, Rec.BENEFICIARYCUSTOMERACNAME, benAddr, sendToRecvInfo, rejectCode, rejectReason, '0', cTime, cTime, '0', Environment.bankName, branchCode, '0', msgType, '0', '0', '0', '0', Header.SEQUENCENUMBER, relRefNum, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-															DatabaseException
-																	File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
-																	Line:INTEGER:3923
-																	Function:CHARACTER:ImbODBCStatement::checkRcInner
-																	Type:CHARACTER:
-																	Name:CHARACTER:
-																	Label:CHARACTER:
-																	Catalog:CHARACTER:BIPmsgs
-																	Severity:INTEGER:3
-																	Number:INTEGER:2321
-																	Text:CHARACTER:Root SQL exception
-																	Insert
-																			Type:INTEGER:2
-																			Text:CHARACTER:-1
-																	Insert
-																			Type:INTEGER:14
-																			Text:CHARACTER:/opt/IBM/ace-12.0.12.5/ie02/lib/libodbcinterface.so
-																	DatabaseException
-																			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
-																			Line:INTEGER:4142
-																			Function:CHARACTER:ImbODBCStatement::checkRcInner
-																			Type:CHARACTER:
-																			Name:CHARACTER:
-																			Label:CHARACTER:
-																			Catalog:CHARACTER:BIPmsgs
-																			Severity:INTEGER:3
-																			Number:INTEGER:2322
-																			Text:CHARACTER:Child SQL exception
-																			Insert
-																					Type:INTEGER:5
-																					Text:CHARACTER:23000
-																			Insert
-																					Type:INTEGER:2
-																					Text:CHARACTER:1
-																			Insert
-																					Type:INTEGER:5
-																					Text:CHARACTER:[IBM][ODBC Oracle Wire Protocol driver][Oracle]ORA-00001: unique constraint (NEFT_TEST.NEFT_OUT_UK1) violated 
+Here's a clean and concise version of your Route node notes, structured for quick reference and easy studying:
+
+
+---
+
+Route Node (IBM Integration Toolkit)
+
+Last Updated: 2023-06-21
+Used for: Directing messages to different paths in a message flow based on specific criteria.
+
+
+---
+
+Operation Modes Available In
+
+Developer
+
+Application Integration Suite
+
+Standard
+
+Advanced
+
+Scale
+
+
+
+---
+
+Purpose
+
+Route messages based on XPath filter expressions.
+
+Bypass unnecessary steps (e.g., skip DB lookup if data is present).
+
+Trigger multiple events using Distribution Mode = All.
+
+Example: Log by account ID or audit by product.
+
+
+
+---
+
+XPath Filters
+
+Use XPath 1.0.
+
+Filters return Boolean (true / false).
+
+Example filter:
+
+$Root/XMLNSC/EmployeeRecord/EmployeeNumber="00001"
+
+
+
+---
+
+Message Flow Structure
+
+Terminals: | Terminal | Type | Purpose | |----------|------|---------| | In | Static | Receives message | | Match | Dynamic | Routed if expression is true | | Default | Static | If no match | | Failure | Static | If an error occurs |
+
+Dynamic Terminals: Can define multiple. Unmapped ones won’t receive messages.
+
+
+
+---
+
+Distribution Mode
+
+
+---
+
+Example Behavior
+
+Input:
+
+<EmployeeRecord>
+  <EmployeeNumber>00001</EmployeeNumber>
+  <FamilyName>Smith</FamilyName>
+  <Wage>20000</Wage>
+</EmployeeRecord>
+
+Filters:
+
+$Root/XMLNSC/EmployeeRecord/EmployeeNumber="00002"  | Match
+$Root/XMLNSC/EmployeeRecord/EmployeeNumber="00001"  | out_exp2
+
+Mode: First
+→ Routed to out_exp2
+
+Mode: All
+→ Same output since only one condition is true.
+
+
+
+---
+
+Properties
+
+1. Description | Property | Mandatory | Configurable | Description | |----------|-----------|--------------|-------------| | Node Name | No | No | Name of the node | | Short/Long Description | No | No | Optional descriptions |
+
+2. Basic | Property | M | C | Description | |----------|---|---|-------------| | Filter Table | Yes | No | Table of XPath expressions + terminals | | Distribution Mode | No | Yes | All or First |
+
+XPath must start with: $Root, $Properties, $LocalEnvironment, $DestinationList, $ExceptionList, $Environment, or $Body.
+
+
+3. Monitoring
+
+Add/Edit/Delete monitoring events (optional).
+
+
+
+---
+
+Helpful Concepts
+
+Dynamic Terminals: Flexible routing.
+
+Message Flow Terminals: Understanding input/output structure.
+
+XPath Overview: Learn XPath 1.0 syntax.
+
+Error Handling: Plan for failures with the Failure terminal.
+
+
+
+---
+
+Let me know if you'd like this in PDF or Markdown format, or need visual diagrams!
