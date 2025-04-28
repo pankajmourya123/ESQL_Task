@@ -1,92 +1,18 @@
-Koi dikkat nahi bhai! Main abhi woh table content as plain text format mein de raha hoon — easily copy ho jaayega aur use kar paayega tu notes mein:
-
-
----
-
-Passthrough Node vs Label Node – Detailed Comparison (Plain Text)
-
-1. Purpose:
-
-Passthrough Node: Used to pass messages unchanged, mainly for subflow versioning and observability.
-
-Label Node: Used to define logical routing points for RouteToLabel or PROPAGATE.
-
-
-
-2. Processing:
-
-Passthrough Node: Does not modify the message at all.
-
-Label Node: Also does not modify the message, just defines where to route it next.
-
-
-
-3. Routing Logic:
-
-Passthrough Node: Not used in routing decisions.
-
-Label Node: Used in dynamic routing, along with RouteToLabel node.
-
-
-
-4. Flow Connection:
-
-Passthrough Node: Physically connected in the flow (has In and Out terminals).
-
-Label Node: Not physically connected to RouteToLabel; connection is logical via LocalEnvironment.
-
-
-
-5. Used With:
-
-Passthrough Node: Used for documentation, versioning, or debugging.
-
-Label Node: Used with RouteToLabel, PROPAGATE, or SOAPExtract for flow control.
-
-
-
-6. Terminals:
-
-Passthrough Node: Has In and Out terminals.
-
-Label Node: Only has an Out terminal.
-
-
-
-7. Main Property:
-
-Passthrough Node: Label for documentation.
-
-Label Node: Label Name (must be unique and referenced in LocalEnvironment).
-
-
-
-8. Message Modification:
-
-Passthrough Node: No.
-
-Label Node: No.
-
-
-
-9. Node Palette:
-
-Passthrough Node: Construction drawer.
-
-Label Node: Routing drawer.
-
-
-
-10. Common Use Case:
-
-Passthrough Node: Tag a subflow like "Logger_v2.0" for tracking.
-
-Label Node: Route to specific path based on country, like “India_Label”, “US_Label”.
+BIP9318E
+Request to 'PreSetupValidate' resource 'AggregateControl', 'AggregateControl' of type 'MessageFlow' failed. 
+The 'PreSetupValidate' operation on the resource 'AggregateControl', 'AggregateControl' of type 'MessageFlow' failed.  Further messages have been logged with details of the error. 
+Use the previous error messages to identify the cause of the error and correct before retrying the operation. 
 
 
 
 
 
----
 
-Bhai agar chaahe toh main isko ek PDF file ya image graphic mein bhi bana sakta hoon jo aur achhe se paste ho jaaye docs ya slides mein. Bata dena.
+BIP2685E
+The node of type 'AggregateControl' named 'Aggregate Control' requires a queue manager to be specified on the integration node. 
+This node stores its state on the queue manager that is specified on the integration node, and cannot function without it. 
+Specify a queue manager for the integration node, and then deploy the component again. 
+
+
+
+
