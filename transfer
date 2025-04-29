@@ -1,42 +1,14 @@
-LocalEnvironment
-	Destination
-			HTTP
-					RequestIdentifier:BLOB:[B@f493c6ae
-	ComIbmAggregateControlNode
-			aggregateName:CHARACTER:MyAggregation
-			aggregateId:CHARACTER:7f03e68e24e711f0b20f0a2b313500000000000000000000
+CREATE COMPUTE MODULE fanout_Compute
+  CREATE FUNCTION Main() RETURNS BOOLEAN
+  BEGIN
+    -- Preserve correlation ID for aggregation
+    SET OutputLocalEnvironment.Destination.HTTP.RequestIdentifier = 
+        InputLocalEnvironment.Destination.HTTP.RequestIdentifier;
 
+    -- Baaki tera logic yahin likh
+    -- Example:
+    SET OutputRoot.XMLNSC.Result = 'OK';
 
-
-ExceptionList
-	RecoverableException
-			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
-			Line:INTEGER:1867
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmWSInputNode
-			Name:CHARACTER:AggregateControlFlow#FCMComposite_1_1
-			Label:CHARACTER:AggregateControlFlow.HTTP Input
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:AggregateControlFlow.HTTP Input
-			RecoverableException
-					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/AggregateNodes/lib/ImbAggregateReplyNode.cpp
-					Line:INTEGER:1105
-					Function:CHARACTER:ImbAggregateReplyNode::getRESTAsyncResponseMessageID
-					Type:CHARACTER:ComIbmAggregateReplyNode
-					Name:CHARACTER:AggregateControlFlow#FCMComposite_1_10
-					Label:CHARACTER:AggregateControlFlow.Aggregate Reply
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:4419
-					Text:CHARACTER:Cannot find 'LocalEnvironment.REST.Response.CorrelationID'
-					Insert
-							Type:INTEGER:5
-							Text:CHARACTER:LocalEnvironment.REST.Response.CorrelationID
-					Insert
-							Type:INTEGER:5
-							Text:CHARACTER:Aggregate Reply
+    RETURN TRUE;
+  END;
+END MODULE;
