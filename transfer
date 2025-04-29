@@ -1,18 +1,42 @@
-BIP9318E
-Request to 'PreSetupValidate' resource 'AggregateControl', 'AggregateControl' of type 'MessageFlow' failed. 
-The 'PreSetupValidate' operation on the resource 'AggregateControl', 'AggregateControl' of type 'MessageFlow' failed.  Further messages have been logged with details of the error. 
-Use the previous error messages to identify the cause of the error and correct before retrying the operation. 
+LocalEnvironment
+	Destination
+			HTTP
+					RequestIdentifier:BLOB:[B@f493c6ae
+	ComIbmAggregateControlNode
+			aggregateName:CHARACTER:MyAggregation
+			aggregateId:CHARACTER:7f03e68e24e711f0b20f0a2b313500000000000000000000
 
 
 
-
-
-
-BIP2685E
-The node of type 'AggregateControl' named 'Aggregate Control' requires a queue manager to be specified on the integration node. 
-This node stores its state on the queue manager that is specified on the integration node, and cannot function without it. 
-Specify a queue manager for the integration node, and then deploy the component again. 
-
-
-
-
+ExceptionList
+	RecoverableException
+			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
+			Line:INTEGER:1867
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:AggregateControlFlow#FCMComposite_1_1
+			Label:CHARACTER:AggregateControlFlow.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:AggregateControlFlow.HTTP Input
+			RecoverableException
+					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/AggregateNodes/lib/ImbAggregateReplyNode.cpp
+					Line:INTEGER:1105
+					Function:CHARACTER:ImbAggregateReplyNode::getRESTAsyncResponseMessageID
+					Type:CHARACTER:ComIbmAggregateReplyNode
+					Name:CHARACTER:AggregateControlFlow#FCMComposite_1_10
+					Label:CHARACTER:AggregateControlFlow.Aggregate Reply
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:4419
+					Text:CHARACTER:Cannot find 'LocalEnvironment.REST.Response.CorrelationID'
+					Insert
+							Type:INTEGER:5
+							Text:CHARACTER:LocalEnvironment.REST.Response.CorrelationID
+					Insert
+							Type:INTEGER:5
+							Text:CHARACTER:Aggregate Reply
