@@ -1,1 +1,25 @@
-mqsichangeproperties ACE_NODE -e IS2 -o ComIbmCallableFlowManager -n enableRemoteCallableFlows -v true
+C:\Program Files\IBM\ACE\12.0.8.0>mqsichangeproperties Testbrkr  -e Exce1 -o ComIbmCallableFlowManager -n enableRemoteCallableFlows -v true
+BIP8123W: The mqsichangeproperties command changes the values of integration node properties.
+Syntax 1 - Integration node properties:
+ mqsichangeproperties [--integration-node] <integrationNodeName> [ --component <componentName> | --configurable-service <policyType> ] [--object <objectName>] --property <propertyName> ( --value <propertyValue> | --delete | --input-file <Path/Filename> ) [--offline] [--trace <traceFileName>]
+ Syntax 2 - Integration server properties::
+ mqsichangeproperties [--integration-node] <integrationNodeName> --integration-server <integrationServerName> --object <objectName> --property <propertyName> ( --value <propertyValue> | --delete | -p Path/Filename ) [--offline] [--trace <traceFileName>]
+
+ Command options:
+ [--integration-node] <integrationNodeName>: The name of the integration node to modify.
+ '--integration-server (-e) <integrationServerName>' Change properties for the integration server.
+ '--component (-b) [BrokerRegistry | NodeHttpListener | SecurityCache | RestAdminListener | Events | Service | AdminLog]' Change properties for the named component.  Omit this paramater to change top-level properties for the integration node.
+ '--configurable-service (-c) <policyType>' Change properties for a policy defined at the integration node level. This cannot be used to change a policy deployed to an integration sever..
+ '--object (-o) <objectName>' The name of the object for which you want to change the properties.
+ '--property (-n) <propertyName>' The name of the property to be changed.
+ '--value (-v) <propertyValue>' The value that is assigned to the property specified by the --property parameter. Specify more than one property name and corresponding value by using commas as separators; for example, --property Name1, Name2 --value Value1, Value2.
+ '--delete (-d)' If the property that you specify on the --property parameter exists, it is deleted. This parameter is valid only if you specify a policy of type UserDefined.
+ '--input-file (-p) <path/filename>' The name of a file to read the integration node property settings from.
+ '--offline (-f)' Allows updates when the integration node or integration server is stopped. The changes made will be used the next time the integration node/server starts.
+ '--trace <traceFileName>' : send verbose internal trace to the specified file.
+
+BIP8004E: Invalid argument '--object ComIbmCallableFlowManager' specified.
+Argument specified should be well formed.
+Correct and reissue the command.
+
+C:\Program Files\IBM\ACE\12.0.8.0>
