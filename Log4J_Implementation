@@ -1,0 +1,40 @@
+----------------------------------------------------- for local ----------------------------------
+
+1) we need to extract Fwd_ LOG4j file which is i have in my drive
+
+2) after extracting  get 3 jar files ,1 dtd file and log4jconfig.xmlfile
+
+3) that 3 jar files we need to put in following path (C:\ProgramData\IBM\MQSI\shared-classes)
+
+4) then we need to do some changes in log4jconfiguration.xml file those are like:
+
+*here you need to give dtd path
+* then we need to give log file path in appenders like 
+(<param name="File" value="C:/Log4J/debug.log" />)
+
+* then we need to give appender name and loger ref both same
+* then we need to give appender ref name,appender level like ERROR,DEBUG,INFO should give in esql as a parameter
+
+
+
+----------------------------------------------------- for sever ----------------------------------
+
+1) we need to extract Fwd_ LOG4j file which is i have in my drive
+
+2) after extracting  get 3 jar files ,1 dtd file and log4jconfig.xmlfile
+
+3) that 3 jar files we need to put in following path (C:var/mqsi/shared-classes)
+
+4) then we need to do some changes in log4jconfiguration.xml file those are like:
+
+*here you need to give dtd path
+* then we need to give log file path in appenders like 
+(<param name="File" value="C:/Log4J/debug.log" />)
+
+* then we need to give appender name and loger ref both same
+* then we need to give should give in esql as a parameter 
+1) log location
+2) logger name
+3) log level
+4) jo print karna he o 
+CALL log4j_1_1('test', 'TEST_CHETAN', 'INFO',' ---------------START---------------') INTO rc;
