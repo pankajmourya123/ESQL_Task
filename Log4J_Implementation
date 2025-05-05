@@ -15,6 +15,19 @@
 * then we need to give appender name and loger ref both same
 * then we need to give appender ref name,appender level like ERROR,DEBUG,INFO should give in esql as a parameter
 
+=======================================================================================================================================================
+jab mai log4 ka application default server deploy kar raha huu toh mhjue error aa raha hai 
+
+BIP2943E
+The Java Method 'com.ibm.broker.IAM3.Log4jNode.initLog4j' could not be found as its containing class could not be found in the deployed bar file or in the 'workpath/shared-classes/'
+ directory. 
+ 
+but same application local system pe node(broker) ke server pe depolye kar rahe hai toh koi use nhi aa raha hai aisa kyu bhai 
+kya hum aisa samjhe sakte hai kya default server jo ki ace hum bana sakte hai voo shared classes ko access nhi kar sakta but node(broker) wala access kar sakta hai
+
+
+============================================================================================================================================================
+
 
 
 ----------------------------------------------------- for sever ----------------------------------
