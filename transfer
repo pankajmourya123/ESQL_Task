@@ -1,40 +1,8 @@
-ExceptionList
-	RecoverableException
-			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
-			Line:INTEGER:1867
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmTimeoutNotificationNode
-			Name:CHARACTER:TOC_TON#FCMComposite_1_5
-			Label:CHARACTER:TOC_TON.Timeout Notification
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:TOC_TON.Timeout Notification
-			RecoverableException
-					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/WebServices/WSLibrary/ImbWSReplyNode.cpp
-					Line:INTEGER:973
-					Function:CHARACTER:ImbWSReplyNode::evaluate
-					Type:CHARACTER:ComIbmWSReplyNode
-					Name:CHARACTER:TOC_TON#FCMComposite_1_2
-					Label:CHARACTER:TOC_TON.HTTP Reply
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:2230
-					Text:CHARACTER:Caught exception and rethrowing
-					Insert
-							Type:INTEGER:14
-							Text:CHARACTER:TOC_TON.HTTP Reply
-					RecoverableException
-							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/WebServices/WSLibrary/ImbWSReplyNode.cpp
-							Line:INTEGER:642
-							Function:CHARACTER:ImbWSReplyNode::evaluate
-							Type:CHARACTER:ComIbmWSReplyNode
-							Name:CHARACTER:TOC_TON#FCMComposite_1_2
-							Label:CHARACTER:TOC_TON.HTTP Reply
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:3143
-							Text:CHARACTER:Need return context info
+jab mai log4 ka application default server deploy kar raha huu toh mhjue error aa raha hai 
+
+BIP2943E
+The Java Method 'com.ibm.broker.IAM3.Log4jNode.initLog4j' could not be found as its containing class could not be found in the deployed bar file or in the 'workpath/shared-classes/'
+ directory. 
+ 
+but same application local system pe node(broker) ke server pe depolye kar rahe hai toh koi use nhi aa raha hai aisa kyu bhai 
+kya hum aisa samjhe sakte hai kya default server jo ki ace hum bana sakte hai voo shared classes ko access nhi kar sakta but node(broker) wala access kar sakta hai 
