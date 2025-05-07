@@ -1,22 +1,13 @@
-{A:SDNF01O298N06SDCB00000SCRBIP0NEFTSC222000SDCBN251002773512EFT2025041010422000569563XXXXXXXXXSDCBN2510027735199}
-{4:
-:2020:NFTBN25100277351
-:1106:1
-:4063:200001,00
-:2020:SDCBN25100277351
-:4038:200001,00
-:3380:20250410
-:5756:SDCB0000001
-:6021:00000808001204425
-:6091:REM TEST
-:5629:EML
-9510066433
-:7002:REM TEST
-TEST
-TEST
-TEST
-:5569:ITBL0000001
-:6061:101100010013797
-:6081:BEN TEST
-:7495:ATTN/TEST
--}
+
+Basic  directory                 remote server server directory                        
+ sahi                                 sahi                            sucess
+ galat                                sahi                            backout    
+sahi                                  galat                           backout 
+
+
+
+
+ 
+
+
+
