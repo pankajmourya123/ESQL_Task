@@ -1,9 +1,376 @@
-mqsicreateconfigurableservice TESTNODE -c Timer -o TN_01 -n timeoutIntervalSeconds -v 50
+Bilkul bhai, main simple aur clearly samjha deta hoon:
 
-mqsicreateconfigurableservice IIBPRODBRKR -c Timer -o job1 -n timeoutIntervalSeconds -v 50
-BIP1042I: Command deprecated, please use policy projects instead.
-BIP8071I: Successful command completion.
+Yeh baat TimeoutNotification node ke Transaction mode ke setting ke baare mein ho rahi hai. Iska purpose yeh decide karna hai ki message ke processing ke dauraan ek transaction start karni hai ya nahi.
+
+1. Transaction Mode kya hota hai?
+
+Transaction ka matlab hota hai ki jab tak saara kaam successfully complete nahi ho jaata, tab tak changes commit nahi honge. Agar beech mein koi error aata hai to sab rollback ho jaayega. Safe processing ke liye yeh use hota hai.
+
+2. TimeoutNotification node me Transaction Mode ke 3 options hote hain:
+
+a) Yes:
+
+Hamesha transaction start hogi.
+
+Message processing ek transaction ke andar hoga.
+
+Agar kuch bhi galat hua, to poora rollback ho jaayega.
 
 
-mqsicreateconfigurableservice IBNODE -c Timer -o myTimerService 
--n queuePrefix,timeoutIntervalSeconds -v SET1,5 
+b) No:
+
+Koi transaction start nahi hoti.
+
+Message processing directly hoti hai, bina kisi rollback ke.
+
+
+c) Automatic (thoda special case hai):
+
+Isse tab hi select karo jab TimeoutControl node ka Operation Mode 'Controlled' ho.
+
+Transaction start hogi ya nahi, yeh depend karta hai TimeoutControl node ke Request Persistence property pe.
+
+
+
+---
+
+3. Request Persistence property kya karti hai?
+
+Yes: Timeout request persistent ban jaati hai — means durable storage me jaata hai.
+
+No: Timeout request sirf memory me rehti hai — means non-persistent hoti hai.
+
+
+
+---
+
+4. Summary with Automatic Mode:
+
+Request Persistence (in TimeoutControl)	Transaction Started?
+
+Yes (persistent)	Yes
+No (non-persistent)	No
+
+
+
+---
+
+Real Life Analogy:
+
+Soch ki tum ek alarm set kar rahe ho.
+
+Agar alarm important hai (persistent), to tum uske liye backup bhi bana rahe ho (transaction start kar rahe ho).
+
+Agar alarm sirf temporary reminder hai (non-persistent), to bina backup ke chala loge (no transaction).
+
+
+
+---
+
+Agar tu chahe to main diagram se bhi explain kar sakta hoon. Chahiye kya?
+Sahi pakda bhai — main baar-baar yeh keh raha hoon ki “transaction start hogi ya nahi hogi” — ab tu yehi pooch raha hai ki "transaction start hogi" ka actual matlab kya hota hai?"
+Chal main ab tujhe yeh concept zero se hero bana ke samjhata hoon:
+
+
+---
+
+Transaction Start Hone Ka Matlab Kya Hai?
+
+Jab hum "transaction start hoti hai" bolte hain, iska matlab hota hai ki:
+
+Message processing ek secure block ke andar hoti hai, jisme:
+
+Agar sab kuch theek ho gaya to commit hota hai (changes permanently save).
+
+Agar koi error aa gaya to rollback hota hai (koi bhi changes save nahi hote).
+
+
+
+
+---
+
+Real-life Example se Samajh:
+
+Tu ek bank soch:
+
+Tu kisi ko ₹500 bhej raha hai (yeh tera message hai).
+
+Agar paise successfully cut gaye aur samne wale ko mil gaye, tabhi transaction complete hoti hai (commit).
+
+Agar beech me system down ho gaya ya paise cut gaye lekin samne wale ko nahi mile — to poora process rollback ho jaata hai, paise wapas aa jaate hain.
+
+
+Yeh hota hai "transaction start hona" — jisme system ensure karta hai ki ya to poora kaam ho ya bilkul bhi na ho.
+
+
+---
+
+TimeoutNotification Node ke Context me:
+
+Jab transaction start hoti hai, to node message ko secure transaction block me process karta hai.
+
+Jab transaction start nahi hoti, to message bas aise hi process ho jaata hai — koi rollback nahi hota.
+
+
+
+---
+
+Simplified Table:
+
+Setting	Transaction Starts?	Result
+
+Yes	Haan, hamesha	Safe processing with rollback
+No	Kabhi nahi	Fast, but risky (no rollback)
+Automatic	Kabhi haan, kabhi nahi (depends on TimeoutControl’s Request Persistence)	Smart choice based on context
+
+
+
+---
+
+Agar tu coding background se hai, to transaction block ko tu try-catch + commit/rollback ke jaisa samajh le.
+
+Kuch aur confusion ho to poochh le bhai, chahe example ke through chahiye ho ya code-level pe.
+Bilkul bhai, ye bhi main sahi aur simple tareeke se samjha deta hoon — ye baat ho rahi hai TimeoutNotification node ke "Paired with TimeoutControl node" property ke baare mein.
+
+
+---
+
+Iska Seedha Matlab Kya Hai?
+
+Ye property yeh batati hai ki: TimeoutNotification node kis mode me kaam karega — Automatic ya Controlled?
+
+
+---
+
+Do Modes Hote Hain:
+
+1. Automatic Mode:
+
+Node kisi bhi TimeoutControl node ke paired nahi hota.
+
+Matlab: Ye khud hi independent timeout request generate karta hai.
+
+Jo bhi timeout interval hoga, wo "Timeout Value" property ke basis pe hoga (tumhe manually ek positive number dena hoga, e.g., 60 seconds).
+
+
+Example: Soch le ki tumhara app har 60 second baad kuch check karna chahta hai — to tu TimeoutNotification node ko Automatic pe set karega aur Timeout Value me 60 daalega. Ab ye node har 60 second me khud hi fire hoga, bina kisi control ke.
+
+
+---
+
+2. Controlled Mode:
+
+Is mode me ye node kisi TimeoutControl node ke saath paired hota hai.
+
+Ye khud timeout request generate nahi karta.
+
+Ye sirf un timeout requests ko process karta hai jo TimeoutControl node ne pahle store kiya tha.
+
+
+Example: Soch le kisi user ne "Remind me after 10 mins" ka request dala. Ye request TimeoutControl node store karta hai. Jab 10 mins ho jaate hain, tab TimeoutNotification node (in Controlled mode) us request ko process karta hai.
+
+
+---
+
+Ek Line Me Difference:
+
+Mode	Kya Karta Hai TimeoutNotification Node?
+
+Automatic	Khud se timeout request generate karta hai
+Controlled	Paired TimeoutControl node ke stored timeout requests ko process karta hai
+
+
+
+---
+
+Real-life Analogy:
+
+Automatic Mode: Alarm clock jo har 60 mins me baja raha hai, bina kisi instruction ke.
+
+Controlled Mode: Reminder app jo tabhi bajta hai jab tumne pehle se koi specific reminder set kiya ho.
+
+
+
+---
+
+Bhai, ab clear hua kya? Agar tu chahe to iska diagram ya real code flow bhi samjha sakta hoon.
+Bhai, yeh part bhi simple hai — main ab tujhe Timeout Interval property ko Automatic mode ke context mein poori clarity ke saath samjha deta hoon.
+
+
+---
+
+Yeh Property Kya Karti Hai?
+
+> “The interval (in seconds) between timeout requests.”
+
+
+
+Iska matlab:
+
+Jab tumhara TimeoutNotification node Automatic mode me hota hai, to yeh property decide karti hai ki kitne second ke baad ek new timeout request generate hogi.
+
+
+
+---
+
+Example:
+
+Agar tu Timeout Interval = 30 set karta hai, to node har 30 second me ek timeout request generate karega.
+
+Jaise: 0 sec, 30 sec, 60 sec, 90 sec, ...
+
+
+
+---
+
+Important Note:
+
+> “If the Operation Mode is set to Automatic, the value of the Timeout Interval property is overridden by the Timeout interval property, if set, in the Timer configurable service.”
+
+
+
+Yani:
+
+Agar tumne integration server me Timer configurable service me bhi ek timeout interval set kiya hai,
+
+To wo value yahan wali Timeout Interval value ko override (replace) kar degi.
+
+
+
+---
+
+Simple Table to Samajhne ke Liye:
+
+Scenario	Final Timeout Interval (in seconds)
+
+Operation Mode = Controlled	Irrelevant — property ka koi effect nahi
+Operation Mode = Automatic, Timer service not set	Use Timeout Interval value from node
+Operation Mode = Automatic, Timer service is set	Use value from Timer configurable service (overrides node value)
+
+
+
+---
+
+Real-life Analogy:
+
+Soch le tu ek timer laga raha hai:
+
+Agar tu manually 60 seconds set karta hai (node ka property),
+
+Lekin kitchen me already ek default timer 30 seconds ka set hai (Timer service),
+
+To kitchen ka timer tumhara set kiya hua override kar dega.
+
+
+
+---
+
+Final Points:
+
+Ye property tabhi kaam karti hai jab Operation Mode = Automatic ho.
+
+Value hamesha positive integer honi chahiye.
+
+Agar Timer service configured hai, to wahi interval use hoga.
+
+
+
+---
+
+Bhai, ab doubt clear hai kya? Agar tu chaahe to Timer Configurable Service ka bhi poora use-case samjha deta hoon.
+
+Bhai, TimeoutNotification node ko samajhne ke liye tu isey simply ek alarm ya reminder system samajh le — jo tu khud set karta hai ya jo automatically ek fixed time pe bajta hai.
+
+Yeh node mostly timer-based flows ke liye use hoti hai, jahan tu chahta hai ki kuch kaam ek specific time ya interval pe ho — jaise:
+
+Har 5 minute me report generate karna
+
+Raat 12 baje batch process run karna
+
+Hourly currency rates fetch karna
+
+
+
+---
+
+TimeoutNotification Node ke Do Use Cases:
+
+1. Paired with TimeoutControl node (Controlled Mode):
+
+TimeoutControl node ek "timeout request" bhejta hai (jaise: “yeh kaam 10 min baad karna”)
+
+TimeoutNotification node us request ko receive karke, jab time pura ho jata hai, tab message propagate karta hai next node ko.
+
+Matlab: Tum manually control kar rahe ho ki notification kab aaye.
+
+
+Important:
+Dono nodes (Control & Notification) ke Unique Identifier same hone chahiye, warna pairing nahi hogi.
+
+
+---
+
+2. Standalone Mode (Automatic Mode):
+
+Koi TimeoutControl nahi hota, yeh node khud hi periodic message generate karta hai.
+
+Tum config me set karte ho: “Har 60 seconds me ek message bhejna hai”
+
+Yeh automation mode me hota hai aur config me set interval ke according flow trigger karta hai.
+
+
+
+---
+
+Important Properties:
+
+Unique Identifier: Yeh name hota hai jisse pairing hoti hai control aur notification node ki.
+
+IgnoreMissed: Agar message miss ho gaya (broker down tha), to uska kya kare — ignore kare ya process.
+
+Timer Configurable Service: Agar default timeout queue (SYSTEM.BROKER.TIMEOUT.QUEUE) nahi chahiye to custom queue specify karne ke liye use hota hai.
+
+MQMD (Message Queue Descriptor): Agar output WebSphere MQ pe bhejna hai to proper MQMD dena padta hai (warna error aayega).
+
+
+
+---
+
+Jab Broker Start Hota Hai:
+
+Node check karta hai internal timeout store me koi pending request hai kya.
+
+Agar koi persistent request hai (missed ho gayi) aur IgnoreMissed = False hai to wo notification fir bhi trigger karega.
+
+
+
+---
+
+Use Case Example:
+
+Scenario: Tujhe chahiye ki har raat 12 baje ek salary processing batch chale:
+
+Use TimeoutControl node to set “Midnight Trigger”
+
+Use TimeoutNotification node to receive that trigger and start flow
+
+Flow jaake database me salary update kare, log file me likhe, email bheje etc.
+
+
+
+---
+
+In Short Summary:
+
+Feature	Controlled Mode (With TimeoutControl)	Automatic Mode (Stand-alone)
+
+Who triggers?	TimeoutControl node	Self-trigger based on config
+Flexibility	High (custom timing per request)	Fixed periodic trigger
+Use Case	Specific, per-user timeout	Regular batch jobs
+Needs MQMD?	Only if not already present	Yes
+
+
+
+---
+
+Bhai agar chaahe to iska diagram ya flowchart bhi bana ke de sakta hoon. Batana.
