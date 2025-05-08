@@ -1,1 +1,9 @@
 mqsicreateconfigurableservice TESTNODE -c Timer -o TN_01 -n timeoutIntervalSeconds -v 50
+
+mqsicreateconfigurableservice IIBPRODBRKR -c Timer -o job1 -n timeoutIntervalSeconds -v 50
+BIP1042I: Command deprecated, please use policy projects instead.
+BIP8071I: Successful command completion.
+
+
+mqsicreateconfigurableservice IBNODE -c Timer -o myTimerService 
+-n queuePrefix,timeoutIntervalSeconds -v SET1,5 
