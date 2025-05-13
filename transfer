@@ -1,40 +1,14 @@
-Timeout Control
+import java.io.OutputStream;
+import java.net.Socket;
 
-Imagine a vigilant clock within your flow. This node meticulously validates and stores timeout requests, sending them on to their destination while keeping track of their deadlines. Think of it as a conductor, scheduling events like daily batch jobs or hourly information updates with pinpoint accuracy.
-
-Earlier in Timeout Notification, this code was automatically coming.
-
-
-However, this time, we want to have control over each parameter by setting each value manually. We will use compute node (rename to Timeout Request) to do that.
-
-
-Timeout Control and Timeout Notification 1 should have the same unique identifier.
-
-In our Timeout Request compute node, we will select compute mode as LocalEnvironment and Message since we will e sending the message in LocalEnvironment.
-
-
-For Timeout Control node, we have to give a Request Location.
-
-
-As per;
-
-
-Add the following esql code in our Timeout Request node:
-
-
-Don’t forget to change Operation mode to Controlled on Timeout Notification 1.
-
-
-If you notice here, in our previous section on Timeout Notification, we created a configurable service that made the timeout interval to be 50. We have to change it since our Timeout Notification node needs to send the trigger after one day and not 50 like we had set using console.
-
-
-
-reloading execution group
-NB: Always delete the previously deployed app from your execution group when dealing with Timer nodes whenever you want to redeploy.
-
-Launch debugger, then deploy the app.
-
-
-The moment the clock hit 11:04, it will be triggered.
-
-And that’s it.
+public class TCPClient {
+    public static void main(String[] args) throws Exception {
+        String xml = "<person><name>Ravi</name><age>23</age></person>";
+        Socket socket = new Socket("localhost", 14141); // must match the port in TCPIPServerInput node
+        OutputStream out = socket.getOutputStream();
+        out.write(xml.getBytes("UTF-8"));
+        out.close();  // Closing socket signals message end
+        socket.close();
+        System.out.println("XML sent.");
+    }
+}
