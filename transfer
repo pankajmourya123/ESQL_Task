@@ -1,14 +1,20 @@
-import java.io.OutputStream;
-import java.net.Socket;
-
-public class TCPClient {
-    public static void main(String[] args) throws Exception {
-        String xml = "<person><name>Ravi</name><age>23</age></person>";
-        Socket socket = new Socket("localhost", 14141); // must match the port in TCPIPServerInput node
-        OutputStream out = socket.getOutputStream();
-        out.write(xml.getBytes("UTF-8"));
-        out.close();  // Closing socket signals message end
-        socket.close();
-        System.out.println("XML sent.");
-    }
-}
+LocalEnvironment
+	Destination
+			HTTP
+					RequestIdentifier:BLOB:[B@52a78fef
+	WrittenDestination
+			TCPIP
+					Output
+							ConnectionDetails
+									Type:CHARACTER:Server
+									Hostname:CHARACTER:localhost
+									Port:INTEGER:7779
+									Id:CHARACTER:20baf6:196c9c3fbf6:-7fc3
+									ReplyId:UNKNOWN:null
+									OpenTimestamp:TIMESTAMP:java.util.GregorianCalendar[time=1747204659030,areFieldsSet=true,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Asia/Calcutta",offset=19800000,dstSavings=0,useDaylight=false,transitions=7,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2025,MONTH=4,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=14,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=1,HOUR=0,HOUR_OF_DAY=12,MINUTE=7,SECOND=39,MILLISECOND=30,ZONE_OFFSET=?,DST_OFFSET=?]
+									CloseTimestamp:UNKNOWN:null
+									SequenceNumber
+											InputRecord:INTEGER:0
+											OutputRecord:INTEGER:1
+									ClientDetails
+											Hostname:CHARACTER:127.0.0.1
