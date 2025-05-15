@@ -1,3 +1,63 @@
+Receiving data on a TCP/IP server socket and sending data back to the same connection
+Last Updated: 2025-01-20
+Receive data on a TCP/IP server socket, then send the data to the same connection, by the use of a message flow with TCPIPServerInput and TCPIPServerOutput nodes.
+
+About this task
+Scenario: A client application opens a TCP/IP socket and sends an undefined document (of any format or size). The end of the document is signalled by the client closing the output stream (but not the connection), and waiting for the same data to be sent back.
+
+Instructions: The following steps describe how to write a message flow that can receive the data and echo it back to the same connection:
+
+Procedure
+Create a message flow called TCPIP_Task3 with a TCPIPServerInput node and a TCPIPServerOutput node.
+For more information, see Creating a message flow.
+Connect the Out terminal of the TCPIPServerInput node to the In terminal of the TCPIPServerOutput node.
+TCPIPServerInput node connected to a TCPIPServerOutput node.
+Set the following properties of the TCPIPServerInput node:
+On the Basic tab, set the Connection details property to 14143.
+On the Advanced tab, set the Input stream modification property to Reserve input stream and release at end of flow.
+Set the following properties of the TCPIPServerOutput node:
+On the Basic tab, set the Connection details property to 14143.
+On the Request tab, set the ID location property to LocalEnvironment/TCPIP/Input/ConnectionDetails/Id.
+On the Advanced tab, set the Close connection property to After data has been sent.
+Save the message flow.
+
+
+===========================================================================================================================================================
+Sending data to a TCP/IP client connection and receiving data back on the same connection (synchronous)
+Last Updated: 2025-01-20
+Send fixed-size data to a TCP/IP client connection and receive fixed-size data back on the same connection (synchronously), by the use of a message flow with MQInput, TCPIPClientOutput, TCPIPClientReceive, and MQOutput nodes.
+
+About this task
+Scenario: An application sends synchronous data between TCP/IP client connections.
+
+Instructions: The following steps describe how to create a message flow that sends data out from a client connection and waits on the same connection for a reply to be returned. The request is synchronous in the same flow, because the TCPIPClientReceive node waits for data to be returned.
+
+Procedure
+Create a message flow called TCPIP_Task6 with an MQInput node, a TCPIPClientOutput node, a TCPIPClientReceive node, and an MQOutput node.
+For more information, see Creating a message flow.
+Connect the Out terminal of the MQInput node to the In terminal of the TCPIPClientOutput node.
+Connect the Out terminal of the TCPIPClientOutput node to the In terminal of the TCPIPClientReceive node.
+Connect the Out terminal of the TCPIPClientReceive node to the In terminal of the MQOutput node.
+Message flow consisting of MQInput, TCPIPClientOutput, TCPIPClientReceive, and MQOutput nodes.
+On the MQInput node, set the Queue name property (on the Basic tab) to TCPIP.TASK6.IN1.
+Set the following properties of the TCPIPClientOutput node:
+On the Basic tab, set the Connection details property to 14146.
+On the Records and elements tab, set the following properties:
+Set the Record detection property to Fixed length.
+Set the Length property to 100.
+Set the following properties of the TCPIPClientReceive node:
+On the Basic tab, set the Connection details property to 14146.
+On the Advanced tab, set the following properties:
+Set the Output stream modification property to Reserve output stream and release at end of flow.
+Set the Input stream modification property to Reserve input stream and release at end of flow.
+On the Request tab, set the ID location property to $LocalEnvironment/WrittenDestination/TCPIP/Output/ConnectionDetails[1]/Id.
+On the Records and elements tab, set the following properties:
+Set the Record detection property to Fixed length.
+Set the Length property to 100.
+On the MQOutput node, set the Queue name property (on the Basic tab) to TCPIP.TASK6.OUT1.
+Save the message flow.
+=====================================================================================================================================================================
+
 ExceptionList
 	RecoverableException
 			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
