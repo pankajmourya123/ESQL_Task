@@ -1,109 +1,105 @@
-Receiving data on a TCP/IP server socket and sending data back to the same connection
-Last Updated: 2025-01-20
-Receive data on a TCP/IP server socket, then send the data to the same connection, by the use of a message flow with TCPIPServerInput and TCPIPServerOutput nodes.
-
-About this task
-Scenario: A client application opens a TCP/IP socket and sends an undefined document (of any format or size). The end of the document is signalled by the client closing the output stream (but not the connection), and waiting for the same data to be sent back.
-
-Instructions: The following steps describe how to write a message flow that can receive the data and echo it back to the same connection:
-
-Procedure
-Create a message flow called TCPIP_Task3 with a TCPIPServerInput node and a TCPIPServerOutput node.
-For more information, see Creating a message flow.
-Connect the Out terminal of the TCPIPServerInput node to the In terminal of the TCPIPServerOutput node.
-TCPIPServerInput node connected to a TCPIPServerOutput node.
-Set the following properties of the TCPIPServerInput node:
-On the Basic tab, set the Connection details property to 14143.
-On the Advanced tab, set the Input stream modification property to Reserve input stream and release at end of flow.
-Set the following properties of the TCPIPServerOutput node:
-On the Basic tab, set the Connection details property to 14143.
-On the Request tab, set the ID location property to LocalEnvironment/TCPIP/Input/ConnectionDetails/Id.
-On the Advanced tab, set the Close connection property to After data has been sent.
-Save the message flow.
+BROKER SCHEMA com.cedge.ucb.inward.routing
+path com.cedge.ucb.inward.neft ;
 
 
-===========================================================================================================================================================
-Sending data to a TCP/IP client connection and receiving data back on the same connection (synchronous)
-Last Updated: 2025-01-20
-Send fixed-size data to a TCP/IP client connection and receive fixed-size data back on the same connection (synchronously), by the use of a message flow with MQInput, TCPIPClientOutput, TCPIPClientReceive, and MQOutput nodes.
+CREATE COMPUTE MODULE  PropagateToNGRTGS
+	DECLARE LOG_PATH EXTERNAL CHARACTER '';
+	DECLARE NEFT_QUE EXTERNAL CHARACTER ''; 
+	DECLARE RTGS_QUE EXTERNAL CHARACTER ''; 
+	DECLARE MIRROR_QUE EXTERNAL CHARACTER '';
+	DECLARE OTHER_QUE EXTERNAL CHARACTER '';
+	DECLARE ACKN10F27 EXTERNAL CHARACTER '';
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
 
-About this task
-Scenario: An application sends synchronous data between TCP/IP client connections.
+	BEGIN
+		DECLARE bool,rc BOOLEAN;
+		CALL initLog4j(LOG_PATH) INTO rc;
+		CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO',' ---------------START---------------') INTO rc;
 
-Instructions: The following steps describe how to create a message flow that sends data out from a client connection and waits on the same connection for a reply to be returned. The request is synchronous in the same flow, because the TCPIPClientReceive node waits for data to be returned.
+		CALL CopyMessageHeaders();
+		SET bool = CopyEntireMessage();
+		RETURN bool;
+	END;
 
-Procedure
-Create a message flow called TCPIP_Task6 with an MQInput node, a TCPIPClientOutput node, a TCPIPClientReceive node, and an MQOutput node.
-For more information, see Creating a message flow.
-Connect the Out terminal of the MQInput node to the In terminal of the TCPIPClientOutput node.
-Connect the Out terminal of the TCPIPClientOutput node to the In terminal of the TCPIPClientReceive node.
-Connect the Out terminal of the TCPIPClientReceive node to the In terminal of the MQOutput node.
-Message flow consisting of MQInput, TCPIPClientOutput, TCPIPClientReceive, and MQOutput nodes.
-On the MQInput node, set the Queue name property (on the Basic tab) to TCPIP.TASK6.IN1.
-Set the following properties of the TCPIPClientOutput node:
-On the Basic tab, set the Connection details property to 14146.
-On the Records and elements tab, set the following properties:
-Set the Record detection property to Fixed length.
-Set the Length property to 100.
-Set the following properties of the TCPIPClientReceive node:
-On the Basic tab, set the Connection details property to 14146.
-On the Advanced tab, set the following properties:
-Set the Output stream modification property to Reserve output stream and release at end of flow.
-Set the Input stream modification property to Reserve input stream and release at end of flow.
-On the Request tab, set the ID location property to $LocalEnvironment/WrittenDestination/TCPIP/Output/ConnectionDetails[1]/Id.
-On the Records and elements tab, set the following properties:
-Set the Record detection property to Fixed length.
-Set the Length property to 100.
-On the MQOutput node, set the Queue name property (on the Basic tab) to TCPIP.TASK6.OUT1.
-Save the message flow.
-=====================================================================================================================================================================
 
-ExceptionList
-	RecoverableException
-			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
-			Line:INTEGER:1607
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmWSInputNode
-			Name:CHARACTER:client#FCMComposite_1_1
-			Label:CHARACTER:client.HTTP Input
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:client.HTTP Input
-			RecoverableException
-					File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\TemplateNodes\ImbRequestTemplateNode.cpp
-					Line:INTEGER:1172
-					Function:CHARACTER:ImbRequestTemplateNode::processMessageAssemblyToFailure
-					Type:CHARACTER:ComIbmRequestTemplateNode
-					Name:CHARACTER:client#FCMComposite_1_5
-					Label:CHARACTER:client.TCPIP Client Receive
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:2230
-					Text:CHARACTER:Caught exception and rethrowing
-					Insert
-							Type:INTEGER:14
-							Text:CHARACTER:client.TCPIP Client Receive
-					RecoverableException
-							File:CHARACTER:C:\ci\product-build\WMB\src\CommonServices\ImbBuffer.cpp
-							Line:INTEGER:973
-							Function:CHARACTER:ImbBuffer::getAllData
-							Type:CHARACTER:ComIbmRequestTemplateNode
-							Name:CHARACTER:client#FCMComposite_1_5
-							Label:CHARACTER:client.TCPIP Client Receive
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:2113
-							Text:CHARACTER:The size of the stream data does not match the expected size.
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:The size of the stream data does not match the expected size.
-							Insert
-									Type:INTEGER:2
-									Text:CHARACTER:15
-							Insert
-									Type:INTEGER:2
-									Text:CHARACTER:100
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN ;
+		DECLARE msgBlob BLOB ;
+--		DECLARE count INTEGER 0 ;
+
+		DECLARE msgChar , delChar, tranCategory, msgType, bizMsgId, reqPayloadChar CHARACTER ;
+		SET msgChar = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+		SET delChar = SUBSTRING(msgChar BEFORE '<RequestPayload>');
+		SET msgChar = TRIM(LEADING delChar FROM msgChar);
+-- 		SET msgChar = REPLACE(msgChar,delChar,'');
+		SET tranCategory = SUBSTRING(msgChar AFTER '<BizSvc>' FOR 4);
+			SET msgType = SUBSTRING(msgChar AFTER '<MsgDefIdr>' FOR 15);
+				SET bizMsgId = SUBSTRING(msgChar AFTER '<BizMsgIdr>' FOR 22);
+					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Category : '||tranCategory) INTO rc;
+					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Type : '||msgType) INTO rc;
+					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Business Message Identifier : '||bizMsgId) INTO rc;
+					IF STARTSWITH(msgType,'admi') THEN
+						DECLARE ResType CHARACTER SUBSTRING(msgChar AFTER '<EvtCd>' FOR 3);
+						IF ResType = 'F27' THEN
+							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Response Type : '||ResType) INTO rc;
+							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||ACKN10F27) INTO rc;
+							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = ACKN10F27 ;
+							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+							SET OutputRoot.BLOB.BLOB = msgBlob ;
+--							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;			
+							PROPAGATE TO TERMINAL 'out' DELETE NONE;
+							RETURN FALSE;
+						ELSE
+							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Event Code : '||ResType) INTO rc;
+							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Posting Message to'||OTHER_QUE) INTO rc;
+							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+							SET OutputRoot.BLOB.BLOB = msgBlob ;
+							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = OTHER_QUE;
+--							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
+							PROPAGATE TO TERMINAL 'out' DELETE NONE;
+							RETURN FALSE;
+						END IF;
+					ELSEIF STARTSWITH(msgType,'camt.059.001.06') THEN
+							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = ACKN10F27;
+							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||ACKN10F27) INTO rc;
+--							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
+							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+							SET OutputRoot.BLOB.BLOB = msgBlob ;
+					PROPAGATE TO TERMINAL 'out' DELETE NONE;
+					RETURN FALSE;
+					END IF;
+					
+					IF tranCategory = 'RTGS'  OR STARTSWITH(tranCategory, 'S') THEN
+						SET reqPayloadChar = RTGS_QUE;
+						CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||RTGS_QUE) INTO rc;
+					ELSE
+						SET reqPayloadChar = NEFT_QUE;
+						CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||NEFT_QUE) INTO rc;
+
+					END IF;
+					SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+					SET OutputRoot.BLOB.BLOB = msgBlob ;
+					SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = reqPayloadChar;
+	--				SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
+					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO',' ----------------END----------------') INTO rc;
+					RETURN TRUE;
+				END;
+			END MODULE;
+
+
+
+
+
+
