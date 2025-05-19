@@ -1,105 +1,60 @@
-BROKER SCHEMA com.cedge.ucb.inward.routing
-path com.cedge.ucb.inward.neft ;
+BROKER SCHEMA com.cedge.ucb.inward.neft
 
-
-CREATE COMPUTE MODULE  PropagateToNGRTGS
+CREATE DATABASE MODULE NEFT_IN_DBCopy
+	DECLARE DSNNAME EXTERNAL CHARACTER '';
+	DECLARE SCHEMANAME EXTERNAL CHARACTER '';
+	DECLARE NEFT_IN_PAYLOAD_TABLE EXTERNAL CHARACTER '';
 	DECLARE LOG_PATH EXTERNAL CHARACTER '';
-	DECLARE NEFT_QUE EXTERNAL CHARACTER ''; 
-	DECLARE RTGS_QUE EXTERNAL CHARACTER ''; 
-	DECLARE MIRROR_QUE EXTERNAL CHARACTER '';
-	DECLARE OTHER_QUE EXTERNAL CHARACTER '';
-	DECLARE ACKN10F27 EXTERNAL CHARACTER '';
 	
 	CREATE FUNCTION Main() RETURNS BOOLEAN
-
-	BEGIN
-		DECLARE bool,rc BOOLEAN;
-		CALL initLog4j(LOG_PATH) INTO rc;
-		CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO',' ---------------START---------------') INTO rc;
-
-		CALL CopyMessageHeaders();
-		SET bool = CopyEntireMessage();
-		RETURN bool;
-	END;
-
-
-	CREATE PROCEDURE CopyMessageHeaders() BEGIN
-		DECLARE I INTEGER 1;
-		DECLARE J INTEGER;
-		SET J = CARDINALITY(InputRoot.*[]);
-		WHILE I < J DO
-			SET OutputRoot.*[I] = InputRoot.*[I];
-			SET I = I + 1;
-		END WHILE;
-	END;
-
-	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN
 	BEGIN
 		DECLARE rc BOOLEAN ;
-		DECLARE msgBlob BLOB ;
---		DECLARE count INTEGER 0 ;
+		CALL initLog4j(LOG_PATH) INTO rc;
+		CALL log4j_1_1('FILTER_CEDGE_NONCEDGE', 'UCB_NEFT_IN', 'INFO',' --------------------------------START-----------------------------------') INTO rc;
+		DECLARE msgId CHARACTER Root.MQMD.MsgId;
+		DECLARE count INTEGER ;
+		SET count = LENGTH(msgId)-3 ;
+		SET msgId = SUBSTRING(msgId FROM 3 FOR count);
+	
 
-		DECLARE msgChar , delChar, tranCategory, msgType, bizMsgId, reqPayloadChar CHARACTER ;
-		SET msgChar = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
-		SET delChar = SUBSTRING(msgChar BEFORE '<RequestPayload>');
-		SET msgChar = TRIM(LEADING delChar FROM msgChar);
--- 		SET msgChar = REPLACE(msgChar,delChar,'');
-		SET tranCategory = SUBSTRING(msgChar AFTER '<BizSvc>' FOR 4);
-			SET msgType = SUBSTRING(msgChar AFTER '<MsgDefIdr>' FOR 15);
-				SET bizMsgId = SUBSTRING(msgChar AFTER '<BizMsgIdr>' FOR 22);
-					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Category : '||tranCategory) INTO rc;
-					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Type : '||msgType) INTO rc;
-					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Business Message Identifier : '||bizMsgId) INTO rc;
-					IF STARTSWITH(msgType,'admi') THEN
-						DECLARE ResType CHARACTER SUBSTRING(msgChar AFTER '<EvtCd>' FOR 3);
-						IF ResType = 'F27' THEN
-							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Response Type : '||ResType) INTO rc;
-							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||ACKN10F27) INTO rc;
-							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = ACKN10F27 ;
-							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
-							SET OutputRoot.BLOB.BLOB = msgBlob ;
---							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;			
-							PROPAGATE TO TERMINAL 'out' DELETE NONE;
-							RETURN FALSE;
-						ELSE
-							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Event Code : '||ResType) INTO rc;
-							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Posting Message to'||OTHER_QUE) INTO rc;
-							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
-							SET OutputRoot.BLOB.BLOB = msgBlob ;
-							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = OTHER_QUE;
---							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
-							PROPAGATE TO TERMINAL 'out' DELETE NONE;
-							RETURN FALSE;
-						END IF;
-					ELSEIF STARTSWITH(msgType,'camt.059.001.06') THEN
-							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = ACKN10F27;
-							CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||ACKN10F27) INTO rc;
---							SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
-							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
-							SET OutputRoot.BLOB.BLOB = msgBlob ;
-					PROPAGATE TO TERMINAL 'out' DELETE NONE;
-					RETURN FALSE;
-					END IF;
-					
-					IF tranCategory = 'RTGS'  OR STARTSWITH(tranCategory, 'S') THEN
-						SET reqPayloadChar = RTGS_QUE;
-						CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||RTGS_QUE) INTO rc;
-					ELSE
-						SET reqPayloadChar = NEFT_QUE;
-						CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To '||NEFT_QUE) INTO rc;
+        DECLARE txnNum CHARACTER Root.XMLNSC.RequestPayload.*:AppHdr.*:BizMsgIdr;
+		DECLARE datechar CHARACTER CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'yyyyMMdd');
+		SET txnNum = datechar||txnNum;
+ 
+		CALL log4j_1_1('DB_COPY', 'UCB_NEFT_IN', 'INFO','Transaction Reference Number : '||txnNum) INTO rc;
+		
+		DECLARE check ROW;
+		SET check.R[] = PASSTHRU('SELECT RETRY_COUNT FROM NEFT_IN_PAYLOAD WHERE TXN_REF_NUM = ?' TO Database.{DSNNAME} VALUES(txnNum));
+		IF check.R[1].RETRY_COUNT >= 0 THEN
+			DECLARE retryCount INTEGER ;
+			SET retryCount = check.R[1].RETRY_COUNT+1 ;
+			DECLARE DB_Details ROW;	
+			DECLARE Qry CHARACTER ;	
+			SET Qry =  'UPDATE '||SCHEMANAME||'.'||NEFT_IN_PAYLOAD_TABLE|| ' A SET A.LAST_MOD_TIME = ? , A.RETRY_COUNT = ? WHERE A.TXN_REF_NUM = ? ' ;
+			SET DB_Details.A[] = PASSTHRU (Qry TO Database.{DSNNAME} VALUES(CURRENT_TIMESTAMP ,retryCount ,txnNum));				
+			CALL log4j_1_1('DB_COPY', 'UCB_NEFT_IN', 'INFO','Updating data in NEFT_IN-PAYLOAD') INTO rc;				
+		ELSE
+			DECLARE wholeMsgBlob BLOB ASBITSTREAM(Root.XMLNSC, Root.Properties.Encoding, Root.Properties.CodedCharSetId );
+	 		DECLARE wholeMsgChar CHAR CAST(wholeMsgBlob AS CHAR CCSID Root.Properties.CodedCharSetId);
+	 		DECLARE fileName CHARACTER 'filename';
+	 		INSERT INTO Database.{DSNNAME}.{SCHEMANAME}.NEFT_IN_PAYLOAD (MSGID,PAYLOAD,CREATION_TIME,LAST_MOD_TIME,STATUS,RETRY_COUNT,FILE_NAME,TXN_REF_NUM) 
+	 		VALUES (msgId,wholeMsgChar, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'F', '0',fileName,txnNum);	
+	 		CALL log4j_1_1('DB_COPY', 'UCB_NEFT_IN', 'INFO','Data inserted to NEFT_IN-PAYLOAD') INTO rc;		
+		END IF;
+		RETURN TRUE;
+	END;
 
-					END IF;
-					SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
-					SET OutputRoot.BLOB.BLOB = msgBlob ;
-					SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = reqPayloadChar;
-	--				SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
-					CALL log4j_1_1('GATEWAY', 'UCB_INWARD_GATEWAY', 'INFO',' ----------------END----------------') INTO rc;
-					RETURN TRUE;
-				END;
-			END MODULE;
+END MODULE;
 
 
-
-
-
-
+CREATE FUNCTION initLog4j( IN CONFIG_FILE_NAME CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
+CREATE FUNCTION log4j_1_1( IN COMPONENT_NAME CHARACTER,
+IN LOGGER_NAME CHARACTER,
+IN LEVEL CHARACTER,
+IN TEXT CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
