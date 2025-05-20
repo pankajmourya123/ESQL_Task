@@ -1,58 +1,64 @@
-Message
-	Properties
-			MessageSet:CHARACTER:
-			MessageType:CHARACTER:
-			MessageFormat:CHARACTER:
-			Encoding:INTEGER:546
-			CodedCharSetId:INTEGER:1208
-			Transactional:BOOLEAN:true
-			Persistence:BOOLEAN:true
-			CreationTime:TIMESTAMP:java.util.GregorianCalendar[time=1747719725260,areFieldsSet=true,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Asia/Kolkata",offset=19800000,dstSavings=0,useDaylight=false,transitions=7,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2025,MONTH=4,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=20,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=11,HOUR_OF_DAY=11,MINUTE=12,SECOND=5,MILLISECOND=260,ZONE_OFFSET=?,DST_OFFSET=?]
-			ExpirationTime:INTEGER:-1
-			Priority:INTEGER:0
-			ReplyIdentifier:BLOB:[B@a05b231c
-			ReplyProtocol:CHARACTER:MQ
-			Topic:UNKNOWN:null
-			ContentType:CHARACTER:
-			IdentitySourceType:CHARACTER:
-			IdentitySourceToken:CHARACTER:
-			IdentitySourcePassword:CHARACTER:
-			IdentitySourceIssuedBy:CHARACTER:
-			IdentityMappedType:CHARACTER:
-			IdentityMappedToken:CHARACTER:
-			IdentityMappedPassword:CHARACTER:
-			IdentityMappedIssuedBy:CHARACTER:
-	MQMD
-			SourceQueue:CHARACTER:GUJ.NEFT.OUT.GATEWAY
-			Transactional:BOOLEAN:true
-			Encoding:INTEGER:546
-			CodedCharSetId:INTEGER:1208
-			Format:CHARACTER:MQSTR   
-			Version:INTEGER:2
-			Report:INTEGER:0
-			MsgType:INTEGER:8
-			Expiry:INTEGER:-1
-			Feedback:INTEGER:0
-			Priority:INTEGER:0
-			Persistence:INTEGER:1
-			MsgId:BLOB:[B@aa2d5967
-			CorrelId:BLOB:[B@80d4f2e1
-			BackoutCount:INTEGER:0
-			ReplyToQ:CHARACTER:                                                
-			ReplyToQMgr:CHARACTER:IIBPRODQMGR                                     
-			UserIdentifier:CHARACTER:mqm         
-			AccountingToken:BLOB:[B@c4dffbe1
-			ApplIdentityData:CHARACTER:                                
-			PutApplType:INTEGER:28
-			PutApplName:CHARACTER:MQ Explorer 9.0.0           
-			PutDate:DATE:java.util.GregorianCalendar[time=1747679400000,areFieldsSet=true,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Asia/Kolkata",offset=19800000,dstSavings=0,useDaylight=false,transitions=7,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2025,MONTH=4,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=20,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]
-			PutTime:TIME:java.util.GregorianCalendar[time=-62167457874740,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Asia/Kolkata",offset=19800000,dstSavings=0,useDaylight=false,transitions=7,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=0,YEAR=2,MONTH=11,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=31,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=11,HOUR_OF_DAY=11,MINUTE=12,SECOND=5,MILLISECOND=260,ZONE_OFFSET=?,DST_OFFSET=?]
-			ApplOriginData:CHARACTER:    
-			GroupId:BLOB:[B@e16a3042
-			MsgSeqNumber:INTEGER:1
-			Offset:INTEGER:0
-			MsgFlags:INTEGER:0
-			OriginalLength:INTEGER:-1
-	BLOB
-			UnknownParserName:CHARACTER:MQSTR
-			BLOB:BLOB:[B@4d5db7
+ExceptionList
+	RecoverableException
+			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
+			Line:INTEGER:1867
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmRouteNode
+			Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_2.com.gujarat.neft.process.VALIDATE_SUBFLOW#FCMComposite_1_2
+			Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.VALIDATE_SUBFLOW.ROUTE
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.VALIDATE_SUBFLOW.ROUTE
+			ParserException
+					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/MTI/MTIforBroker/DfdlParser/ImbDFDLParser.cpp
+					Line:INTEGER:557
+					Function:CHARACTER:ImbDFDLParser::parseRightSibling
+					Type:CHARACTER:
+					Name:CHARACTER:
+					Label:CHARACTER:
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:5803
+					Text:CHARACTER:DFDL parsing errors have occurred
+					ParserException
+							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/MTI/MTIforBroker/DfdlParser/ImbDFDLErrorHandler.cpp
+							Line:INTEGER:165
+							Function:CHARACTER:ImbDFDLErrorHandler::handleParserErrors
+							Type:CHARACTER:ComIbmMQInputNode
+							Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_1
+							Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.GUJ.NEFT.OUT.GATEWAY
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:5807
+							Text:CHARACTER:An error occurred whilst parsing with DFDL
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:CTDP3059E: Element '#xscd(/schemaElement::Generic_Message/type::0/model::sequence/schemaElement::Body)' has minOccurs='1' and no default value but the input document contained only '0' occurrences.
+
+====================================================================================================
+{A:CBSF01O298N07GSCB0NEFTSCRBIP0NEFTSC222000GSCBN251212064552EFT2025050111052110491371XXXXXXXXXGSCBN2512120645599}
+{4:
+:2020:GSCON25121206455
+:1106:1
+:4063:1000,00
+:2020:GSCBN25121206455
+:2006:    000438908007
+:4038:1000,00
+:3380:20250501
+:5756:GSCB0000001
+:6021:107016097029
+:6091:ROHIT ARJAN VAGHELA
+:7002:KAJIPURCIT
+Instruct
+
+
+:5569:RATN0000999
+:6061:2309109900110017
+:6081:KAJIPURCIT
+:6346:R03
+:6366:INVALID ACCOUNT NUMBER
+-}
