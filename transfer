@@ -1,64 +1,17 @@
-ExceptionList
-	RecoverableException
-			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
-			Line:INTEGER:1867
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmRouteNode
-			Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_2.com.gujarat.neft.process.VALIDATE_SUBFLOW#FCMComposite_1_2
-			Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.VALIDATE_SUBFLOW.ROUTE
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.VALIDATE_SUBFLOW.ROUTE
-			ParserException
-					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/MTI/MTIforBroker/DfdlParser/ImbDFDLParser.cpp
-					Line:INTEGER:557
-					Function:CHARACTER:ImbDFDLParser::parseRightSibling
-					Type:CHARACTER:
-					Name:CHARACTER:
-					Label:CHARACTER:
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:5803
-					Text:CHARACTER:DFDL parsing errors have occurred
-					ParserException
-							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/MTI/MTIforBroker/DfdlParser/ImbDFDLErrorHandler.cpp
-							Line:INTEGER:165
-							Function:CHARACTER:ImbDFDLErrorHandler::handleParserErrors
-							Type:CHARACTER:ComIbmMQInputNode
-							Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_1
-							Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.GUJ.NEFT.OUT.GATEWAY
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:5807
-							Text:CHARACTER:An error occurred whilst parsing with DFDL
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:CTDP3059E: Element '#xscd(/schemaElement::Generic_Message/type::0/model::sequence/schemaElement::Body)' has minOccurs='1' and no default value but the input document contained only '0' occurrences.
-
-====================================================================================================
-{A:CBSF01O298N07GSCB0NEFTSCRBIP0NEFTSC222000GSCBN251212064552EFT2025050111052110491371XXXXXXXXXGSCBN2512120645599}
-{4:
-:2020:GSCON25121206455
-:1106:1
-:4063:1000,00
+{A:RTGF01O298N07GSCB0000001RATN0000999111000GSCBN251212064551RTG2025050111052000000000XXXXXXXXXGSCBN2512120645599}{4:
 :2020:GSCBN25121206455
 :2006:    000438908007
-:4038:1000,00
-:3380:20250501
-:5756:GSCB0000001
-:6021:107016097029
-:6091:ROHIT ARJAN VAGHELA
-:7002:KAJIPURCIT
+:4488:20250501INR000000001000,00
+:6717:/107016097029
+:5521:ROHIT ARJAN VAGHELA
+:6718:2309109900110017
+:5526:KAJIPURCIT
 Instruct
 
-
-:5569:RATN0000999
-:6061:2309109900110017
-:6081:KAJIPURCIT
-:6346:R03
-:6366:INVALID ACCOUNT NUMBER
+:6310:
+:5518:
+:5556:RATN0000999
+:7495:/ATTN/RETURN
+//
+//INVALID ACCOUNT NUMBER
 -}
