@@ -1,154 +1,112 @@
-ExceptionList
-	RecoverableException
-			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
-			Line:INTEGER:1867
-			Function:CHARACTER:ImbDataFlowNode::createExceptionList
-			Type:CHARACTER:ComIbmTryCatchNode
-			Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_7
-			Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.INIT_TRYCATCH
-			Catalog:CHARACTER:BIPmsgs
-			Severity:INTEGER:3
-			Number:INTEGER:2230
-			Text:CHARACTER:Node throwing exception
-			Insert
-					Type:INTEGER:14
-					Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.INIT_TRYCATCH
-			RecoverableException
-					File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/SQLNodeLibrary/ImbComputeNode.cpp
-					Line:INTEGER:343
-					Function:CHARACTER:ImbComputeNode::evaluate
-					Type:CHARACTER:ComIbmComputeNode
-					Name:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD#FCMComposite_1_9
-					Label:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.DB_INSERT
-					Catalog:CHARACTER:BIPmsgs
-					Severity:INTEGER:3
-					Number:INTEGER:2230
-					Text:CHARACTER:Caught exception and rethrowing
-					Insert
-							Type:INTEGER:14
-							Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD.DB_INSERT
-					RecoverableException
-							File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-							Line:INTEGER:785
-							Function:CHARACTER:SqlStatementGroup::execute
-							Type:CHARACTER:
-							Name:CHARACTER:
-							Label:CHARACTER:
-							Catalog:CHARACTER:BIPmsgs
-							Severity:INTEGER:3
-							Number:INTEGER:2488
-							Text:CHARACTER:Error detected, rethrowing
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD_DB_INSERT.Main
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:14.3
-							Insert
-									Type:INTEGER:5
-									Text:CHARACTER:DECLARE flag BOOLEAN CopyEntireMessage();
-							RecoverableException
-									File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
-									Line:INTEGER:1337
-									Function:CHARACTER:SqlRoutine::invoke
-									Type:CHARACTER:
-									Name:CHARACTER:
-									Label:CHARACTER:
-									Catalog:CHARACTER:BIPmsgs
-									Severity:INTEGER:3
-									Number:INTEGER:2934
-									Text:CHARACTER:Error occured in procedure
-									Insert
-											Type:INTEGER:5
-											Text:CHARACTER:CopyEntireMessage
-									RecoverableException
-											File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-											Line:INTEGER:785
-											Function:CHARACTER:SqlStatementGroup::execute
-											Type:CHARACTER:
-											Name:CHARACTER:
-											Label:CHARACTER:
-											Catalog:CHARACTER:BIPmsgs
-											Severity:INTEGER:3
-											Number:INTEGER:2488
-											Text:CHARACTER:Error detected, rethrowing
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD_DB_INSERT.CopyEntireMessage
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:66.8
-											Insert
-													Type:INTEGER:5
-													Text:CHARACTER:CALL insertDatabase(N07Header, N07Record, N07Body, sType, msg);
-											RecoverableException
-													File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
-													Line:INTEGER:1337
-													Function:CHARACTER:SqlRoutine::invoke
-													Type:CHARACTER:
-													Name:CHARACTER:
-													Label:CHARACTER:
-													Catalog:CHARACTER:BIPmsgs
-													Severity:INTEGER:3
-													Number:INTEGER:2934
-													Text:CHARACTER:Error occured in procedure
-													Insert
-															Type:INTEGER:5
-															Text:CHARACTER:insertDatabase
-													RecoverableException
-															File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
-															Line:INTEGER:760
-															Function:CHARACTER:SqlStatementGroup::execute
-															Type:CHARACTER:
-															Name:CHARACTER:
-															Label:CHARACTER:
-															Catalog:CHARACTER:BIPmsgs
-															Severity:INTEGER:3
-															Number:INTEGER:2488
-															Text:CHARACTER:Error detected, rethrowing
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:com.gujarat.neft.out.GUJ_NEFT_OUTWARD_DB_INSERT.insertDatabase
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:80.3
-															Insert
-																	Type:INTEGER:5
-																	Text:CHARACTER:INSERT INTO Database.NEFT_OUT (TRAN_REF_NO, INC_UTR, TRAN_DATE, AMOUNT, IFSC_SENDER, SENDER_ACCT_TYPE, SENDER_ACCT_NO, SENDER_ACCT_NAME, ORIG_REMITTANCE, IFSC_RECVR, RECVR_ACCT_TYPE, RECVR_ACCT_NO, RECVR_ACCT_NAME, BENEF_ADDRS, SEND_TO_RECE_INFO, REJECT_CODE, REJECT_REASON, ACK_NACK, CREATION_TIME, LAST_MOD_TIME, OUT_MSG_SENT_SBI, BANKNAME, TRAN_BRANCH, ACK_NACKOUT_SEND_CBS, SUB_MSG_TYPE, ACK_NACK_TIME, RET_ORG_ERR, DUP_ORG_OUT, N10_ACKNACK, SEQINHEADER, TRAN_REF_RETURN_UTR, LAST_UPD_STAMP, CREATION_TIME_STAMP) VALUES(Rec.TRANSACTIONREFERENCENUMBER, inc_utr, Rec.VALUEDATE, Rec.AMOUNT, Rec.SENDINGBRANCHIFSC, Rec.SENDINGCUSTOMERACCOUNTTYPE, Rec.SENDINGCUSTOMERACCOUNTNUMBER, Rec.SEDINGCUSTOMERACCOUNTNAME, orgRemt, Rec.BENEFICIARYBRANCHSIFSC, Rec.BENEFICIARYCUSTOMERACTYPE, Rec.BENEFICIARYCUSTOMERACNUMBER, Rec.BENEFICIARYCUSTOMERACNAME, benAddr, sendToRecvInfo, rejectCode, rejectReason, '0', cTime, cTime, '0', Environment.bankName, branchCode, '0', msgType, '0', '0', '0', '0', Header.SEQUENCENUMBER, relRefNum, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-															DatabaseException
-																	File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
-																	Line:INTEGER:3923
-																	Function:CHARACTER:ImbODBCStatement::checkRcInner
-																	Type:CHARACTER:
-																	Name:CHARACTER:
-																	Label:CHARACTER:
-																	Catalog:CHARACTER:BIPmsgs
-																	Severity:INTEGER:3
-																	Number:INTEGER:2321
-																	Text:CHARACTER:Root SQL exception
-																	Insert
-																			Type:INTEGER:2
-																			Text:CHARACTER:-1
-																	Insert
-																			Type:INTEGER:14
-																			Text:CHARACTER:/opt/IBM/ace-12.0.12.5/ie02/lib/libodbcinterface.so
-																	DatabaseException
-																			File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbODBC.cpp
-																			Line:INTEGER:4142
-																			Function:CHARACTER:ImbODBCStatement::checkRcInner
-																			Type:CHARACTER:
-																			Name:CHARACTER:
-																			Label:CHARACTER:
-																			Catalog:CHARACTER:BIPmsgs
-																			Severity:INTEGER:3
-																			Number:INTEGER:2322
-																			Text:CHARACTER:Child SQL exception
-																			Insert
-																					Type:INTEGER:5
-																					Text:CHARACTER:23000
-																			Insert
-																					Type:INTEGER:2
-																					Text:CHARACTER:1
-																			Insert
-																					Type:INTEGER:5
-																					Text:CHARACTER:[IBM][ODBC Oracle Wire Protocol driver][Oracle]ORA-00001: unique constraint (NEFT_TEST.NEFT_OUT_UK1) violated 
+CREATE PROCEDURE CopyEntireMessage()RETURNS BOOLEAN BEGIN
+		
+		DECLARE sType CHARACTER InputRoot.DFDL.*.Header.SUBMESSAGETYPE;
+		SET OutputRoot.DFDL.{sType} = NULL;
+		DECLARE rc BOOLEAN;
+		DECLARE whiteSpace CONSTANT CHARACTER CAST( X'090D0A20' AS CHAR CCSID 1208);
+		SET Environment.msgtype = sType; 
+		DECLARE tran_ref_no CHARACTER InputRoot.DFDL.*.Body.record[1].TRANSACTIONREFERENCENUMBER ;
+		SET tran_ref_no = TRIM(whiteSpace FROM tran_ref_no);
+		SET Environment.TRAN_REF_NO=tran_ref_no;
+		SET Environment.appId = InputRoot.DFDL.*.Header.BANKAPPLICATIONIDENTIFIER;
+		--SET Environment.bankName = 'KABBN';
+		DECLARE ref ROW;
+		DECLARE sod_date,header_date,body_date, enable_flag CHARACTER;
+		DECLARE sodcheck ROW;
+		SET sodcheck.R[] = PASSTHRU('SELECT * FROM NEFT_24X7 ' TO Database.{DSN} );
+		SET sod_date = sodcheck.R[1].SOD_DATE;
+		SET enable_flag = sodcheck.R[1].ENABLE_FLAG;
+		DECLARE msg CHARACTER;
+		IF sType <> 'N10' THEN
+			DECLARE verify ROW;
+			SET verify.R[] = PASSTHRU('SELECT * FROM NEFT_OUT WHERE TRAN_REF_NO = ?' TO Database.{DSN} VALUES(tran_ref_no));
+			DECLARE Ref REFERENCE TO verify.R[<];
+			IF NOT LASTMOVE(Ref) THEN
+					IF sType = 'N06' THEN
+						-- comment the code before deploying on production
+--						SET OutputLocalEnvironment.Destination.File.Remote.ServerDirectory = '/fns/b1/r/spool/Interfaces/NEFT/OUTGOING';
+						-- end
+						DECLARE N06Header REFERENCE TO InputRoot.DFDL.N06.Header;
+						DECLARE N06Record REFERENCE TO InputRoot.DFDL.N06.Body.record[1];					
+						DECLARE N06Body REFERENCE TO InputRoot.DFDL.N06.Body;
+						WHILE LASTMOVE(N06Record) DO
+							IF (enable_flag = 'Y') AND (sod_date <> '00000000') AND (sType = 'N06') AND ((sod_date <> N06Header.ORIGINATINGDATE) OR (sod_date <> N06Record.VALUEDATE)) THEN
+								SET header_date = N06Header.ORIGINATINGDATE;
+								SET body_date = N06Record.VALUEDATE;
+								CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Header date changed from '||header_date||' to '||sod_date) INTO rc;
+								CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Body date changed from '||body_date||' to '||sod_date) INTO rc;
+								SET N06Header.ORIGINATINGDATE = sod_date;
+								SET N06Record.VALUEDATE = sod_date;
+							END IF;
+							SET msg = '';
+							CALL getMsg(N06Header,N06Record,N06Body,sType,msg);
+							CALL insertDatabase(N06Header,N06Record,N06Body,sType,msg );
+							MOVE N06Record NEXTSIBLING;
+						END WHILE;	
+						CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Message Type is : '||sType) INTO rc;
+						CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Data inserted into NEFT_OUT,NEFT_MSG_OUT tables') INTO rc;
+					ELSE
+					-- comment the code before deploying on production	
+--					SET OutputLocalEnvironment.Destination.File.Remote.ServerDirectory = '/fns/b1/r/spool/Interfaces/NEFT/OUTGOING';
+					-- -- comment the code before deploying on production
+						DECLARE N07Header REFERENCE TO InputRoot.DFDL.N07.Header;
+						DECLARE N07Record REFERENCE TO InputRoot.DFDL.N07.Body.record[1];
+						DECLARE N07Body REFERENCE TO InputRoot.DFDL.N07.Body;
+						WHILE LASTMOVE(N07Record) DO
+							IF (enable_flag = 'Y') AND (sod_date <> '00000000') AND (sType = 'N07') AND ((sod_date <> N07Header.ORIGINATINGDATE) OR (sod_date <> N07Record.VALUEDATE)) THEN
+								SET header_date = N07Header.ORIGINATINGDATE;
+								SET body_date = N07Record.VALUEDATE;
+								CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Header date changed from '||header_date||' to '||sod_date) INTO rc;
+								CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Body date changed from '||body_date||' to '||sod_date) INTO rc;
+								SET N07Header.ORIGINATINGDATE = sod_date;
+								SET N07Record.VALUEDATE = sod_date;
+							END IF;
+							SET msg = '';
+							CALL getMsg(N07Header,N07Record,N07Body,sType,msg);
+							CALL insertDatabase(N07Header,N07Record,N07Body,sType,msg );
+							CALL updateDatabaseN07(N07Record);
+							MOVE N07Record NEXTSIBLING;
+						END WHILE;
+						CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Message Type is : '||sType) INTO rc;
+						CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Data inserted into NEFT_OUT,NEFT_MSG_OUT and updated in NEFT_IN table') INTO rc;
+					END IF;	
+					RETURN TRUE;
+			ELSE
+				DECLARE sIFSC , refNum CHARACTER;
+				SET sIFSC = TRIM(whiteSpace FROM InputRoot.DFDL.*.Body.record[1].SENDINGBRANCHIFSC);
+				SET refNum =TRIM(whiteSpace FROM InputRoot.DFDL.*.Body.record[1].TRANSACTIONREFERENCENUMBER);
+				DECLARE DB_Details ROW;
+		   		DECLARE Qry CHARACTER 'SELECT A.BANKNAME FROM IFSC_BANKNAME A WHERE A.IFSC = ? ';
+		   		SET DB_Details.A[] = PASSTHRU(Qry TO Database.{DSN} VALUES(sIFSC));
+				SET Environment.bankName = DB_Details.A[1].BANKNAME;
+				DECLARE qry CHARACTER ;
+				SET qry = 'SELECT OUT_MSG_SENT_SBI FROM NEFT_OUT  WHERE TRIM(TRAN_REF_NO) = ?';
+				SET ref.A[] = PASSTHRU(qry TO Database.{DSN} VALUES(refNum));
+				CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Duplicate record found for this transaction.') INTO rc;
+				RETURN FALSE;
+			END IF;
+		ELSE
+			-- comment the code before deploying on production		
+--			SET OutputLocalEnvironment.Destination.File.Remote.ServerDirectory = '/fns/b1/r/spool/Interfaces/NEFT/OUTGOING/N10-OUTGOING';
+			-- comment the code before deploying on production
+			DECLARE N10Record REFERENCE TO InputRoot.DFDL.N10.Body.record[1];
+			DECLARE N10Header REFERENCE TO InputRoot.DFDL.N10.Header;
+			DECLARE N10Body REFERENCE TO InputRoot.DFDL.N10.Body;
+			WHILE LASTMOVE(N10Record) DO
+			IF (enable_flag = 'Y') AND (sod_date <> '00000000') AND (sType = 'N10') AND ((sod_date <> N10Header.ORIGINATINGDATE) OR (sod_date <> N10Record.AMT_CREDITED.LINE1)) THEN
+				SET header_date = N10Header.ORIGINATINGDATE;
+				SET body_date = N10Record.AMT_CREDITED.LINE1;
+				CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Header date changed from '||header_date||' to '||sod_date) INTO rc;
+				CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Body date changed from '||body_date||' to '||sod_date) INTO rc;
+				SET N10Header.ORIGINATINGDATE = sod_date;
+				SET N10Record.AMT_CREDITED.LINE1 = sod_date;
+			END IF;		
+			CALL getMsg(N10Header,N10Record,N10Body,sType,msg);
+			CALL updateDatabaseN10(N10Record,msg);
+			MOVE N10Record NEXTSIBLING;
+			END WHILE;	
+			CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Message Type is : '||sType) INTO rc;
+			CALL log4j_1_1('DB_INSERT', 'GUJ_NEFT_OUTWARD', 'INFO','Record updated in NEFT_IN table') INTO rc;
+			RETURN TRUE;
+		END IF;	
+	END;
