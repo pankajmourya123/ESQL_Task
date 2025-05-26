@@ -1,37 +1,49 @@
-DECLARE sharvar SHARED INTEGER 5555;
-
-CREATE COMPUTE MODULE xlsreadflw_Compute
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		 
-     DECLARE I INTEGER 1;
-    DECLARE TotalRecords INTEGER CARDINALITY(InputRoot.DFDL.xlsread.record[]);
-
-    WHILE I <= TotalRecords DO
-      DECLARE refNo CHARACTER InputRoot.DFDL.xlsread.record[I].REF_NO;
-      DECLARE msg CHARACTER InputRoot.DFDL.xlsread.record[I].MSG;
-      DECLARE bankName CHARACTER InputRoot.DFDL.xlsread.record[I].BANKNAME;
-      DECLARE creationTime CHARACTER InputRoot.DFDL.xlsread.record[I].CREATION_TIME;
-
-    
-      /*SET OutputLocalEnvironment.Variables.Records[I].REF_NO = refNo;
-     
-      SET OutputLocalEnvironment.Variables.Records[I].BANKNAME = bankName;
-      SET OutputLocalEnvironment.Variables.Records[I].CREATION_TIME = creationTime;*/
-      
-      SET  OutputLocalEnvironment.Destination.File.Directory='C:\Users\pankaj.m\Downloads\Hoogly\Hoogly\pankaj';
-      SET  OutputLocalEnvironment.Destination.File.Name='NEFT_'||OutputLocalEnvironment.Variables.Records[I].REF_NO ||'_'||OutputLocalEnvironment.Variables.Records[I].BANKNAME||'_'||OutputLocalEnvironment.Variables.Records[I].CREATION_TIME||sharvar||'.TXT'; 
-       SET OutputLocalEnvironment.Variables.Records[I].MSG = msg;
-      SET sharvar=sharvar+1;
-      SET I = I + 1;
-    END WHILE;
-		
-		RETURN TRUE;
-	END;
-
-	
-END MODULE;
-
-
-
-
+ExceptionList
+	RecoverableException
+			File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\MessageServices\ImbDataFlowNode.cpp
+			Line:INTEGER:1607
+			Function:CHARACTER:ImbDataFlowNode::createExceptionList
+			Type:CHARACTER:ComIbmWSInputNode
+			Name:CHARACTER:TCPIP_Clinet#FCMComposite_1_9
+			Label:CHARACTER:TCPIP_Clinet.HTTP Input
+			Catalog:CHARACTER:BIPmsgs
+			Severity:INTEGER:3
+			Number:INTEGER:2230
+			Text:CHARACTER:Node throwing exception
+			Insert
+					Type:INTEGER:14
+					Text:CHARACTER:TCPIP_Clinet.HTTP Input
+			RecoverableException
+					File:CHARACTER:C:\ci\product-build\WMB\src\DataFlowEngine\TemplateNodes\ImbRequestTemplateNode.cpp
+					Line:INTEGER:1172
+					Function:CHARACTER:ImbRequestTemplateNode::processMessageAssemblyToFailure
+					Type:CHARACTER:ComIbmRequestTemplateNode
+					Name:CHARACTER:TCPIP_Clinet#FCMComposite_1_5
+					Label:CHARACTER:TCPIP_Clinet.TCPIP Client Receive
+					Catalog:CHARACTER:BIPmsgs
+					Severity:INTEGER:3
+					Number:INTEGER:2230
+					Text:CHARACTER:Caught exception and rethrowing
+					Insert
+							Type:INTEGER:14
+							Text:CHARACTER:TCPIP_Clinet.TCPIP Client Receive
+					RecoverableException
+							File:CHARACTER:C:\ci\product-build\WMB\src\CommonServices\ImbBuffer.cpp
+							Line:INTEGER:973
+							Function:CHARACTER:ImbBuffer::getAllData
+							Type:CHARACTER:ComIbmRequestTemplateNode
+							Name:CHARACTER:TCPIP_Clinet#FCMComposite_1_5
+							Label:CHARACTER:TCPIP_Clinet.TCPIP Client Receive
+							Catalog:CHARACTER:BIPmsgs
+							Severity:INTEGER:3
+							Number:INTEGER:2113
+							Text:CHARACTER:The size of the stream data does not match the expected size.
+							Insert
+									Type:INTEGER:5
+									Text:CHARACTER:The size of the stream data does not match the expected size.
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:52
+							Insert
+									Type:INTEGER:2
+									Text:CHARACTER:100
