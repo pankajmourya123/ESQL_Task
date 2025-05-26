@@ -1,7 +1,10 @@
-CREATE COMPUTE MODULE ReadRecords_Compute
-  CREATE FUNCTION Main() RETURNS BOOLEAN
-  BEGIN
-    DECLARE I INTEGER 1;
+DECLARE sharvar SHARED INTEGER 5555;
+
+CREATE COMPUTE MODULE xlsreadflw_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 
+     DECLARE I INTEGER 1;
     DECLARE TotalRecords INTEGER CARDINALITY(InputRoot.DFDL.xlsread.record[]);
 
     WHILE I <= TotalRecords DO
@@ -10,16 +13,25 @@ CREATE COMPUTE MODULE ReadRecords_Compute
       DECLARE bankName CHARACTER InputRoot.DFDL.xlsread.record[I].BANKNAME;
       DECLARE creationTime CHARACTER InputRoot.DFDL.xlsread.record[I].CREATION_TIME;
 
-      -- Logging ya processing
-      CALL CopyMessageHeaders();
-      SET OutputLocalEnvironment.Variables.Records[I].REF_NO = refNo;
-      SET OutputLocalEnvironment.Variables.Records[I].MSG = msg;
+    
+      /*SET OutputLocalEnvironment.Variables.Records[I].REF_NO = refNo;
+     
       SET OutputLocalEnvironment.Variables.Records[I].BANKNAME = bankName;
-      SET OutputLocalEnvironment.Variables.Records[I].CREATION_TIME = creationTime;
-
+      SET OutputLocalEnvironment.Variables.Records[I].CREATION_TIME = creationTime;*/
+      
+      SET  OutputLocalEnvironment.Destination.File.Directory='C:\Users\pankaj.m\Downloads\Hoogly\Hoogly\pankaj';
+      SET  OutputLocalEnvironment.Destination.File.Name='NEFT_'||OutputLocalEnvironment.Variables.Records[I].REF_NO ||'_'||OutputLocalEnvironment.Variables.Records[I].BANKNAME||'_'||OutputLocalEnvironment.Variables.Records[I].CREATION_TIME||sharvar||'.TXT'; 
+       SET OutputLocalEnvironment.Variables.Records[I].MSG = msg;
+      SET sharvar=sharvar+1;
       SET I = I + 1;
     END WHILE;
+		
+		RETURN TRUE;
+	END;
 
-    RETURN TRUE;
-  END;
+	
 END MODULE;
+
+
+
+
