@@ -1,138 +1,16 @@
-package com.cedge.apcob.rtgs;
+Overall Kya Kar Raha Hai Code?
 
-import com.ibm.broker.javacompute.MbJavaComputeNode;
-import com.ibm.broker.plugin.MbElement;
-import com.ibm.broker.plugin.MbException;
-import com.ibm.broker.plugin.MbMessage;
-import com.ibm.broker.plugin.MbMessageAssembly;
-import com.ibm.broker.plugin.MbOutputTerminal;
-import com.ibm.broker.plugin.MbUserException;
-import com.ibm.broker.plugin.MbXMLNSC;
+Ye Java Compute Node incoming XML message me se MsgType check karta hai. Uske basis pe:
 
-public class GET_MSGID extends MbJavaComputeNode {
+Message ID (BizMsgIdr),
 
-	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
-		MbOutputTerminal out = getOutputTerminal("out");
-		MbOutputTerminal alt = getOutputTerminal("alternate");
+Receiver IFSC Code (RcvrIfsc ya MmId),
 
-		MbMessage inMessage = inAssembly.getMessage();
-		MbMessageAssembly outAssembly = null;
-		try 
-		{
-			MbMessage outMessage = new MbMessage(inMessage);
-			outAssembly = new MbMessageAssembly(inAssembly, outMessage);
-			
-			String msgType = "" , bizMsgIdr = "", msgId = "",MmId ="",orgnlMsgId = "" , rcvrIfsc = "";
-			MbElement msgDefIdr = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/AppHdr/MsgDefIdr");
-			if (msgDefIdr != null) 
-			{
-				msgType = msgDefIdr.getValueAsString();
-				MbElement environment = outAssembly.getGlobalEnvironment().getRootElement();
-				MbElement pacsType = environment.createElementAsLastChild(MbXMLNSC.FOLDER, "MsgType", msgType);
-//				MbElement localEnv = outAssembly.getLocalEnvironment().getRootElement();
-				MbElement uniqueId = environment.createElementAsLastChild(MbXMLNSC.FOLDER, "UniqueId", null);
-//				uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "MsgType", msgType);
-				MbElement ifsc = environment.createElementAsLastChild(MbXMLNSC.FOLDER, "IFSCDetails", null);
-				
-				if (msgType.equals("pacs.008.001.03")) 
-				{//FIToFICstmrCdtTrf.GrpHdr.MsgId;
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FIToFICstmrCdtTrf/GrpHdr/MsgId");
-					MbElement rcvrIfscEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/CdtrAgt/FinInstnId/ClrSysMmbId/MmbId");
-					if (bizMsgIdrEle != null && rcvrIfscEle != null) 
-					{//UniqueId.BizMsgIdr
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						rcvrIfsc = rcvrIfscEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-						ifsc.createElementAsLastChild(MbXMLNSC.FIELD, "RcvrIfsc", rcvrIfsc);
-					}
-				}
-				else if (msgType.equals("pacs.009.001.03")) 
-				{//FinInstnCdtTrf.GrpHdr.MsgId;
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FinInstnCdtTrf/GrpHdr/MsgId");
-					MbElement rcvrIfscEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FinInstnCdtTrf/CdtTrfTxInf/Cdtr/FinInstnId/ClrSysMmbId/MmbId");
-					if (bizMsgIdrEle != null && rcvrIfscEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						rcvrIfsc = rcvrIfscEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-						ifsc.createElementAsLastChild(MbXMLNSC.FIELD, "RcvrIfsc", rcvrIfsc);
-					}
-				}
-				else if (msgType.equals("pacs.004.001.03")) 
-				{
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/PmtRtr/GrpHdr/MsgId");
-					MbElement orgnlMsgIdEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/PmtRtr/OrgnlGrpInf/OrgnlMsgId");
-					if (bizMsgIdrEle != null && orgnlMsgIdEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						orgnlMsgId = orgnlMsgIdEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-						ifsc.createElementAsLastChild(MbXMLNSC.FIELD, "OrgnlMsgId", orgnlMsgId);
-					}
-				}
-				else if (msgType.equals("camt.054.001.03")) 
-				{
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/BkToCstmrDbtCdtNtfctn/GrpHdr/MsgId");
-					MbElement MmbId = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/AppHdr/To/FIId/FinInstnId/ClrSysMmbId/MmbId");
-					MbElement orgnlMsgIdEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/BkToCstmrDbtCdtNtfctn/Ntfctn/Ntry/NtryDtls/TxDtls/Refs/EndToEndId");
-					if (bizMsgIdrEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						orgnlMsgId = orgnlMsgIdEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-						MmId = MmbId.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "MmId", MmId); 
-						ifsc.createElementAsLastChild(MbXMLNSC.FIELD, "OrgnlMsgId", orgnlMsgId);
-					}
-				}
-				
-				/*change by prabhakar*/
-				/*FOR SFMS CREDIT CONFIRMATION*/
-				else if (msgType.equals("camt.059.001.04")) //camt.059.001.04
-				{
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/NtfctnToRcvStsRpt/GrpHdr/MsgId");
-					if (bizMsgIdrEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-					}
-				}
-				
-				else if (msgType.equals("pacs.002.001.04")) //pacs.002.001.04
-				{
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FIToFIPmtStsRpt/GrpHdr/MsgId");
-					MbElement rcvrIfscEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/Document/FIToFIPmtStsRpt/TxInfAndSts/OrgnlTxRef/Dbtr/Id/OrgId/Othr/Id");
-					if (bizMsgIdrEle != null && rcvrIfscEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						rcvrIfsc = rcvrIfscEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-						ifsc.createElementAsLastChild(MbXMLNSC.FIELD, "RcvrIfsc", rcvrIfsc);
-					}
-				}
-				else if (msgType.equals("admi.004.001.01")) 
-				{
-					MbElement bizMsgIdrEle = inMessage.getRootElement().getLastChild().getFirstElementByPath("/XMLNSC/RequestPayload/AppHdr/BizMsgIdr");
-					if (bizMsgIdrEle != null) 
-					{
-						bizMsgIdr = bizMsgIdrEle.getValueAsString();
-						uniqueId.createElementAsLastChild(MbXMLNSC.FIELD, "BizMsgIdr", bizMsgIdr);
-					}
-				}
-			}
-		} 
-		catch (MbException e) 
-		{
-			throw e;
-		} 
-		catch (RuntimeException e) 
-		{
-			throw e;
-		} 
-		catch (Exception e) 
-		{
-			throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
-		}
-		out.propagate(outAssembly);
-	}
-}
+Original Message ID (OrgnlMsgId)
+
+
+...jaise fields extract karta hai.
+
+Phir ye fields Global Environment ke andar "MsgType", "UniqueId", aur "IFSCDetails" folders me daal deta hai.
+
+Ye Global Environment ka use flow ke aage ke nodes karte hain further processing ke liye.
