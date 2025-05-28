@@ -1,16 +1,125 @@
-Overall Kya Kar Raha Hai Code?
-
-Ye Java Compute Node incoming XML message me se MsgType check karta hai. Uske basis pe:
-
-Message ID (BizMsgIdr),
-
-Receiver IFSC Code (RcvrIfsc ya MmId),
-
-Original Message ID (OrgnlMsgId)
+Bhai, tu Parse Timing ka practical samajhna chahta hai IBM Integration Bus (IIB) ya App Connect Enterprise (ACE) me, aur tu specifically HttpInput node ke Parse Timing property ka flow banana chahta hai. Chalo step-by-step bataata hoon ki kaise flow banaye, kya message bheje, aur har Parse Timing mode me kya expect kare:
 
 
-...jaise fields extract karta hai.
+---
 
-Phir ye fields Global Environment ke andar "MsgType", "UniqueId", aur "IFSCDetails" folders me daal deta hai.
+🔧 SETUP
 
-Ye Global Environment ka use flow ke aage ke nodes karte hain further processing ke liye.
+Flow:
+
+HttpInput → Compute Node → HttpReply
+
+
+HttpInput Properties:
+
+Set Message Domain: XMLNSC
+
+Set Parse Timing: (We will test with Complete, No Demand, and Immediate one by one)
+
+
+
+---
+
+📤 TEST XML MESSAGE (VALID):
+
+<order>
+    <item>Book</item>
+    <quantity>2</quantity>
+</order>
+
+🧪 TEST XML MESSAGE (INVALID):
+
+<order>
+    <item>Book</item>
+    <quantity>2</quantity>
+<!-- Missing closing tag for <order> -->
+
+
+---
+
+🧠 Compute Node ESQL Code:
+
+CREATE COMPUTE MODULE ParseTest_Compute
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        -- Access some field to trigger parsing (important for No Demand)
+        DECLARE itemName CHARACTER FieldReference(Message.order.item);
+        SET OutputRoot.XMLNSC.reply = 'Received item: ' || itemName;
+        RETURN TRUE;
+    END;
+END MODULE;
+
+
+---
+
+🧪 NOW TEST EACH PARSE TIMING MODE:
+
+
+---
+
+🅐 COMPLETE
+
+HttpInput → Parse Timing: Complete
+
+✅ Valid XML: Flow passes successfully. itemName is accessed and reply message is sent.
+
+⚠️ Invalid XML: Even if there's a parse error, flow continues. But the itemName will be NULL, and you may get an empty or error message depending on how you handle it.
+
+
+Summary: Parser tries to fully parse when message is accessed. Errors don’t stop the flow.
+
+
+---
+
+🅑 NO DEMAND
+
+HttpInput → Parse Timing: No Demand
+
+✅ Valid XML: Flow passes, message parsed only when itemName is accessed, gives valid reply.
+
+❌ Invalid XML: Error is thrown only when you access the field (i.e., at itemName = ... line). So flow fails at Compute node if you try to access corrupted XML part.
+
+
+Summary: Lazy parsing. Errors are only seen when field is accessed.
+
+
+---
+
+🅒 IMMEDIATE
+
+HttpInput → Parse Timing: Immediate
+
+✅ Valid XML: Parsed at HttpInput node itself, flow continues.
+
+❌ Invalid XML: Immediately throws error at HttpInput node, flow doesn’t proceed.
+
+
+Summary: Strictest mode. Validates everything at the start.
+
+
+---
+
+💬 HOW TO TEST?
+
+Use Postman or cURL:
+
+curl -X POST http://localhost:7800/test -H "Content-Type: application/xml" -d "<order><item>Book</item><quantity>2</quantity></order>"
+
+Try with both valid and invalid XML while changing Parse Timing value in HttpInput node.
+
+
+---
+
+✅ Conclusion:
+
+Parse Timing	Error Handling	When Parsed	Suitable When...
+
+Complete	Error ignored	On first access	You want to delay parse but not fail early
+No Demand	Error on access	Only when needed	Optimize performance; fail only if accessed
+Immediate	Fail early	At input itself	Need early validation and strict checks
+
+
+
+---
+
+Agar tu chahta hai ki main tera .msgflow banake dikhau ya deploy karne ka step-by-step bataun, toh mujhe bata. Mai screenshots and testing ideas bhi de sakta hoon.
