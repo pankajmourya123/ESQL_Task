@@ -1,68 +1,642 @@
-<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Transaction" targetNamespace="http://tempuri.org/Transaction" xmlns="http://tempuri.org/Transaction" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org/Transaction" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <wsdl:types>
-    <xsd:schema targetNamespace="http://tempuri.org/Transaction" xmlns:mrm="http://tempuri.org/Transaction">
-      <xsd:complexType name="transactionreq">
-        <xsd:sequence>
-          <xsd:element ref="TransactionId"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="transactionres">
-        <xsd:sequence>
-          <xsd:element ref="TransactionId"/>
-          <xsd:element ref="Transactionname"/>
-          <xsd:element ref="Amount"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="fault">
-        <xsd:sequence>
-          <xsd:element ref="Fcode"/>
-          <xsd:element ref="Fstring"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:element name="TransactionId" type="xsd:string"/>
-      <xsd:element name="Transactionname" type="xsd:string"/>
-      <xsd:element name="Amount" type="xsd:string"/>
-      <xsd:element name="Fstring" type="xsd:string"/>
-      <xsd:element name="Fcode" type="xsd:string"/>
-      <xsd:element name="transactionreq" type="transactionreq"/>
-      <xsd:element name="transactionres" type="transactionres"/>
-      <xsd:element name="fault" type="fault"/>
-    </xsd:schema>
-  </wsdl:types>
-  <wsdl:message name="transaction1_in">
-    <wsdl:part element="transactionreq" name="transactionreq"/>
-  </wsdl:message>
-  <wsdl:message name="transaction1_out">
-    <wsdl:part element="transactionres" name="transactionres"/>
-  </wsdl:message>
-  <wsdl:message name="transaction1_fault1">
-    <wsdl:part element="fault" name="fault"/>
-  </wsdl:message>
-  <wsdl:portType name="TransactionPortType">
-    <wsdl:operation name="transaction1">
-      <wsdl:input message="transaction1_in" name="transaction1_Input"/>
-      <wsdl:output message="transaction1_out" name="transaction1_Output"/>
-      <wsdl:fault message="transaction1_fault1" name="transaction1_Fault"/>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="TransactionSOAP_HTTP_Binding" type="TransactionPortType">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="transaction1">
-      <soap:operation soapAction=""/>
-      <wsdl:input name="transaction1_Input">
-        <soap:body parts="transactionreq" use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="transaction1_Output">
-        <soap:body parts="transactionres" use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="transaction1_Fault">
-        <soap:fault name="transaction1_Fault" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="TransactionSOAP_HTTP_Service">
-    <wsdl:port binding="TransactionSOAP_HTTP_Binding" name="TransactionSOAP_HTTP_Port">
-      <soap:address location="http://localhost:7800/TransactionSOAP_HTTP_Service"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
+BROKER SCHEMA com.cedge.apcob.routing
+
+CREATE FUNCTION initLog4j( IN CONFIG_FILE_NAME CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
+CREATE FUNCTION log4j_1_1( IN COMPONENT_NAME CHARACTER,
+IN LOGGER_NAME CHARACTER,
+IN LEVEL CHARACTER,
+IN TEXT CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
+
+CREATE COMPUTE MODULE PropagateToNGRTGS
+	DECLARE UDP EXTERNAL CHARACTER;
+	DECLARE NEFT_QUE EXTERNAL CHARACTER ''; 
+	DECLARE RTGS_QUE EXTERNAL CHARACTER ''; 
+	DECLARE MIRROR_QUE EXTERNAL CHARACTER '';
+	DECLARE OTHER_QUE EXTERNAL CHARACTER '';        
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN;
+
+		CALL initLog4j(UDP) INTO rc;
+
+		CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO',' ---------------START---------------') INTO rc;
+
+
+		DECLARE bool BOOLEAN;
+		CALL CopyMessageHeaders();
+		SET bool = CopyEntireMessage();
+		RETURN bool;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN ;
+
+
+		DECLARE msgBlob BLOB ;
+		DECLARE count INTEGER 0 ;
+		DECLARE msgChar , delChar, tranCategory, msgType, bizMsgId, reqPayloadChar CHARACTER ;
+		SET msgChar = CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+		
+		SET delChar = SUBSTRING(msgChar BEFORE '<RequestPayload>');
+		SET msgChar = TRIM(LEADING delChar FROM msgChar);                   -- 2025/01/22 
+--		SET msgChar = REPLACE(msgChar,delChar,'');
+		
+		SET tranCategory = SUBSTRING(msgChar AFTER '<BizSvc>' FOR 4);
+			SET msgType = SUBSTRING(msgChar AFTER '<MsgDefIdr>' FOR 15);
+				SET bizMsgId = SUBSTRING(msgChar AFTER '<BizMsgIdr>' FOR 22);
+					CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Message Category : '||tranCategory) INTO rc;
+					CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Message Type : '||msgType) INTO rc;
+					CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Business Message Identifier : '||bizMsgId) INTO rc;
+					IF STARTSWITH(msgType,'admi') THEN
+						DECLARE ResType CHARACTER SUBSTRING(msgChar AFTER '<EvtCd>' FOR 3);
+						IF ResType = 'F27' THEN
+							CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Response Type : '||ResType) INTO rc;
+						ELSE
+							CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Event Code : '||ResType) INTO rc;
+							CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Posting Message to CEDGERRB.NEFT.IN.OTHER') INTO rc;
+							SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+							SET OutputRoot.BLOB.BLOB = msgBlob ;
+							SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = OTHER_QUE;
+							PROPAGATE TO TERMINAL 'out' DELETE NONE;
+							RETURN FALSE;
+						END IF;
+					END IF;
+
+					IF tranCategory = 'RTGS'  OR STARTSWITH(tranCategory, 'S') THEN
+						SET reqPayloadChar = RTGS_QUE;
+						CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To RTGS Flow') INTO rc;
+					ELSE
+						SET reqPayloadChar = NEFT_QUE;
+						CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO','Message Is Being Routed To NEFT Flow') INTO rc;
+
+					END IF;
+					SET msgBlob = CAST(msgChar AS BLOB CCSID InputRoot.Properties.CodedCharSetId Encoding InputRoot.Properties.Encoding);
+					SET OutputRoot.BLOB.BLOB = msgBlob ;
+					SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = reqPayloadChar;
+--					SET OutputLocalEnvironment.Destination.MQ.DestinationData[2].queueName = MIRROR_QUE;
+					CALL log4j_1_1('GATEWAY', 'APCOB_INWARD_GATEWAY', 'INFO',' ----------------END----------------') INTO rc;
+
+				RETURN TRUE;		
+				END;
+			END MODULE;
+
+
+BROKER SCHEMA com.cedge.apcob.neft
+
+CREATE DATABASE MODULE NEFT_IN_DBCopy
+	DECLARE DSNNAME EXTERNAL CHARACTER'';
+	DECLARE SCHEMANAME EXTERNAL CHARACTER'';
+--	DECLARE TABLENAME EXTERNAL CHARACTER'';
+	DECLARE NEFT_IN_PAYLOAD_TABLE  EXTERNAL CHARACTER'';
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN ;
+		DECLARE msgId CHARACTER Root.MQMD.MsgId;
+		DECLARE count INTEGER ;
+		SET count = LENGTH(msgId)-3 ;
+		SET msgId = SUBSTRING(msgId FROM 3 FOR count);
+		
+
+
+        	DECLARE txnNum CHARACTER Root.XMLNSC.RequestPayload.*:AppHdr.*:BizMsgIdr;
+		DECLARE datechar CHARACTER CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'yyyyMMdd');
+		SET txnNum = datechar||txnNum;
+		
+		CALL log4j_1_1('DB_COPY', 'APCOB_NEFT_IN', 'INFO','---------------------------- START -------------------------') INTO rc;
+		CALL log4j_1_1('DB_COPY', 'APCOB_NEFT_IN', 'INFO','Transaction Reference Number : '||txnNum) INTO rc;
+		DECLARE check ROW;
+		SET check.R[] = PASSTHRU('SELECT RETRY_COUNT FROM NEFT_IN_PAYLOAD WHERE TXN_REF_NUM = ?' TO Database.{DSNNAME} VALUES(txnNum));
+		IF check.R[1].RETRY_COUNT >= 0 THEN
+			DECLARE retryCount INTEGER ;
+			SET retryCount = check.R[1].RETRY_COUNT+1 ;
+			DECLARE DB_Details ROW;	
+			DECLARE Qry CHARACTER ;	
+			SET Qry =  'UPDATE '||SCHEMANAME||'.'||NEFT_IN_PAYLOAD_TABLE|| ' A SET A.LAST_MOD_TIME = ? , A.RETRY_COUNT = ? WHERE A.TXN_REF_NUM = ? ' ;
+			SET DB_Details.A[] = PASSTHRU (Qry TO Database.{DSNNAME} VALUES(CURRENT_TIMESTAMP ,retryCount ,txnNum));
+			CALL log4j_1_1('DB_COPY', 'APCOB_NEFT_IN', 'INFO','Updating data in NEFT_IN-PAYLOAD') INTO rc;				
+		ELSE
+			DECLARE wholeMsgBlob BLOB ASBITSTREAM(Root.XMLNSC, Root.Properties.Encoding, Root.Properties.CodedCharSetId );
+	 		DECLARE wholeMsgChar CHAR CAST(wholeMsgBlob AS CHAR CCSID Root.Properties.CodedCharSetId);
+	 		DECLARE fileName CHARACTER 'filename';
+	 		INSERT INTO Database.{DSNNAME}.{SCHEMANAME}.NEFT_IN_PAYLOAD (MSGID,PAYLOAD,CREATION_TIME,LAST_MOD_TIME,STATUS,RETRY_COUNT,FILE_NAME,TXN_REF_NUM) 
+	 		VALUES (msgId,wholeMsgChar, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'F', '0',fileName,txnNum);	
+	 		CALL log4j_1_1('DB_COPY', 'APCOB_NEFT_IN', 'INFO','Data inserted to NEFT_IN-PAYLOAD') INTO rc;		
+		END IF;
+		RETURN TRUE;
+	END;
+
+END MODULE;
+
+
+BROKER SCHEMA com.cedge.apcob.inward.neft
+
+
+CREATE COMPUTE MODULE NeftPropagation
+	DECLARE SCHEMANAME EXTERNAL CHARACTER '';
+	DECLARE NEFT_OUT_TABLE EXTERNAL CHARACTER '';
+	DECLARE DSNNAME EXTERNAL CHARACTER '';
+    DECLARE LOG_PATH EXTERNAL CHARACTER '' ;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN;
+--		CALL initLog4j('/var/iib/interface/apcob/neft/inward/properties/log4j/apcob_neft_rtgs_log4j.xml') INTO rc;
+-- 		CALL log4j_1_1('FILTER_CEDGE_NONCEDGE', 'APCOB_NEFT_IN', 'INFO',' ---------------START---------------') INTO rc;
+--		CALL initLog4j(LOG_PATH) INTO rc;
+		DECLARE bool BOOLEAN;
+		CALL CopyMessageHeaders();
+		SET bool = CopyEntireMessage();
+		RETURN bool;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN BEGIN
+		DECLARE rc BOOLEAN;
+		DECLARE msgType CHARACTER '';
+		DECLARE DB_Details , DB_Info ROW;
+
+		DECLARE headerRef REFERENCE TO InputRoot.XMLNSC.RequestPayload.[1];
+
+		SET msgType = headerRef.*:MsgDefIdr;
+
+		DECLARE bodyRef REFERENCE TO InputRoot.XMLNSC.RequestPayload.[2];
+		MOVE bodyRef LASTCHILD;
+
+		DECLARE outRef REFERENCE TO OutputRoot;
+		CREATE FIELD OutputRoot.MQRFH2.usr.BankDetails AS outRef;
+
+		SET outRef.MsgId = headerRef.*:BizMsgIdr;
+
+		SET Environment.MsgType = msgType;
+		CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Message Belogs To '||msgType||' Category') INTO rc;
+		CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Message Identification : '||COALESCE(bodyRef.*:GrpHdr.*:MsgId,headerRef.*:BizMsgIdr)) INTO rc;
+		CASE msgType
+		WHEN 'pacs.008.001.09' THEN
+			CALL GenerateUTR(bodyRef.*:GrpHdr.*:MsgId, bodyRef.*:GrpHdr.*:CreDtTm, outRef);
+		WHEN 'pacs.004.001.10' THEN
+			CALL GenerateUTR(bodyRef.*:GrpHdr.*:MsgId, bodyRef.*:GrpHdr.*:CreDtTm, outRef);
+		WHEN 'admi.004.001.02' THEN
+			-- SET outRef.CreDt = InputRoot.XMLNSC.RequestPayload.*:Document.*:SysEvtNtfn.*:EvtInf.*:EvtTm;
+			-- IF bodyRef.*:EvtInf.*:EvtCd='F27' THEN
+			CALL FetchData(headerRef.*:BizMsgIdr, headerRef, outRef);
+			CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Response CODE : '||bodyRef.*:EvtInf.*:EvtParam) INTO rc;
+			CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Response Description : '||bodyRef.*:EvtInf.*:EvtDesc) INTO rc;
+			IF EXISTS( outRef.BANKNAME[]) THEN
+				CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Sub Message Type : '||outRef.SUB_MSG_TYPE) INTO rc;
+				SET outRef.cDate = REPLACE(SUBSTRING(headerRef.*:CreDt FROM 1 FOR 10) , '-','');
+				SET outRef.cTime = REPLACE(SUBSTRING (headerRef.*:CreDt AFTER 'T' for 5), ':','');
+					IF (STARTSWITH(bodyRef.*:EvtInf.*:EvtParam,'P')) OR ( outRef.SUB_MSG_TYPE = 'N07')THEN
+						SET Environment.MsgType = 'F27';
+						SET outRef.cDateTime = outRef.cDate||outRef.cTime;
+						
+					END IF;
+				ELSE
+					CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','Propogating To Other As Bank Name Not Found...') INTO rc;
+					SET OutputRoot.XMLNSC =InputRoot.XMLNSC;
+					PROPAGATE TO LABEL 'OTHER_LABLE' DELETE NONE;
+					RETURN FALSE;
+				END IF;
+			WHEN 'pacs.002.001.11' THEN
+				CALL GenerateUTR(bodyRef.*:GrpHdr.*:MsgId, bodyRef.*:GrpHdr.*:CreDtTm, outRef);
+
+			WHEN 'camt.054.001.08' THEN
+				CALL GenerateUTR(bodyRef.*:GrpHdr.*:MsgId, bodyRef.*:GrpHdr.*:CreDtTm, outRef);
+				CALL CheckRemInformation(bodyRef.*:Ntfctn.*:Ntry.*:NtryDtls, headerRef, outRef);
+
+			WHEN 'camt.052.001.08' THEN
+				CALL log4j_1_1('MSG_FILTER', 'APCOB_NEFT_IN', 'INFO','972 Statement No. : ' || FIELDVALUE(bodyRef.*:Rpt.*:ElctrncSeqNb)) INTO rc;
+				DECLARE cDate CHARACTER REPLACE(SUBSTRING(bodyRef.*:GrpHdr.*:CreDtTm FROM 3 FOR 8) , '-','');
+				SET outRef.cDate = REPLACE(SUBSTRING(bodyRef.*:GrpHdr.*:CreDtTm FROM 1 FOR 10) , '-','');
+				SET outRef.cTime = REPLACE(SUBSTRING (bodyRef.*:GrpHdr.*:CreDtTm AFTER 'T' for 5), ':','');
+					SET outRef.UTR = cDate||outRef.cTime||RIGHT(bodyRef.*:GrpHdr.*:MsgId,6);
+					CALL CheckRemInformation(bodyRef.*:Rpt.*:Ntry.*:NtryDtls, headerRef, outRef);
+
+				WHEN 'camt.059.001.06' THEN
+					CALL GenerateUTR(bodyRef.*:GrpHdr.*:MsgId, bodyRef.*:GrpHdr.*:CreDtTm, outRef);
+					SET outRef.HO_RECEIVER_IFCS = headerRef.*:To.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+					SET outRef.HO_SENDER_IFCS = headerRef.*:Fr.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+				ELSE
+				END CASE;
+				SET OutputRoot.XMLNSC = InputRoot.XMLNSC.RequestPayload;
+				DELETE FIRSTCHILD OF OutputRoot.XMLNSC ;
+				RETURN TRUE;
+			END;
+
+
+			CREATE PROCEDURE FetchData (IN utr CHARACTER,IN inref REFERENCE ,INOUT outreff REFERENCE )
+			BEGIN
+				DECLARE DB_Info ROW;
+				SET outreff.INC_UTR = utr;
+				DECLARE Qry1 CHARACTER 'SELECT A.TRAN_REF_NO, A.IFSC_SENDER, A.SUB_MSG_TYPE, A.IFSC_RECVR, A.SEQINHEADER, A.BANKNAME FROM '||SCHEMANAME||'.'||NEFT_OUT_TABLE||' A WHERE A.INC_UTR = ? ';
+				SET DB_Info.A[] = PASSTHRU(Qry1 TO Database.{DSNNAME} VALUES(utr));
+				DECLARE bankDetailsRef REFERENCE TO DB_Info;
+				MOVE bankDetailsRef FIRSTCHILD;
+				DECLARE tempDbRef REFERENCE TO bankDetailsRef;
+				SET outreff.rcvrIfsc = TRIM(tempDbRef.IFSC_RECVR) ;
+				SET outreff.sdrIfsc = TRIM(tempDbRef.IFSC_SENDER);
+				SET outreff.UTR = TRIM(tempDbRef.TRAN_REF_NO);
+				SET outreff.seqNo = TRIM(tempDbRef.SEQINHEADER);
+				SET outreff.BANKNAME = TRIM(tempDbRef.BANKNAME);
+				SET outreff.SUB_MSG_TYPE = TRIM(tempDbRef.SUB_MSG_TYPE);
+--				SET outreff.HO_RECEIVER_IFCS = inref.*:To.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+--				SET outreff.HO_SENDER_IFCS = inref.*:Fr.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+				
+			END;
+		END MODULE;
+
+		CREATE PROCEDURE GenerateUTR(IN msgId CHARACTER, IN cDateTime CHARACTER, INOUT outref REFERENCE)
+		BEGIN
+			DECLARE jDate , getYear , doy , utr CHARACTER '';
+
+			SET getYear = SUBSTRING(cDateTime FROM 3 FOR 2);
+			DECLARE ctime CHARACTER SUBSTRING (cDateTime AFTER 'T' for 5);
+			SET doy = REPLACE(SUBSTRING(cDateTime FROM 3 FOR 8),'-','');
+			DECLARE target DATE;
+			SET target = CAST(doy AS DATE FORMAT 'yyMMdd');
+			SET doy = EXTRACT(DAYOFYEAR FROM target);
+			DECLARE len INTEGER (3 - (LENGTH(doy)));
+			IF len<3 THEN
+				SET jDate = REPLICATE('0' , len);
+				SET jDate = getYear||jDate||doy;
+			ELSE
+				SET jDate = getYear||doy;
+			END IF;
+
+			SET outref.UTR = OVERLAY(msgId PLACING jDate FROM 5 for 11);
+			SET outref.cDate = REPLACE(SUBSTRING(cDateTime FROM 1 FOR 10) , '-','');
+			SET outref.cTime = REPLACE(ctime , ':','');
+		END;
+
+		CREATE PROCEDURE CheckRemInformation (IN inRef REFERENCE,IN hRef REFERENCE, INOUT outReff REFERENCE )
+		BEGIN
+			SET outReff.HO_RECEIVER_IFCS = hRef.*:To.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+			SET outReff.HO_SENDER_IFCS = hRef.*:Fr.*:FIId.*:FinInstnId.*:ClrSysMmbId.*:MmbId;
+			DECLARE tranRef REFERENCE TO inRef.*:TxDtls[>];
+			WHILE LASTMOVE(tranRef) DO
+				SET outReff.{tranRef.*:CdtDbtInd}.Amt=REPLACE(tranRef.*:Amt,'.',',');
+				SET outReff.{tranRef.*:CdtDbtInd}.Ustrd=tranRef.*:RmtInf.*:Ustrd;
+				MOVE tranRef NEXTSIBLING;
+			END WHILE;
+
+		END;
+BROKER SCHEMA com.cedge.apcob.neft
+
+CREATE COMPUTE MODULE BankIdentification
+	DECLARE DSNNAME EXTERNAL CHARACTER;
+	DECLARE SCHEMANAME EXTERNAL CHARACTER;
+	DECLARE TABLENAME EXTERNAL CHARACTER;
+	DECLARE NEFT_OUT_TABLE EXTERNAL CHARACTER;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 DECLARE bool BOOLEAN;
+		 CALL CopyMessageHeaders();
+		 SET bool = CopyEntireMessage();
+		RETURN bool;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN  
+	BEGIN
+		DECLARE rc BOOLEAN;
+		DECLARE msgType , msgIdentifier ,sdrIfsc , rcvrIfsc , bankName , bankType , curStatus , relatedRefNo ,newRecvrIfsc , newSdrIfsc , seqNo , transdate , newTrandate ,newTrandate1, transRefNoForN09, msgtype , responsecode, tran_date, IfscIdentify, rcvrIfscbodyN10 CHARACTER ;
+		DECLARE DB_Details ROW;
+		DECLARE inMsgDetailsref REFERENCE TO InputRoot.DFDL ;
+		DECLARE outMsgDetailsRef REFERENCE TO OutputRoot;
+		DECLARE headerRef REFERENCE TO inMsgDetailsref.*.header;
+		DECLARE bodyRef REFERENCE TO inMsgDetailsref.*.body;
+		DECLARE i INTEGER 1 ;
+		SET msgType = headerRef.SubMessage_Type ;
+		SET msgtype = headerRef.Message_Type ; --N04
+		SET msgIdentifier = headerRef.Message_Identifier ;
+		SET sdrIfsc = headerRef.Sender_IFSC ;
+		SET rcvrIfsc = headerRef.Receiver_IFSC ;
+--		SET sequence_Num = headerRef.Sequence_Number;
+--		SET transdate = headerRef.Date_Time;
+		SET tran_date = SUBSTRING(transdate FROM 1 FOR 8);
+		SET msgtype = headerRef.Message_Type ;					--972 
+		SET responsecode = headerRef.BankAPI_Response_Code;
+		SET IfscIdentify = SUBSTRING(rcvrIfsc FROM 7 FOR 2);
+-- 		SET rcvrIfscbodyN02 = bodyRef.record.BenfBranch_IFSC;
+		SET rcvrIfscbodyN10 = bodyRef.record.IFSC_of_Originator_of_Remittance;
+		
+		CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','IFT MSG TYPE : '||InputRoot.Properties.MessageType) INTO rc;
+		CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Sender IFSC : '||sdrIfsc) INTO rc;
+		CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Receiver IFSC :'||COALESCE(rcvrIfsc,'NOT APPLICABLE')) INTO rc;
+		
+--        SET newRecvrIfsc=SUBSTRING(rcvrIfsc FROM 1 FOR 4)||'%';
+		SET newRecvrIfsc= rcvrIfsc||'%';
+		SET newSdrIfsc=SUBSTRING(sdrIfsc from 1 for 4)||'%';
+		
+		DECLARE Qry CHARACTER 'SELECT A.BANKNAME FROM '||SCHEMANAME||'.'||TABLENAME||' A WHERE A.IFSC like ? ';
+		
+--  		IF msgtype = '972' THEN
+--		     CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','972 Statement No. : ' || InputRoot.DFDL.INF972.body.Statement_Number) INTO rc;
+--			END IF;
+		IF msgType = 'N02' OR msgType = 'N03' OR msgType = 'N09' OR msgType = 'N04' OR ((msgtype = '972') AND (InputRoot.DFDL.INF972.body.Statement_Number = '1')) THEN --N03
+			-- N04 changes end --
+			SET DB_Details.A[] = PASSTHRU(Qry TO Database.{DSNNAME} VALUES(newRecvrIfsc));
+			
+		ELSEIF msgType = 'N10' THEN
+			SET relatedRefNo = InputRoot.DFDL.N10.body.record.Related_RefNumber ;
+			CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Related refrence Number :'||relatedRefNo) INTO rc;
+			SET Qry = 'SELECT A.BANKNAME FROM '||SCHEMANAME||'.'||NEFT_OUT_TABLE||' A WHERE TRIM(A.TRAN_REF_NO) = ?';
+			SET DB_Details.A[] = PASSTHRU(Qry TO Database.{DSNNAME} VALUES(relatedRefNo));
+--			CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Receiver IFSC Body :'||rcvrIfscbodyN02) INTO rc;	
+		END IF;	
+			DECLARE bankDetailsRef REFERENCE TO DB_Details;
+    		MOVE bankDetailsRef FIRSTCHILD;
+    		DECLARE tempDbRef REFERENCE TO bankDetailsRef;
+			SET bankName = TRIM(tempDbRef.BANKNAME) ;	
+
+--		ELSEIF msgType = 'N10' THEN
+--			SET DB_Details.A[] = PASSTHRU(Qry TO Database.{DSNNAME} VALUES(rcvrIfscbodyN10));
+--			CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Receiver IFSC Body :'||rcvrIfscbodyN10) INTO rc;	
+--		END IF;
+		
+		IF msgIdentifier = 'F27' THEN
+--			SET Qry = 'SELECT A.BANKNAME,A.TRAN_REF_NO,A.ACK_NACK FROM '||SCHEMANAME||'.'||NEFT_OUT_TABLE||' A WHERE A.SEQINHEADER = ? AND A.TRAN_DATE = ?';
+--			SET DB_Details.A[] = PASSTHRU(Qry TO Database.{DSNNAME} VALUES(sequence_Num,tran_date));
+                        SET bankName = TRIM(OutputRoot.MQRFH2.usr.BankDetails.BANKNAME) ;
+		END IF;
+		
+--		DECLARE bankDetailsRef REFERENCE TO DB_Details;
+--    	MOVE bankDetailsRef FIRSTCHILD;
+--    	DECLARE tempDbRef REFERENCE TO bankDetailsRef;
+		
+		
+--		SET bankName = TRIM(tempDbRef.BANKNAME) ;	
+		
+		CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Bank Name: '||COALESCE(bankName,'NOT FOUND.')) INTO rc;	
+		-----------------------------------N03-----------------------------ROHAN---------------------
+		IF msgType = 'N03' THEN
+			DECLARE recordRef REFERENCE TO inMsgDetailsref.*.body.record[>];
+			WHILE LASTMOVE(recordRef) DO
+
+				DECLARE qry2 CHARACTER 'SELECT IFSC_SENDER,IFSC_RECVR,INC_UTR FROM '||SCHEMANAME||'.'||NEFT_OUT_TABLE|| ' B WHERE  TRIM(B.TRAN_REF_NO)= ?';
+				SET DB_Details.B[] =PASSTHRU(qry2 TO Database.{DSNNAME} VALUES(recordRef.Related_Reference_Number));
+				DECLARE recordReff REFERENCE TO DB_Details.B[1];
+				CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Sender IFSC : '||COALESCE(recordReff.IFSC_RECVR,'Unable To Fetch Data..')) INTO rc;
+				CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Receiver IFSC :'||COALESCE(recordReff.IFSC_SENDER,'Unable To Fetch Data..')) INTO rc;
+				
+				SET OutputRoot.MQRFH2.usr.BankDetails.INC_UTR = recordReff.INC_UTR;
+				CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Transaction Id : '||COALESCE(recordReff.INC_UTR,'Unable To Fetch Data..')) INTO rc;
+				CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Transaction Number : '||recordRef.Related_Reference_Number) INTO rc;
+				CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Reasion code : '||recordRef.Reason_Code) INTO rc;
+				IF recordRef.Reason_Code IN ('RJ07','RJ08') THEN
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Holding N03 transaction record at IIB end') INTO rc;
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','---------------------------END--------------------------') INTO rc;
+				ELSE
+					SET OutputRoot.MQRFH2.usr.BankDetails.BankName = bankName;
+					SET OutputRoot.DFDL.N09.header = InputRoot.DFDL.N_03.header ;
+					SET OutputRoot.DFDL.N09.header.Sender_IFSC = TRIM(recordReff.IFSC_RECVR);
+					SET OutputRoot.DFDL.N09.header.Receiver_IFSC = TRIM(recordReff.IFSC_SENDER);
+					SET OutputRoot.DFDL.N09.header.MUR = recordRef.Related_Reference_Number;
+					SET OutputRoot.DFDL.N09.header.Unique_Transaction_Number = recordRef.Related_Reference_Number;
+					SET OutputRoot.DFDL.N09.header.SubMessage_Type = 'N09';
+					SET OutputRoot.DFDL.N09.body.Block_4_Initiator = InputRoot.DFDL.N_03.body.Block_4_Initiator;
+					SET OutputRoot.DFDL.N09.body.Transaction_Reference_Number = recordRef.Related_Reference_Number;
+					SET OutputRoot.DFDL.N09.body.Status = 'N';
+					SET OutputRoot.DFDL.N09.body.Reason = recordRef.Reason_Code;
+					SET OutputRoot.DFDL.N09.body.Description = 'Rejected BY RBI N03 MSG';
+					-- SET OutputRoot.DFDL.N_03.body.record[1] = recordRef;
+					-- SET i = i + 1;
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Converting to N09 Msg') INTO rc;
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Belogs TO Cedge Bank') INTO rc;
+					-- SET OutputRoot.MQRFH2.usr.BankDetails.BankName = bankName ;
+					-- SET OutputRoot.DFDL = inMsgDetailsref ;
+					-- SET OutputRoot.DFDL = OutputRoot.DFDL.N_03;
+					-- SET OutputRoot.DFDL.*.Optional = NULL;
+					PROPAGATE TO TERMINAL 'out' DELETE NONE;
+				END IF;
+				-- END IF;
+				MOVE recordRef NEXTSIBLING;
+				SET OutputRoot.DFDL.*.Optional = NULL;
+			END WHILE;
+
+			RETURN FALSE;
+			----------------------------------------------N03------------------------ROHAN----------------
+		ELSE
+			IF LENGTH(bankName) <> 0 THEN
+				SET OutputRoot.MQRFH2.usr.BankDetails.BankName = bankName ;
+				SET OutputRoot.DFDL = inMsgDetailsref ;
+				SET OutputRoot.DFDL.*.Optional = NULL;
+				PROPAGATE TO TERMINAL 'out' DELETE NONE;
+				RETURN FALSE ;
+		ELSE
+--				IF msgType = 'N02' OR msgType = 'N03' OR msgType ='N04' OR ((msgtype = '972') AND (InputRoot.DFDL.INF972.body.Statement_Number = '1')) THEN --N04 --N03
+				IF msgType IN ('N02','N04') OR (InputRoot.DFDL.INF972.body.Statement_Number = '1') THEN
+				SET OutputRoot.DFDL = inMsgDetailsref ;
+				SET OutputRoot.DFDL.*.Optional = NULL;	
+				PROPAGATE TO TERMINAL 'out' DELETE NONE;
+				RETURN FALSE ;
+			----------------------------------------------------------------------		
+			ELSE
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','Posting Message to CEDGERRB.NEFT.IN.OTHER') INTO rc;
+					CALL log4j_1_1('IDENTIFY_BANK', 'APCOB_NEFT_IN', 'INFO','---------------------------END--------------------------') INTO rc;
+					SET OutputRoot.DFDL = inMsgDetailsref ;
+					SET OutputRoot.DFDL.*.Optional = NULL;
+					PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+					RETURN FALSE ;
+				END IF;
+			END IF;
+		END IF;				
+	END;
+END MODULE;
+
+BROKER SCHEMA com.cedge.apcob.neft
+
+CREATE DATABASE MODULE APCOB_NEFT_INWARD_UPDATE_STATUS
+	DECLARE DSNNAME EXTERNAL CHARACTER;
+	DECLARE SCHEMANAME EXTERNAL CHARACTER;
+	DECLARE NEFT_IN_PAYLOAD_TABLENAME EXTERNAL CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL updateStatus();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE updateStatus ( )
+	BEGIN
+		SET Environment.Fail = 'While Updating the Status Field in NEFT_IN_PAYLAOD Table it is failed' ;
+		DECLARE msgId, msgType, Qry, datechar CHARACTER ;
+--		DECLARE Qry CHARACTER ;
+		SET msgId = Root.MQMD.MsgId ;
+		DECLARE count INTEGER ;
+		SET count = LENGTH(msgId)-3 ;
+		SET msgId = SUBSTRING(msgId FROM 3 FOR count);
+                DECLARE txnNum CHARACTER;
+		----------------------------Changes for N04 and 972 Message----------------------------------------------- 				
+--		Declare msgType CHARACTER;
+		SET datechar = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'yyyyMMdd');
+		SET msgType= Environment.MsgType;
+		SET txnNum = Root.MQRFH2.usr.BankDetails.MsgId;
+--		SET msgtype = Root.DFDL.*.header.Message_Type;
+--		SET batchTime = Root.DFDL.N04.body.Batch_Time;
+--		SET Environment.msgtype = Root.DFDL.*.header.Message_Type;
+--		SET tranrefno = Root.DFDL.INF972.body.Transaction_Reference;
+--		IF batchTime IS NULL OR batchTime = '' THEN
+--			SET batchTime = '9999' ;
+--		END IF;
+--		IF msgType = 'N04' THEN
+--			SET txnNum =datechar||batchTime;
+--
+--		ELSEIF msgtype = '972' THEN
+--			SET txnNum = datechar||tranrefno;
+--			-----------------------Changes for N04 and INF-972 END ---------------------------
+--		ELSE
+--			SET txnNum =Root.DFDL.*.body.Transaction_Reference_Number;
+			-- IF txnNum IS NULL OR LENGTH(txnNum) = 0 THEN
+			-- SET txnNum = Root.DFDL.*.header.Sequence_Number ;
+			-- END IF;
+			-- IF Environment.msgType='N09' THEN CHANGE BY KAJAL
+--			IF txnNum IS NULL OR LENGTH(txnNum) = 0 OR Environment.msgType='N09' THEN
+--				SET txnNum =Environment.newtxn;
+--				-- ELSE
+--				-- SET txnNum =Root.DFDL.*.body.Transaction_Reference_Number;
+--
+--			END IF;
+			SET txnNum = datechar||txnNum;
+--		END IF;
+		
+		DECLARE DB_Details ROW;	
+		SET Qry =  'UPDATE '||SCHEMANAME||'.'||NEFT_IN_PAYLOAD_TABLENAME|| ' A SET A.LAST_MOD_TIME = ? , STATUS = ''S'' WHERE A.TXN_REF_NUM = ? ' ;
+		SET DB_Details.A[] = PASSTHRU (Qry TO Database.{DSNNAME} VALUES(CURRENT_TIMESTAMP ,txnNum));
+	END;
+END MODULE;
+
+
+
+BROKER SCHEMA com.cedge.apcob.inward.neft
+
+
+CREATE COMPUTE MODULE APCOB_NEFT_INWARD_UAPDATE_FAIL
+	DECLARE PROP_LOC EXTERNAL CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	 CALL setMailInfo();
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE setMailInfo ( )
+	BEGIN
+		DECLARE toEmail,ccEmail,fromEmail,smtpServer , type , fail , transRefNo CHARACTER '';
+		DECLARE rc BOOLEAN ;
+		SET type = Environment.Type;
+		SET fail = Environment.Fail ;
+		CALL getMailProp(PROP_LOC,toEmail,ccEmail,fromEmail,smtpServer);
+		SET Environment.toEmail = toEmail;
+		SET Environment.ccEmail = ccEmail;
+		SET Environment.fromEmail = fromEmail;
+		SET Environment.mailSubject = 'Warning Regarding CEDGERRB NEFT Inward Interface';
+		SET Environment.smtpServer = smtpServer;
+		IF type = 'NEFT_IN' THEN
+			CALL log4j_1_1('UPDATE_FAIL', 'APCOB_NEFT_IN', 'WARN','---------------START---------------') INTO rc;
+			SET transRefNo = InputRoot.DFDL.*.body.Transaction_Reference_Number;
+			IF LENGTH(transRefNo) <> 0 THEN
+				SET Environment.mailBody = 'Message with transaction ID :'||transRefNo||',  processing failed because of this exception: Updation Failed'||fail;	
+			ELSE
+				SET transRefNo = InputRoot.DFDL.*.header.Sender_IFSC;
+				SET Environment.mailBody = 'Message with Sender IFSC Code :'||transRefNo||',  processing failed because of this exception:'||fail;
+			END IF;
+			CALL log4j_1_1('UPDATE_FAIL', 'APCOB_NEFT_IN', 'WARN','Message with Sender IFSC Code :'||transRefNo||',  processing failed because of this exception:'||fail) INTO rc;
+			CALL log4j_1_1('UPDATE_FAIL', 'APCOB_NEFT_IN', 'WARN','----------------END----------------') INTO rc;
+		ELSEIF type = 'RTGS_IN' THEN
+			CALL log4j_1_1('UPDATE_FAIL', 'CEDGERRB_RTGS_IN', 'WARN','---------------START---------------') INTO rc;
+			DECLARE msgId CHARACTER Environment.UniqueId.BizMsgIdr;
+			SET Environment.mailBody = 'Message with Message ID (In RTGS XML Request) :'||msgId||',  processing failed because of this exception:'||fail;
+			CALL log4j_1_1('UPDATE_FAIL', 'APCOB_RTGS_IN', 'WARN','Message with Message ID (In RTGS XML Request) :'||msgId||',  processing failed because of this exception:'||fail) INTO rc;
+			CALL log4j_1_1('UPDATE_FAIL', 'APCOB_RTGS_IN', 'WARN','----------------END----------------') INTO rc;
+		END IF;
+	END;
+	CREATE FUNCTION  getMailProp( IN P1 CHARACTER, OUT P2 CHARACTER, OUT P3 CHARACTER,OUT P4 CHARACTER, OUT P5 CHARACTER)
+ 	LANGUAGE JAVA 
+ 	EXTERNAL NAME "com.cedge.apcob.APCOB_NEFT_INWARD_LoadProperties.getMailProp";
+	
+END MODULE;
+BROKER SCHEMA com.cedge.apcob.neft
+
+CREATE COMPUTE MODULE UPDATE_FLAG_FILE
+	DECLARE DSNNAME EXTERNAL CHARACTER;
+	DECLARE SCHEMANAME EXTERNAL CHARACTER;
+	DECLARE NEFT_IN_TABLENAME EXTERNAL CHARACTER;
+	DECLARE NEFT_OUT_TABLENAME EXTERNAL CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN ;
+		CALL log4j_1_1('UPDATE_FLAG_FILE', 'APCOB_NEFT_IN', 'INFO','File is Successfully written at CBS Side ') INTO rc;
+		 CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET Environment.Fail = 'While Updating the Flag_File_Created Field in NEFT_IN Table it is failed' ;
+		DECLARE Qry , tranRefNo , refNo , msgType CHARACTER ;
+		DECLARE rc BOOLEAN ;
+		DECLARE inMsgDetailsref REFERENCE TO InputRoot.DFDL ;
+		DECLARE headerRef REFERENCE TO inMsgDetailsref.*.header;
+		SET msgType = headerRef.SubMessage_Type ;
+		DECLARE DB_Details ROW;
+		SET OutputRoot = InputRoot;
+		SET tranRefNo = InputRoot.MQRFH2.usr.BankDetails.tranRefNo;
+		SET refNo = InputRoot.MQRFH2.usr.BankDetails.RefNo ;
+		IF msgType = 'N02' THEN
+			SET Qry =  'UPDATE '||SCHEMANAME||'.'||NEFT_IN_TABLENAME|| ' A SET A.FLAG_FILE_CREATED = ''Y'' WHERE A.REF_NO= ? ' ;
+			SET DB_Details.A[] = PASSTHRU (Qry TO Database.{DSNNAME} VALUES(refNo));
+			CALL log4j_1_1('UPDATE_FLAG_FILE', 'APCOB_NEFT_IN', 'INFO','Flag File is Updated Successfully to NEFT_IN Table Using Reference Number as :'||refNo) INTO rc;		
+		END IF;
+		IF msgType = 'N10' THEN
+			DECLARE lastModTime , lastUpdTime CHARACTER ;
+			SET lastModTime = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'dd-MMM-yyyy HH:mm:ss');
+			SET Qry =  'UPDATE '||SCHEMANAME||'.'||NEFT_OUT_TABLENAME|| ' A SET A.ACK_NACKOUT_SEND_CBS = ''Y'',A.LAST_MOD_TIME=? ,A.LAST_UPD_STAMP=? WHERE A.TRAN_REF_NO = ? ' ;
+			SET DB_Details.A[] = PASSTHRU (Qry TO Database.{DSNNAME} VALUES(lastModTime, CURRENT_TIMESTAMP , tranRefNo));
+			CALL log4j_1_1('UPDATE_FLAG_FILE', 'APCOB_NEFT_IN', 'INFO','Flag File is Updated Successfully to NEFT_IN Table Using Reference Number as :'||refNo) INTO rc;		
+		END IF;
+		CALL log4j_1_1('UPDATE_FLAG_FILE', 'APCOB_NEFT_IN', 'INFO','----------------END----------------') INTO rc;
+	END;
+END MODULE;
+
