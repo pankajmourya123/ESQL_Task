@@ -1,12 +1,30 @@
-DECLARE inputDateString CHARACTER '01-nov-2025';
-DECLARE parsedDate DATE;
-DECLARE formattedDateString CHARACTER;
-
--- Step 1: Parse the string to a DATE using the input format
-SET parsedDate = CAST(inputDateString AS DATE FORMAT 'dd-MMM-yyyy');
-
--- Step 2: Format the DATE to desired string format
-SET formattedDateString = CAST(parsedDate AS CHARACTER FORMAT 'dd-MM-yyyy');
-
--- Output the result (for debug or return)
-RETURN formattedDateString;
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ./ufm_183_wb_done
+Tue Jun  3 15:54:52 IST 2025
+Starting UFM 183 WB DONE
+Started UFM 183 WB DONE
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ps -ef |grep ufm
+     mqm 21420 32129  0 15:55:10 pts/30    0:00 grep ufm
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script#
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ps -ef |grep ufm
+     mqm 21420 32129  0 15:55:10 pts/30    0:00 grep ufm
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script#  dspmqver
+Name:        WebSphere MQ
+Version:     7.5.0.5
+Level:       p750-005-150424
+BuildType:   IKAP - (Production)
+Platform:    WebSphere MQ for HP-UX (Itanium platform)
+Mode:        64-bit
+O/S:         HP-UX B.11.31
+InstName:    Installation1
+InstDesc:
+Primary:     Yes
+InstPath:    /opt
+DataPath:    /var/mqm
+MaxCmdLevel: 750
+dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# which java
+/opt/java7/bin/java
+dc_cedgeuat_1:/# java -version
+java version "1.7.0.33"
+Java(TM) SE Runtime Environment (build 1.7.0.33-jinteg_2021_12_05_23_10-b00)
+Java HotSpot(TM) Server VM (build 24.255-b255-internal-jinteg_2021_12_05_23_10, mixed mode)
+dc_cedgeuat_1:/#
