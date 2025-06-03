@@ -1,30 +1,149 @@
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ./ufm_183_wb_done
-Tue Jun  3 15:54:52 IST 2025
-Starting UFM 183 WB DONE
-Started UFM 183 WB DONE
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ps -ef |grep ufm
-     mqm 21420 32129  0 15:55:10 pts/30    0:00 grep ufm
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script#
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# ps -ef |grep ufm
-     mqm 21420 32129  0 15:55:10 pts/30    0:00 grep ufm
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script#  dspmqver
-Name:        WebSphere MQ
-Version:     7.5.0.5
-Level:       p750-005-150424
-BuildType:   IKAP - (Production)
-Platform:    WebSphere MQ for HP-UX (Itanium platform)
-Mode:        64-bit
-O/S:         HP-UX B.11.31
-InstName:    Installation1
-InstDesc:
-Primary:     Yes
-InstPath:    /opt
-DataPath:    /var/mqm
-MaxCmdLevel: 750
-dc_cedgeuat_1:/opt/mqm/Capitalware/UFM/script# which java
-/opt/java7/bin/java
-dc_cedgeuat_1:/# java -version
-java version "1.7.0.33"
-Java(TM) SE Runtime Environment (build 1.7.0.33-jinteg_2021_12_05_23_10-b00)
-Java HotSpot(TM) Server VM (build 24.255-b255-internal-jinteg_2021_12_05_23_10, mixed mode)
-dc_cedgeuat_1:/#
+#!/bin/sh
+#
+# Starting Universal File Mover
+#
+# Uncomment and set UFM_HOME
+#
+UFM_HOME=/opt/mqm/Capitalware/UFM
+export UFM_HOME
+#
+if [ -n "${UFM_HOME}" ]; then
+  echo "UFM_HOME=${UFM_HOME} "
+else
+  echo "UFM_HOME is not set. Please set UFM_HOME then try again."
+  exit
+fi
+#
+# MQAUSXJ client-side security exit
+#
+case `uname -s` in
+OS400)
+  MQAUSXJ_PATH=/QIBM/ProdData/mqm/mqausx
+;;
+*)
+  MQAUSXJ_PATH=/var/mqm/exits64
+esac
+#
+# Set defaul values for UFM variables
+#
+UFM_JVM_PARMS="-Xms64m -Xmx512m -Dcom.ibm.mq.cfg.useIBMCipherMappings=false -Dcom.ibm.jsse2.disableSSLv3=false"
+UFM_EXE_CLASS=com.capitalware.ufm.UFM
+#
+# Common CLASSPATH value
+#
+CLASSPATH=".:libs/UFM.jar:libs/jdom.jar:libs/log4j-1.2.8.jar:libs/jsch-0.1.55.jar:libs/mail.jar:libs/activation.jar:${MQAUSXJ_PATH}/MQAUSXJ.jar"
+#
+#
+if [ -n "${MQSSLKEYR}" ]; then
+   UFM_JVM_PARMS="${UFM_JVM_PARMS} -Djavax.net.ssl.trustStore=${MQSSLKEYR}.jks"
+fi
+#
+export CLASSPATH
+#
+# Are the MQ Java libraries installed
+#
+if [ -f "/opt/mqm/java/lib/com.ibm.mq.jar" ] || [ -f "/usr/mqm/java/lib/com.ibm.mq.jar" ] || [ -f "/QIBM/ProdData/mqm/java/lib/com.ibm.mq.jar" ]; then
+  #
+  # Figure out CLASSPATH and shared library
+  #
+  case `uname -s` in
+  AIX)
+    MQLIBPATH="/usr/mqm/java/lib"
+
+    if [ -z "${MQ_JAVA_LIB_PATH}" ]; then
+      MQ_JAVA_LIB_PATH="${MQLIBPATH}"
+    fi
+
+    if [ -n "${LIBPATH}" ]; then
+      LIBPATH="${MQ_JAVA_LIB_PATH}:$LIBPATH"
+    else
+      LIBPATH="${MQ_JAVA_LIB_PATH}"
+    fi
+
+    export LIBPATH
+    echo "LIBPATH=${LIBPATH}"
+  ;;
+  HP-UX)
+    MQLIBPATH="/opt/mqm/java/lib"
+
+    if [ -z "${MQ_JAVA_LIB_PATH}" ]; then
+      MQ_JAVA_LIB_PATH="${MQLIBPATH}"
+    fi
+
+    if [ -n "${SHLIB_PATH}" ]; then
+      SHLIB_PATH="${MQ_JAVA_LIB_PATH}:$SHLIB_PATH"
+    else
+      SHLIB_PATH="${MQ_JAVA_LIB_PATH}"
+    fi
+
+    export SHLIB_PATH
+    echo "SHLIB_PATH=${SHLIB_PATH}"
+  ;;
+  LINUX|Linux)
+    MQLIBPATH="/opt/mqm/java/lib"
+
+    if [ -z "${MQ_JAVA_LIB_PATH}" ]; then
+      MQ_JAVA_LIB_PATH="${MQLIBPATH}"
+    fi
+
+    if [ -n "${LD_LIBRARY_PATH}" ]; then
+      LD_LIBRARY_PATH="${MQ_JAVA_LIB_PATH}:$LD_LIBRARY_PATH"
+    else
+      LD_LIBRARY_PATH="${MQ_JAVA_LIB_PATH}"
+    fi
+
+    export LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+  ;;
+  SunOS)
+    MQLIBPATH="/opt/mqm/java/lib"
+
+    if [ -z "${MQ_JAVA_LIB_PATH}" ]; then
+      MQ_JAVA_LIB_PATH="${MQLIBPATH}"
+    fi
+
+    if [ -n "${LD_LIBRARY_PATH}" ]; then
+      LD_LIBRARY_PATH="${MQ_JAVA_LIB_PATH}:$LD_LIBRARY_PATH"
+    else
+      LD_LIBRARY_PATH="${MQ_JAVA_LIB_PATH}"
+    fi
+
+    export LD_LIBRARY_PATH
+    echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+  ;;
+  OS400)
+    MQLIBPATH="/QIBM/ProdData/mqm/java/lib"
+
+    if [ -z "${MQ_JAVA_LIB_PATH}" ]; then
+      MQ_JAVA_LIB_PATH="${MQLIBPATH}"
+    fi
+
+    if [ -n "${LIBPATH}" ]; then
+      LIBPATH="${MQ_JAVA_LIB_PATH}:$LIBPATH"
+    else
+      LIBPATH="${MQ_JAVA_LIB_PATH}"
+    fi
+
+    export LIBPATH
+    echo "LIBPATH=${LIBPATH}"
+  ;;
+  *)
+    MQLIBPATH="libs"
+    echo "Using included libs libraries - Only Client mode connections allowed."
+  esac
+else
+  echo "Java MQ not found."
+  exit
+fi
+#
+# Add MQ JAR files to the CLASSPATH
+#
+CLASSPATH="${MQLIBPATH}/com.ibm.mq.allclient.jar:${MQLIBPATH}/com.ibm.mq.jar:${MQLIBPATH}/com.ibm.mq.jmqi.jar:${MQLIBPATH}/com.ibm.mq.headers.jar:${MQLIBPATH}/com.ibm.mq.commonservices.jar:${MQLIBPATH}/com.ibm.mq.pcf.jar:${MQLIBPATH}:${MQLIBPATH}/connector.jar:$CLASSPATH"
+export CLASSPATH
+echo "CLASSPATH=${CLASSPATH}"
+#
+cd ${UFM_HOME}
+#
+# Now start Universal File Mover
+#
+java ${UFM_JVM_PARMS} ${UFM_EXE_CLASS} "$@"
