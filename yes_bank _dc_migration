@@ -55,3 +55,200 @@ queue name
 	  
 	  this all the stuff occurs only in case yes bank flow 
 	  yaad rakh cbs ka inward outward ka queu name aur iib inward aur iib outward same hona chaihye 
+=================================================================================================================================================
+{A:NFTF01O298N06APBL00000SCRBIP0NEFTSC222000APELU251422969922EFT2025052202382501387719XXXXXXXXXAPELU2514229699299}
+{4:
+:2020:NEFTU25142296992
+:1106:1
+:4063:1700,00
+:2020:APELU25142296992
+:4038:1700,00
+:3380:20250522
+:5756:APBL0005002
+:6021:00000707005950443
+:6091:THUMULA   VENKATESWARA RAO
+:5629:SMS
++91-9999999999
+:7002:THUMULA   VENKATESWARA RAO
+
+
+
+:5569:ICIC0000534
+:6061:053405017231
+:6081:anji communication
+:7495:ATTN/anji communication
+
+
+
+
+
+-}
+=============================================================================================
+<RequestPayload>
+<AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02" xmlns:xsi="urn:iso:std:iso:20022:tech:xsd:Header" xmlns:sig="http://www.w3.org/2000/09/xmldsig#">
+    <Fr>
+        <FIId>
+            <FinInstnId>
+                <ClrSysMmbId>
+                    <MmbId>APBL00000SC</MmbId>
+                </ClrSysMmbId>
+            </FinInstnId>
+        </FIId>
+    </Fr>
+    <To>
+        <FIId>
+            <FinInstnId>
+                <ClrSysMmbId>
+                    <MmbId>APBL00000SC</MmbId>
+                </ClrSysMmbId>
+            </FinInstnId>
+        </FIId>
+    </To>
+    <BizMsgIdr>APBL202505235002655213</BizMsgIdr>
+    <MsgDefIdr>pacs.008.001.09</MsgDefIdr>
+    <BizSvc>NEFTFIToFICustomerCredit</BizSvc>
+    <CreDt>2025-05-30T01:01:02Z</CreDt>
+    <Sgntr>
+        <sig:XMLSgntrs>-----BEGIN PKCS7-----
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0B
+BwEAAKCAMIIFQzCCBCugAwIBAgIKS8S99xOWOR/55TANBgkqhkiG9w0BAQsFADCB
+9zELMAkGA1UEBhMCSU4xRTBDBgNVBAoTPEluc3RpdHV0ZSBmb3IgRGV2ZWxvcG1l
+bnQgYW5kIFJlc2VhcmNoIGluIEJhbmtpbmcgVGVjaG5vbG9neTEdMBsGA1UECxMU
+Q2VydGlmeWluZyBBdXRob3JpdHkxDzANBgNVBBETBjUwMDA1NzESMBAGA1UECBMJ
+VGVsYW5nYW5hMSowKAYDVQQJEyFSb2FkIE5vLiAxLCBNYXNhYiBUYW5rLCBIeWRl
+cmFiYWQxFTATBgNVBDMTDENhc3RsZSBIaWxsczEaMBgGA1UEAxMRSURSQlQgU3Vi
+IENBIDIwMjIwHhcNMjUwMTIwMTEyOTU5WhcNMjcwMTIwMTgyOTU5WjAWMRQwEgYD
+VQQDEwtBUEJMMDAwMDAwMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AJA2I6bvv/lBw7JcBnm7sDIm553YAWrn+6HUE0mLj3RIAtJxF/neftyTEo2oYi58
+gPQNTCf7suTS7CTh90NDvEccaZfCmtHZzAe7EeUZ6M2vPkyNCK7yS8xpSL5XjiBw
+yf5j2EoFmLmWsH+nwQt5y1lrr6xTRTVNHKKvFUZabVx/aPmYLK0gG1WKvYz2UkF6
+R0w8zpnrYSt28+iN3EFGjjjcWRWUDcOD5oZV0hWL/K1ItBz2K5WfJhmqoaSreKkF
+qNLbqjajmme7xHPJ5714JjvDMR4b0kbqMo69Y9CZjgSp0hHehCR1zhy9GUYUzM3D
+sH6H2psNwwoQ3sFVyCA231sCAwEAAaOCAa8wggGrMAwGA1UdEwEB/wQCMAAwDgYD
+VR0PAQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB8GA1UdIwQYMBaAFGbD
+tB1WM9GA7doOpEcW0w63hQHDMB0GA1UdDgQWBBQ4x2Fs3Ejbdtlgz0pnbPSlHry5
+qDBxBggrBgEFBQcBAQRlMGMwOQYIKwYBBQUHMAKGLWh0dHA6Ly9pZHJidGNhLm9y
+Zy5pbi9jZXJ0L0lEUkJUU3ViQ0EyMDIyLmNlcjAmBggrBgEFBQcwAYYaaHR0cDov
+L29jc3AuaWRyYnRjYS5vcmcuaW4wDwYDVR0RBAgwBocErBDmmDBlBgNVHR8EXjBc
+MCqgKKAmhiRodHRwOi8vMTAuMC42NS42NS9JRFJCVFN1YkNBMjAyMi5jcmwwLqAs
+oCqGKGh0dHA6Ly9pZHJidGNhLm9yZy5pbi9JRFJCVFN1YkNBMjAyMi5jcmwwSwYD
+VR0gBEQwQjBABgZggmRkAgMwNjA0BggrBgEFBQcCAjAoHiYAQwBsAGEAcwBzACAA
+MwAgAEMAZQByAHQAaQBmAGkAYwBhAHQAZTANBgkqhkiG9w0BAQsFAAOCAQEAa+JV
+k/2h38b0FE9P9W02Z+bnOof1mt+QHNJD7LeeUL0ev5XlIPENr22G+AQ+xtmbTJkY
+ui3ynA/ZDGcSh5ETRuSIW5iCGmP86bH5P1CRekNO6+6HSIGxorzS+D4Af9EI1RrC
+GEntkNJ7wr5gHO8zWNJlrF2RL+JnzqjqSaSf5jO+R8zTTR7QdtJwdeD/A2i+GE+a
+zjbi07JG0ujbpfmh8eK6O70ID2PPiMrumlkpgxCmiJCFPIUmkkjtRzl+ThAjwSZZ
+eIWbV6dsCEy7Mb5SexwlnfoG1X+kTEWgPjv+srRHbF0XH22+kmStD0OKmOYpHvWt
++JqdP/virLr/f36JJgAAMYICnjCCApoCAQEwggEGMIH3MQswCQYDVQQGEwJJTjFF
+MEMGA1UEChM8SW5zdGl0dXRlIGZvciBEZXZlbG9wbWVudCBhbmQgUmVzZWFyY2gg
+aW4gQmFua2luZyBUZWNobm9sb2d5MR0wGwYDVQQLExRDZXJ0aWZ5aW5nIEF1dGhv
+cml0eTEPMA0GA1UEERMGNTAwMDU3MRIwEAYDVQQIEwlUZWxhbmdhbmExKjAoBgNV
+BAkTIVJvYWQgTm8uIDEsIE1hc2FiIFRhbmssIEh5ZGVyYWJhZDEVMBMGA1UEMxMM
+Q2FzdGxlIEhpbGxzMRowGAYDVQQDExFJRFJCVCBTdWIgQ0EgMjAyMgIKS8S99xOW
+OR/55TANBglghkgBZQMEAgEFAKBpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
+HAYJKoZIhvcNAQkFMQ8XDTI1MDUyMjE5MzEwMlowLwYJKoZIhvcNAQkEMSIEIIZ9
+UmAkcNZHYOV13ZiQ60GSG48vCgBgSanPl5d+U2bSMA0GCSqGSIb3DQEBAQUABIIB
+AA9NOLAOzbFS6ONmq7T/CSyD3shx8r1A6lZ012zWADLjdbnZZ9IYkX5BVr4yWul1
+GDXIjbGtQzYikTLZFlt7AIq241PpJZULKYA2B1N7d7/0x4CukDTsIy1brz1UoFVr
+ofZNiDAkClkvGT0WasbCHrakzbcr6qVWZ6mbWefwG8iUk1SPJRrOpUY32ROQ/Qtm
+wxMU6g8cRGM9JBgDMVRxFp9BdDyxMcFG1qpfkQFWMmKtIKaPwOMsCl90y8mJPSYs
+m7pGiX8O7LcLgnkmk8KJ9VoJ4yHJZ82ivCJKrgDM/xaBSbU1ZMKUj9GMDKKgyazc
+0m8kisrTIbx+mEmTlhoqqjUAAAAAAAA=
+-----END PKCS7-----
+</sig:XMLSgntrs>
+    </Sgntr>
+</AppHdr>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.09">
+    <FIToFICstmrCdtTrf>
+        <GrpHdr>
+            <MsgId>APBL202505235002655213</MsgId>
+            <CreDtTm>2025-05-30T01:01:02</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <TtlIntrBkSttlmAmt Ccy="INR">70000.00</TtlIntrBkSttlmAmt>
+            <IntrBkSttlmDt>2025-05-30</IntrBkSttlmDt>
+            <SttlmInf>
+                <SttlmMtd>CLRG</SttlmMtd>
+            </SttlmInf>
+            <InstgAgt>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>APBL00000SC</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </InstgAgt>
+            <InstdAgt>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>APBL00000SC</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </InstdAgt>
+        </GrpHdr>
+        <CdtTrfTxInf>
+            <PmtId>
+                <EndToEndId>/XUTR/0523829325255287</EndToEndId>
+                <TxId>IBKLN92025052347455213</TxId>
+            </PmtId>
+            <PmtTpInf>
+                <InstrPrty>HIGH</InstrPrty>
+                <SvcLvl>
+                    <Cd>SDVA</Cd>
+                </SvcLvl>
+                <LclInstrm>
+                    <Cd>TRF</Cd>
+                </LclInstrm>
+                <CtgyPurp>
+                    <Cd>EFT</Cd>
+                </CtgyPurp>
+            </PmtTpInf>
+            <IntrBkSttlmAmt Ccy="INR">70000.00</IntrBkSttlmAmt>
+            <ChrgBr>SLEV</ChrgBr>
+            <Dbtr>
+                <Nm>SHUBH</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>0051102000127707</Id>
+                    </Othr>
+                </Id>
+                <Tp>
+                    <Cd>11</Cd>
+                </Tp>
+            </DbtrAcct>
+            <DbtrAgt>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>IBKL0NEFT01</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </DbtrAgt>
+            <CdtrAgt>
+                <FinInstnId>
+                    <ClrSysMmbId>
+                        <MmbId>APBL0000005</MmbId>
+                    </ClrSysMmbId>
+                </FinInstnId>
+            </CdtrAgt>
+            <Cdtr>
+                <Nm>B SUDHAKAR</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>610000007031</Id>
+                    </Othr>
+                </Id>
+            </CdtrAcct>
+            <InstrForCdtrAgt>
+                <InstrInf>iNet Banking</InstrInf>
+            </InstrForCdtrAgt>
+            <RmtInf>
+                <Ustrd>BatchId:0002</Ustrd>
+                <Ustrd>SL////BL//</Ustrd>
+                <Ustrd>AGM//</Ustrd>
+            </RmtInf>
+        </CdtTrfTxInf>
+    </FIToFICstmrCdtTrf>
+</Document>
+</RequestPayload>
