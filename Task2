@@ -61,3 +61,10 @@ CREATE COMPUTE MODULE xmljson_Compute
 		PROPAGATE;
 	END;
 END MODULE;
+=========================================================================================================
+fn:concat( fn:substring($SENDERADDRESS,0 ,5 ),$ORIGINATINGDATE1 ,'5',fn:substring($UNIQUETRANSACTIONREF ,8 ,9 ))
+fn:concat( fn:substring( $ORIGINATINGDATE,0 ,5 ),'-',fn:substring( $ORIGINATINGDATE,5 ,2 ),'-',fn:substring( $ORIGINATINGDATE,7 ,2 ),'T' ,fn:substring( $ORIGINATINGTIME,0 ,3 ),':',fn:substring( $ORIGINATINGTIME,3 ,2 ),':00Z')
+fn:concat( fn:substring( $ORIGINATINGDATE3,0 ,5 ),'-',fn:substring( $ORIGINATINGDATE3,5 ,2 ),'-',fn:substring( $ORIGINATINGDATE3,7 ,2 ))
+fn:concat( fn:substring($SENDERADDRESS1,0 ,5 ),$ORIGINATINGDATE2 ,'5',fn:substring($UNIQUETRANSACTIONREF1 ,8 ,9 ))
+fn:concat( fn:substring($SENDERADDRESS2,0 ,5 ),'N','5',$VALUEDATE1,fn:substring($TRANSACTIONREFERENCENUMBER1 ,9 ,8 ))
+fn:concat( fn:substring( $VALUEDATE,0 ,5 ),'-',fn:substring( $VALUEDATE,5 ,2 ),'-',fn:substring( $VALUEDATE,7 ,2 ),'T' ,fn:substring( $ORIGINATINGTIME1,0 ,3 ),':',fn:substring( $ORIGINATINGTIME1,3 ,2 ),':00')
