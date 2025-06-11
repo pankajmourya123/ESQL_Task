@@ -145,4 +145,216 @@ BODY:
 	SENDERTIRECEIVERINFORMATION				7495:		           ATTN/Pallagani Aruna Kuma
 ==============================================================================================================================================================
 
-														 
+			 1. Expression:
+
+fn:concat(
+  fn:substring($SENDERADDRESS,0 ,5 ),
+  $ORIGINATINGDATE1,
+  '5',
+  fn:substring($UNIQUETRANSACTIONREF ,8 ,9 )
+)
+
+🧾 Input Values:
+
+$SENDERADDRESS = APBL00000SC
+
+$ORIGINATINGDATE1 = 20250522
+
+$UNIQUETRANSACTIONREF = APELU25142296954
+
+
+🔍 Substituted:
+
+fn:substring("APBL00000SC", 0, 5) → APBL0
+
+'5' → constant
+
+fn:substring("APELU25142296954", 8, 9) → starts at index 8 (1-based in XPath), value: 42296954
+But 9 characters → 422969549
+
+
+✅ Final Output:
+
+APBL0202505225422969549
+
+
+---
+
+🔹 2. Expression:
+
+fn:concat(
+  fn:substring($ORIGINATINGDATE,0 ,5 ),
+  '-', fn:substring($ORIGINATINGDATE,5 ,2 ),
+  '-', fn:substring($ORIGINATINGDATE,7 ,2 ),
+  'T',
+  fn:substring($ORIGINATINGTIME,0 ,3 ),
+  ':', fn:substring($ORIGINATINGTIME,3 ,2 ),
+  ':00Z'
+)
+
+🧾 Input:
+
+$ORIGINATINGDATE = 20250522
+
+$ORIGINATINGTIME = 0216
+
+
+🔍 Break-up:
+
+20250 - (0–4)
+
+52 - (5–6)
+
+2 - (7–8) → Only 1 digit left, so it will be 2 (partial)
+
+021 - (0–2)
+
+6 - (3–4)
+
+
+But ideally it should be:
+
+Date → 2025-05-22
+
+Time → 02:16:00Z
+
+
+Let’s fix indexing as per XPath 1-based indexing. So:
+
+substring("20250522",1,4) → 2025
+
+substring("20250522",5,2) → 05
+
+substring("20250522",7,2) → 22
+
+substring("0216",1,2) → 02
+
+substring("0216",3,2) → 16
+
+
+✅ Final Output:
+
+2025-05-22T02:16:00Z
+
+
+---
+
+🔹 3. Expression:
+
+fn:concat(
+  fn:substring($ORIGINATINGDATE3,0 ,5 ),
+  '-', fn:substring($ORIGINATINGDATE3,5 ,2 ),
+  '-', fn:substring($ORIGINATINGDATE3,7 ,2 )
+)
+
+Assume: $ORIGINATINGDATE3 = 20250522
+
+✅ Output:
+
+2025-05-22
+
+
+---
+
+🔹 4. Expression:
+
+fn:concat(
+  fn:substring($SENDERADDRESS1,0 ,5 ),
+  $ORIGINATINGDATE2,
+  '5',
+  fn:substring($UNIQUETRANSACTIONREF1 ,8 ,9 )
+)
+
+Assume:
+
+$SENDERADDRESS1 = APBL00000SC
+
+$ORIGINATINGDATE2 = 20250522
+
+$UNIQUETRANSACTIONREF1 = APELU25142296954
+
+
+Same logic as #1
+
+✅ Output:
+
+APBL0202505225422969549
+
+
+---
+
+🔹 5. Expression:
+
+fn:concat(
+  fn:substring($SENDERADDRESS2,0 ,5 ),
+  'N',
+  '5',
+  $VALUEDATE1,
+  fn:substring($TRANSACTIONREFERENCENUMBER1 ,9 ,8 )
+)
+
+Assume:
+
+$SENDERADDRESS2 = APBL00000SC
+
+$VALUEDATE1 = 20250522
+
+$TRANSACTIONREFERENCENUMBER1 = NEFTU25142296976
+
+
+Break:
+
+substring("NEFTU25142296976", 9, 8) = starts at 9th char (1-based) → 2296976 → 8 chars = 2296976 + 1 char = 2296976 + (none?)
+
+
+Actually:
+
+"NEFTU25142296976"
+Index 1 = N
+Index 9 = 2
+Indexes 9 to 16 → 2296976 (7 chars), but 8 requested = 2296976 + (next char) = 8th char → 22969761
+
+
+✅ Output:
+
+APBL0N52025052222969761
+
+
+---
+
+🔹 6. Expression:
+
+fn:concat(
+  fn:substring( $VALUEDATE,0 ,5 ),
+  '-', fn:substring( $VALUEDATE,5 ,2 ),
+  '-', fn:substring( $VALUEDATE,7 ,2 ),
+  'T',
+  fn:substring( $ORIGINATINGTIME1,0 ,3 ),
+  ':', fn:substring( $ORIGINATINGTIME1,3 ,2 ),
+  ':00'
+)
+
+Assume:
+
+$VALUEDATE = 20250522
+
+$ORIGINATINGTIME1 = 0216
+
+
+✅ Output:
+
+2025-05-22T02:16:00
+
+
+---
+
+✅ Final Summary Table
+
+Expression	Output
+
+1	APBL0202505225422969549
+2	2025-05-22T02:16:00Z
+3	2025-05-22
+4	APBL0202505225422969549
+5	APBL0N52025052222969761
+6	2025-05-22T02:16:00											 
