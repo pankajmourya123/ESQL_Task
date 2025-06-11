@@ -7,12 +7,12 @@ CREATE COMPUTE MODULE Map_code_flow_Compute
 
 	CREATE PROCEDURE CopyEntireMessage() 
 	BEGIN
-		-- Existing declarations
+		-- Required Input Data (from parsed N06 message)
 		DECLARE SENDERADDRESS CHARACTER 'APBL00000SC';
 		DECLARE ORIGINATINGDATE CHARACTER '20250522';
 		DECLARE UNIQUETRANSACTIONREF CHARACTER 'APELU25142296954';
 
-		-- ✅ Missing variables declared below
+		-- ✅ Missing variables declared
 		DECLARE ORIGINATINGDATE1 CHARACTER '20250522';
 		DECLARE ORIGINATINGTIME CHARACTER '0216';
 		DECLARE ORIGINATINGDATE3 CHARACTER '20250522';
@@ -26,13 +26,16 @@ CREATE COMPUTE MODULE Map_code_flow_Compute
 		DECLARE ORIGINATINGTIME1 CHARACTER '0216';
 
 		-- BizmgsIdr
+		-- fn:concat( fn:substring($SENDERADDRESS1,0 ,5 ),$ORIGINATINGDATE2 ,'5',fn:substring($UNIQUETRANSACTIONREF1 ,8 ,9 ))
 		DECLARE BizmgsIdr CHARACTER;
 		SET BizmgsIdr = SUBSTRING(SENDERADDRESS FROM 1 FOR 5)
 			|| ORIGINATINGDATE1
 			|| '5'
 			|| SUBSTRING(UNIQUETRANSACTIONREF FROM 8 FOR 9);
+		SET OutputRoot.JSON.Data.BizmgsIdr = BizmgsIdr;
 
 		-- credt
+		-- fn:concat( fn:substring( $ORIGINATINGDATE,0 ,5 ),'-',fn:substring( $ORIGINATINGDATE,5 ,2 ),'-',fn:substring( $ORIGINATINGDATE,7 ,2 ),'T' ,fn:substring( $ORIGINATINGTIME,0 ,3 ),':',fn:substring( $ORIGINATINGTIME,3 ,2 ),':00Z');
 		DECLARE credt CHARACTER;
 		SET credt = SUBSTRING(ORIGINATINGDATE FROM 1 FOR 4)
 			|| '-' || SUBSTRING(ORIGINATINGDATE FROM 5 FOR 2)
@@ -40,29 +43,37 @@ CREATE COMPUTE MODULE Map_code_flow_Compute
 			|| 'T' || SUBSTRING(ORIGINATINGTIME FROM 1 FOR 2)
 			|| ':' || SUBSTRING(ORIGINATINGTIME FROM 3 FOR 2)
 			|| ':00Z';
+		SET OutputRoot.JSON.Data.credt = credt;
 
 		-- IntrBkSttlmdt
+		-- fn:concat( fn:substring( $ORIGINATINGDATE3,0 ,5 ),'-',fn:substring( $ORIGINATINGDATE3,5 ,2 ),'-',fn:substring( $ORIGINATINGDATE3,7 ,2 ))
 		DECLARE IntrBkSttlmdt CHARACTER;
 		SET IntrBkSttlmdt = SUBSTRING(ORIGINATINGDATE3 FROM 1 FOR 4)
 			|| '-' || SUBSTRING(ORIGINATINGDATE3 FROM 5 FOR 2)
 			|| '-' || SUBSTRING(ORIGINATINGDATE3 FROM 7 FOR 2);
+		SET OutputRoot.JSON.Data.IntrBkSttlmdt = IntrBkSttlmdt;
 
 		-- MsgId
+		-- fn:concat( fn:substring($SENDERADDRESS1,0 ,5 ),$ORIGINATINGDATE2 ,'5',fn:substring($UNIQUETRANSACTIONREF1 ,8 ,9 ))		
 		DECLARE MsgId CHARACTER;
 		SET MsgId = SUBSTRING(SENDERADDRESS1 FROM 1 FOR 5)
 			|| ORIGINATINGDATE2
 			|| '5'
 			|| SUBSTRING(UNIQUETRANSACTIONREF1 FROM 8 FOR 9);
+		SET OutputRoot.JSON.Data.MsgId = MsgId;
 
 		-- TxId
+		-- fn:concat( fn:substring($SENDERADDRESS2,0 ,5 ),'N','5',$VALUEDATE1,fn:substring($TRANSACTIONREFERENCENUMBER1 ,9 ,8 ))		
 		DECLARE TxId CHARACTER;
 		SET TxId = SUBSTRING(SENDERADDRESS2 FROM 1 FOR 5)
 			|| 'N'
 			|| '5'
 			|| VALUEDATE1
 			|| SUBSTRING(TRANSACTIONREFERENCENUMBER1 FROM 9 FOR 8);
+		SET OutputRoot.JSON.Data.TxId = TxId;
 
 		-- CredTm
+		-- fn:concat( fn:substring( $VALUEDATE,0 ,5 ),'-',fn:substring( $VALUEDATE,5 ,2 ),'-',fn:substring( $VALUEDATE,7 ,2 ),'T' ,fn:substring( $ORIGINATINGTIME1,0 ,3 ),':',fn:substring( $ORIGINATINGTIME1,3 ,2 ),':00');		
 		DECLARE CredTm CHARACTER;
 		SET CredTm = SUBSTRING(VALUEDATE FROM 1 FOR 4)
 			|| '-' || SUBSTRING(VALUEDATE FROM 5 FOR 2)
@@ -70,5 +81,6 @@ CREATE COMPUTE MODULE Map_code_flow_Compute
 			|| 'T' || SUBSTRING(ORIGINATINGTIME1 FROM 1 FOR 2)
 			|| ':' || SUBSTRING(ORIGINATINGTIME1 FROM 3 FOR 2)
 			|| ':00';
+		SET OutputRoot.JSON.Data.CredTm = CredTm;
 	END;
 END MODULE;
