@@ -1,234 +1,171 @@
-{A: RTG F01 O 298 R41 GSCB0000001 RBIN0RTGS00 2 2 2 000 GSCBH21001010010 2 XXX 20210101 1118 2 000000000 XXXXXXXXX GSCBH21001010010 99 }{4:
-:2020:GSCBH21001010010
-:4488:20210101INR400000,00
-:5500:108001026486
-Mr  DISHANT DEVANG SHAH
-:5518:GSCB0000001
-:6500:CITI0000007
-:5561:/0003421667
-J DEVANGKUMAR
-:7023:RTGS transaction posted from MBS A
-ount400000 DrAC00000108001026486 C
-AC0003421667 and IFSCCodeCITI00000
-7
-:7495:/ATTN/Fund transfer to J DEVAN
-//KUMAR
--}
-
-
-
-R41:							
-							
-Part:	Field Name	                      Length            
-HEADER:							                         
-	BLOCKIDENTIFIER		               		3               
-	BANKAPPLICATIONIDENTIFIER				3               
-	MESSAGEIDENTIFIER				        3               
-	INPUTOUTPUTIDENTIFIER			     	1               
-	MESSAGETYPE				                3               
-	SUBMESSAGETYPE				            3               
-	SENDERADDRESS				           11               
-	RECEIVERADDRESS				           11               
-	DELIVERYMONITORINGFLAG			    	1               
-	OPENNOTIFICATIONFLAG			     	1               
-	NONDELIVERYFLAG				            1               
-	OBSOLENCEPERIOD			            	3               
-	MUR			                        	16              
-	POSSIBLEDUPLICATEFLAG			     	1               
-	SERVICEIDENTIFIER			        	3               
-	ORIGINATINGDATE			            	8               
-	ORIGINATINGTIME		            		4               
-	TESTINGANDTRAININGFLAG	     			1               
-	SEQUENCENUMBER			            	9               
-	FILLER			                     	9               
-	UNIQUETRANSACTIONREF     				16
-	RTGSPRIORITY			             	2
-	BLOCKEND			                 	1
-							
-BODY:							
-	BLOCKIDENTIFIER				             3
-	TRANSACTIONREFERENCENUMBER			2020:	
-	VALUEDATE_CURRENCY_AMOUNT			4488:	
-		VALUEDATE			
-		CURRENCY			
-		AMOUNT			
-	OREDERING_CUSTOMER			     	5500:	
-		LINE1 senderActnum			
-		LINE2 senderName			
-		LINE3 senderAddress			
-		LINE4				
-	ORDERING_INSTITUTION1		     	5517:	
-	ORDERING_INSTITUTION2				5516:	
-		LINE1				
-		LINE2			
-		LINE3			
-		LINE4	 		
-		LINE5				
-	SENDERS_CORRESPONDENT1SENDER IFSC		5518:	
-	SENDERS_CORRESPONDENT2				6717:	
-		LINE1				
-		LINE2				
-	SENDERS_CORRESPONDENT3				5521:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-		LINE5				
-	RECEIVER_CORRESPONDENT1RECEIVER IFSC			6500:	
-	RECEIVER_CORRESPONDENT2				6718:	
-		LINE1				
-		LINE2				
-	RECEIVER_CORRESPONDENT3				5526:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-		LINE5				
-	INTERMEDIARY1				6511:	
-	INTERMEDIARY2				5546:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-		LINE5				
-	ACCOUNT_WITH_INSTITUTION1				6516:	
-	ACCOUNT_WITH_INSTITUTION2				6719:	
-		LINE1				
-		LINE2				
-	ACCOUNT_WITH_INSTITUTION3				5551:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-		LINE5				
-	BENEFICIARY_CUSTOMER			1	1	5561:	
-		LINE1 benfAcntNo			
-		LINE2 benfName			
-		LINE3 benfAddress			
-		LINE4				
-		LINE5				
-		LINE6				
-	DETAILS_OF_PAYMENT				7023:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-	DETAILS_OF_CHARGES				7028:	
-	SENDER_TO_RECEIVER_INFORMATION				7495:	
-		LINE1				
-		LINE2				
-		LINE3				
-		LINE4				
-		LINE5				
-		LINE6				
-		
-=================================================================================================		
-Bhai tujhse mila message aur fields ka structure dekhke maine sirf wahi fields nikale jo actual message mein present hain, aur har field ko acche se label karke bata diya hai. Yeh list HEADER aur BODY dono ka breakdown hai, present fields ke value ke saath.
-
-
----
-
-✅ Parsed Fields from Message
-
-🟩 HEADER Block (R41)
-
 Field Name	Value
 
-BLOCKIDENTIFIER	RTG
-BANKAPPLICATIONIDENTIFIER	F01
-MESSAGEIDENTIFIER	O
-INPUTOUTPUTIDENTIFIER	2
-MESSAGETYPE	298
-SUBMESSAGETYPE	R41
-SENDERADDRESS	GSCB0000001
-RECEIVERADDRESS	RBIN0RTGS00
-DELIVERYMONITORINGFLAG	2
-OPENNOTIFICATIONFLAG	2
-NONDELIVERYFLAG	2
-OBSOLENCEPERIOD	000
-MUR	GSCBH21001010010
-POSSIBLEDUPLICATEFLAG	2
-SERVICEIDENTIFIER	XXX
-ORIGINATINGDATE	20210101
-ORIGINATINGTIME	1118
-TESTINGANDTRAININGFLAG	2
-SEQUENCENUMBER	000000000
-FILLER	XXXXXXXXX
+BLOCKIDENTIFIER	                         {A:        
+BANKAPPLICATIONIDENTIFIER	             RTG
+MESSAGEIDENTIFIER	                     F01
+INPUTOUTPUTIDENTIFIER      	              O
+MESSAGETYPE	                             298
+SUBMESSAGETYPE	                         R41 
+SENDERADDRESS	                       GSCB0000001
+RECEIVERADDRESS	                       RBIN0RTGS00
+DELIVERYMONITORINGFLAG	                  2
+OPENNOTIFICATIONFLAG	                   2
+NONDELIVERYFLAG	                           2
+OBSOLENCEPERIOD           	000
+MUR                	                    GSCBH21001010010   
+POSSIBLEDUPLICATEFLAG                          2
+SERVICEIDENTIFIER              XXX
+ORIGINATINGDATE	            20210101      
+ORIGINATINGTIME	             1118
+TESTINGANDTRAININGFLAG	    2
+SEQUENCENUMBER             	000000000
+FILLER                   	XXXXXXXXX
 UNIQUETRANSACTIONREF	GSCBH21001010010
-RTGSPRIORITY	99
-BLOCKEND	}
+RTGSPRIORITY                99
+BLOCKEND	            }
 
 
 
 ---
 
-🟦 BODY Block
-
-Field Code	Field Name	Value(s)
-
-2020:	TRANSACTIONREFERENCENUMBER	GSCBH21001010010
-4488:	VALUEDATE_CURRENCY_AMOUNT	VALUEDATE: 20210101<br>CURRENCY: INR<br>AMOUNT: 400000,00
-5500:	ORDERING_CUSTOMER	LINE1 (Acct Num): 108001026486<br>LINE2 (Name): Mr DISHANT DEVANG SHAH
-5518:	SENDER'S CORRESPONDENT1 IFSC	GSCB0000001
-6500:	RECEIVER'S CORRESPONDENT1 IFSC	CITI0000007
-5561:	BENEFICIARY_CUSTOMER	LINE1 (Acct Num): /0003421667<br>LINE2 (Name): J DEVANGKUMAR
-7023:	DETAILS_OF_PAYMENT	RTGS transaction posted from MBS Account 400000 DrAC00000108001026486 C AC0003421667 and IFSCCode CITI0000007
-7495:	SENDER_TO_RECEIVER_INFORMATION	/ATTN/Fund transfer to J DEVANKUMAR
 
 
+Field Code	Field Name	                         Value(s)
 
----
+2020:	   TRANSACTIONREFERENCENUMBER	        GSCBH21001010010
+4488:	   VALUEDATE_CURRENCY_AMOUNT       	    VALUEDATE: 20210101<br>CURRENCY: INR<br>AMOUNT: 400000,00
+5500:	   ORDERING_CUSTOMER	                LINE1Acct Num): 108001026486<br>LINE2Name): Mr DISHANT DEVANG SHAH
+5518:	   SENDER'S CORRESPONDENT1 IFSC       	GSCB0000001
+6500:	   RECEIVER'S CORRESPONDENT1 IFSC     	CITI0000007
+5561:	   BENEFICIARY_CUSTOMER             	LINE1Acct Num): /0003421667<br>LINE2Name): J DEVANGKUMAR
+7023:	   DETAILS_OF_PAYMENT               	RTGS transaction posted from MBS Account 400000 DrAC00000108001026486 C AC0003421667 and IFSCCode CITI0000007
+7495:	   SENDER_TO_RECEIVER_INFORMATION    	/ATTN/Fund transfer to J DEVANKUMAR
 
-🔁 Optional: JSON Format Output (if needed in code)
 
-{
-  "HEADER": {
-    "BLOCKIDENTIFIER": "RTG",
-    "BANKAPPLICATIONIDENTIFIER": "F01",
-    "MESSAGEIDENTIFIER": "O",
-    "INPUTOUTPUTIDENTIFIER": "2",
-    "MESSAGETYPE": "298",
-    "SUBMESSAGETYPE": "R41",
-    "SENDERADDRESS": "GSCB0000001",
-    "RECEIVERADDRESS": "RBIN0RTGS00",
-    "DELIVERYMONITORINGFLAG": "2",
-    "OPENNOTIFICATIONFLAG": "2",
-    "NONDELIVERYFLAG": "2",
-    "OBSOLENCEPERIOD": "000",
-    "MUR": "GSCBH21001010010",
-    "POSSIBLEDUPLICATEFLAG": "2",
-    "SERVICEIDENTIFIER": "XXX",
-    "ORIGINATINGDATE": "20210101",
-    "ORIGINATINGTIME": "1118",
-    "TESTINGANDTRAININGFLAG": "2",
-    "SEQUENCENUMBER": "000000000",
-    "FILLER": "XXXXXXXXX",
-    "UNIQUETRANSACTIONREF": "GSCBH21001010010",
-    "RTGSPRIORITY": "99"
-  },
-  "BODY": {
-    "TRANSACTIONREFERENCENUMBER": "GSCBH21001010010",
-    "VALUEDATE": "20210101",
-    "CURRENCY": "INR",
-    "AMOUNT": "400000,00",
-    "ORDERING_CUSTOMER": {
-      "AcctNo": "108001026486",
-      "Name": "Mr DISHANT DEVANG SHAH"
-    },
-    "SENDERS_CORRESPONDENT1_IFSC": "GSCB0000001",
-    "RECEIVERS_CORRESPONDENT1_IFSC": "CITI0000007",
-    "BENEFICIARY_CUSTOMER": {
-      "AcctNo": "/0003421667",
-      "Name": "J DEVANGKUMAR"
-    },
-    "DETAILS_OF_PAYMENT": "RTGS transaction posted from MBS Account 400000 DrAC00000108001026486 C AC0003421667 and IFSCCode CITI0000007",
-    "SENDER_TO_RECEIVER_INFORMATION": "/ATTN/Fund transfer to J DEVANKUMAR"
-  }
+
+import com.ibm.broker.javacompute.MbJavaComputeNode;
+import com.ibm.broker.plugin.MbException;
+import com.ibm.broker.plugin.MbMessage;
+import com.ibm.broker.plugin.MbMessageAssembly;
+import com.ibm.broker.plugin.MbOutputTerminal;
+import com.ibm.broker.plugin.MbUserException;
+
+public class Map_code_RTGS_JavaCompute extends MbJavaComputeNode {
+
+	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
+		MbOutputTerminal out = getOutputTerminal("out");
+		MbOutputTerminal alt = getOutputTerminal("alternate");
+		
+		
+
+		MbMessage inMessage = inAssembly.getMessage();
+		MbMessageAssembly outAssembly = null;
+		try {
+			// create new message as a copy of the input
+			MbMessage outMessage = new MbMessage(inMessage);
+			outAssembly = new MbMessageAssembly(inAssembly, outMessage);
+			
+			
+			// ----------------------------------------------------------
+			
+			// Add user code below
+
+			// End of user code
+			// ----------------------------------------------------------
+		} catch (MbException e) {
+			// Re-throw to allow Broker handling of MbException
+			throw e;
+		} catch (RuntimeException e) {
+			// Re-throw to allow Broker handling of RuntimeException
+			throw e;
+		} catch (Exception e) {
+			// Consider replacing Exception with type(s) thrown by user code
+			// Example handling ensures all exceptions are re-thrown to be handled in the flow
+			throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
+		}
+		// The following should only be changed
+		// if not propagating message to the 'out' terminal
+		out.propagate(outAssembly);
+
+	}
+	
+	public static void main() {
+		String mmid_SENDERADDRESS ="GSCB0000001";
+		String   odate_ValueDATE="20210101";
+		String UNIQUETRANSACTIONREF ="GSCBH21001010010";
+		ORIGINATINGDATE			                        
+		ORIGINATINGTIME
+		amount 
+	String res=	getMsgId(mmid_SENDERADDRESS,odate_ValueDATE,UNIQUETRANSACTIONREF);
+	
+	
+	System.out.println(res);
+	
+	
+		/*DECLARE SENDERADDRESS CHARACTER 'APBL00000SC';
+		DECLARE ORIGINATINGDATE CHARACTER '20250522';
+		DECLARE UNIQUETRANSACTIONREF CHARACTER 'APELU25142296954';*/
+		
+	}
+
+	public static java.lang.String getMsgId(String mmbId,String utrNumber,String oDate) 
+	{
+
+     //   return mmbId.substring(0, 4)+oDate+"5000"+utrNumber.substring(utrNumber.length()-6, utrNumber.length());
+        return mmbId.substring(0, 4)+oDate+"5"+utrNumber.substring(utrNumber.length()-9, utrNumber.length());
+    }
+	
+	
+	public static java.lang.String getAmount(String amount) 
+	{
+		String value = amount.replaceFirst ("^0*", "");
+		 value = value.replace(',', '.');
+        return value;
+    }
+	
+	
+    public static java.lang.String getCreDt(String originatingTime,String originatingDate) 
+    {
+      String odate = originatingDate.substring(0,4)+'-'+originatingDate.substring(4,6)+'-'+originatingDate.substring(6,8);
+      String otime = originatingTime.substring(0,2)+':'+originatingTime.substring(2,4)+":00Z";
+      return odate+'T'+otime;
+    }
+    
+    
+    public static java.lang.String getCreDtTm(String originatingTime,String originatingDate) 
+    {
+     String odate = originatingDate.substring(0,4)+'-'+originatingDate.substring(4,6)+'-'+originatingDate.substring(6,8);
+     String otime = originatingTime.substring(0,2)+':'+originatingTime.substring(2,4)+":00";
+     return odate+'T'+otime;
+    }
+    
+    
+    public static java.lang.String getIntrBkSttlmDt(String valuedate)
+    {
+	String formatedDate = valuedate.substring(0, 4)+'-'+valuedate.substring(4, 6)+'-'+valuedate.substring(6, 8);
+	return formatedDate;
+    }
+    
+    
+    public static java.lang.String getTxId(String utrNumber,String oDate) 
+    {
+
+ // utrNumber.substring(0, 4)+"R5"+oDate+"00"+utrNumber.substring(utrNumber.length()-6, utrNumber.length());
+    return utrNumber.substring(0, 4)+"R5"+oDate+utrNumber.substring(utrNumber.length()-8, utrNumber.length());
+    }
+    
+    
+    
+    public static java.lang.String getFCRA(String lineone)
+    {
+    	if (lineone.contains("FCRA")){
+    		lineone="FCRA";
+    		return lineone;
+    	}else{
+    		lineone="CASH";
+    		return lineone;
+    	}
+    	
+    }
+
 }
-
-
----
-
-Agar tu chahe toh mai isko ESQL code mein parse karna bhi de sakta hoon — InputRoot.BLOB.BLOB se parse karke structured message banana ho toh bas bol de bhai.
-
-Aur kuch chahiye toh bol dena — main yahin hoon! 💪
