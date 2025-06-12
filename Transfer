@@ -1,171 +1,50 @@
-Field Name	Value
+public void evaluate(MbMessageAssembly inAssembly) throws MbException {
+    MbOutputTerminal out = getOutputTerminal("out");
+    MbOutputTerminal alt = getOutputTerminal("alternate");
 
-BLOCKIDENTIFIER	                         {A:        
-BANKAPPLICATIONIDENTIFIER	             RTG
-MESSAGEIDENTIFIER	                     F01
-INPUTOUTPUTIDENTIFIER      	              O
-MESSAGETYPE	                             298
-SUBMESSAGETYPE	                         R41 
-SENDERADDRESS	                       GSCB0000001
-RECEIVERADDRESS	                       RBIN0RTGS00
-DELIVERYMONITORINGFLAG	                  2
-OPENNOTIFICATIONFLAG	                   2
-NONDELIVERYFLAG	                           2
-OBSOLENCEPERIOD           	000
-MUR                	                    GSCBH21001010010   
-POSSIBLEDUPLICATEFLAG                          2
-SERVICEIDENTIFIER              XXX
-ORIGINATINGDATE	            20210101      
-ORIGINATINGTIME	             1118
-TESTINGANDTRAININGFLAG	    2
-SEQUENCENUMBER             	000000000
-FILLER                   	XXXXXXXXX
-UNIQUETRANSACTIONREF	GSCBH21001010010
-RTGSPRIORITY                99
-BLOCKEND	            }
+    MbMessage inMessage = inAssembly.getMessage();
+    MbMessageAssembly outAssembly = null;
+    try {
+        // Create new message as a copy of the input
+        MbMessage outMessage = new MbMessage(inMessage);
+        outAssembly = new MbMessageAssembly(inAssembly, outMessage);
 
+        // Access OutputRoot
+        MbElement outRoot = outMessage.getRootElement();
+        MbElement jsonRoot = outRoot.createElementAsLastChild(MbJSON.PARSER_NAME);
+        MbElement dataElem = jsonRoot.createElementAsLastChild(MbElement.TYPE_NAME, "Data", null);
 
+        // Declare input values
+        String senderAddress = "GSCB0000001";
+        String originatingDate = "20210101";
+        String originatingTime = "1118";
+        String uniqueTransactionRef = "GSCBH21001010010";
+        String amount = "400000,00";
+        String valueDate = "20210101";
 
----
+        // Function calls
+        String msgId = getMsgId(senderAddress, originatingDate, uniqueTransactionRef);
+        String formattedAmount = getAmount(amount);
+        String creDt = getCreDt(originatingTime, originatingDate);
+        String creDtTm = getCreDtTm(originatingTime, originatingDate);
+        String intrBkSttlmDt = getIntrBkSttlmDt(valueDate);
+        String txId = getTxId(uniqueTransactionRef, originatingDate);
 
+        // Set values in OutputRoot JSON structure
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "MsgId", msgId);
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "FormattedAmount", formattedAmount);
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDate", creDt);
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDateTime", creDtTm);
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "SettlementDate", intrBkSttlmDt);
+        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "TransactionId", txId);
 
-
-Field Code	Field Name	                         Value(s)
-
-2020:	   TRANSACTIONREFERENCENUMBER	        GSCBH21001010010
-4488:	   VALUEDATE_CURRENCY_AMOUNT       	    VALUEDATE: 20210101<br>CURRENCY: INR<br>AMOUNT: 400000,00
-5500:	   ORDERING_CUSTOMER	                LINE1Acct Num): 108001026486<br>LINE2Name): Mr DISHANT DEVANG SHAH
-5518:	   SENDER'S CORRESPONDENT1 IFSC       	GSCB0000001
-6500:	   RECEIVER'S CORRESPONDENT1 IFSC     	CITI0000007
-5561:	   BENEFICIARY_CUSTOMER             	LINE1Acct Num): /0003421667<br>LINE2Name): J DEVANGKUMAR
-7023:	   DETAILS_OF_PAYMENT               	RTGS transaction posted from MBS Account 400000 DrAC00000108001026486 C AC0003421667 and IFSCCode CITI0000007
-7495:	   SENDER_TO_RECEIVER_INFORMATION    	/ATTN/Fund transfer to J DEVANKUMAR
-
-
-
-import com.ibm.broker.javacompute.MbJavaComputeNode;
-import com.ibm.broker.plugin.MbException;
-import com.ibm.broker.plugin.MbMessage;
-import com.ibm.broker.plugin.MbMessageAssembly;
-import com.ibm.broker.plugin.MbOutputTerminal;
-import com.ibm.broker.plugin.MbUserException;
-
-public class Map_code_RTGS_JavaCompute extends MbJavaComputeNode {
-
-	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
-		MbOutputTerminal out = getOutputTerminal("out");
-		MbOutputTerminal alt = getOutputTerminal("alternate");
-		
-		
-
-		MbMessage inMessage = inAssembly.getMessage();
-		MbMessageAssembly outAssembly = null;
-		try {
-			// create new message as a copy of the input
-			MbMessage outMessage = new MbMessage(inMessage);
-			outAssembly = new MbMessageAssembly(inAssembly, outMessage);
-			
-			
-			// ----------------------------------------------------------
-			
-			// Add user code below
-
-			// End of user code
-			// ----------------------------------------------------------
-		} catch (MbException e) {
-			// Re-throw to allow Broker handling of MbException
-			throw e;
-		} catch (RuntimeException e) {
-			// Re-throw to allow Broker handling of RuntimeException
-			throw e;
-		} catch (Exception e) {
-			// Consider replacing Exception with type(s) thrown by user code
-			// Example handling ensures all exceptions are re-thrown to be handled in the flow
-			throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
-		}
-		// The following should only be changed
-		// if not propagating message to the 'out' terminal
-		out.propagate(outAssembly);
-
-	}
-	
-	public static void main() {
-		String mmid_SENDERADDRESS ="GSCB0000001";
-		String   odate_ValueDATE="20210101";
-		String UNIQUETRANSACTIONREF ="GSCBH21001010010";
-		ORIGINATINGDATE			                        
-		ORIGINATINGTIME
-		amount 
-	String res=	getMsgId(mmid_SENDERADDRESS,odate_ValueDATE,UNIQUETRANSACTIONREF);
-	
-	
-	System.out.println(res);
-	
-	
-		/*DECLARE SENDERADDRESS CHARACTER 'APBL00000SC';
-		DECLARE ORIGINATINGDATE CHARACTER '20250522';
-		DECLARE UNIQUETRANSACTIONREF CHARACTER 'APELU25142296954';*/
-		
-	}
-
-	public static java.lang.String getMsgId(String mmbId,String utrNumber,String oDate) 
-	{
-
-     //   return mmbId.substring(0, 4)+oDate+"5000"+utrNumber.substring(utrNumber.length()-6, utrNumber.length());
-        return mmbId.substring(0, 4)+oDate+"5"+utrNumber.substring(utrNumber.length()-9, utrNumber.length());
-    }
-	
-	
-	public static java.lang.String getAmount(String amount) 
-	{
-		String value = amount.replaceFirst ("^0*", "");
-		 value = value.replace(',', '.');
-        return value;
-    }
-	
-	
-    public static java.lang.String getCreDt(String originatingTime,String originatingDate) 
-    {
-      String odate = originatingDate.substring(0,4)+'-'+originatingDate.substring(4,6)+'-'+originatingDate.substring(6,8);
-      String otime = originatingTime.substring(0,2)+':'+originatingTime.substring(2,4)+":00Z";
-      return odate+'T'+otime;
-    }
-    
-    
-    public static java.lang.String getCreDtTm(String originatingTime,String originatingDate) 
-    {
-     String odate = originatingDate.substring(0,4)+'-'+originatingDate.substring(4,6)+'-'+originatingDate.substring(6,8);
-     String otime = originatingTime.substring(0,2)+':'+originatingTime.substring(2,4)+":00";
-     return odate+'T'+otime;
-    }
-    
-    
-    public static java.lang.String getIntrBkSttlmDt(String valuedate)
-    {
-	String formatedDate = valuedate.substring(0, 4)+'-'+valuedate.substring(4, 6)+'-'+valuedate.substring(6, 8);
-	return formatedDate;
-    }
-    
-    
-    public static java.lang.String getTxId(String utrNumber,String oDate) 
-    {
-
- // utrNumber.substring(0, 4)+"R5"+oDate+"00"+utrNumber.substring(utrNumber.length()-6, utrNumber.length());
-    return utrNumber.substring(0, 4)+"R5"+oDate+utrNumber.substring(utrNumber.length()-8, utrNumber.length());
-    }
-    
-    
-    
-    public static java.lang.String getFCRA(String lineone)
-    {
-    	if (lineone.contains("FCRA")){
-    		lineone="FCRA";
-    		return lineone;
-    	}else{
-    		lineone="CASH";
-    		return lineone;
-    	}
-    	
+    } catch (MbException e) {
+        throw e;
+    } catch (RuntimeException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
     }
 
+    out.propagate(outAssembly);
 }
