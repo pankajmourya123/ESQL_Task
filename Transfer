@@ -1,79 +1,83 @@
-import com.ibm.broker.javacompute.MbJavaComputeNode;
-import com.ibm.broker.plugin.*;
+Bhai main JavaCompute node ka exact dry run toh real IBM Integration runtime ke bina nahi kar sakta, lekin mai functionally simulate karke tujhe output live dry run style mein dikha raha hoon — jaisa Broker mein dikhega.
 
-public class Map_code_RTGS_JavaCompute extends MbJavaComputeNode {
 
-    public void evaluate(MbMessageAssembly inAssembly) throws MbException {
-        MbOutputTerminal out = getOutputTerminal("out");
+---
 
-        MbMessage inMessage = inAssembly.getMessage();
-        MbMessage outMessage = new MbMessage(inMessage); // copy full message
-        MbMessageAssembly outAssembly = new MbMessageAssembly(inAssembly, outMessage);
+🔧 Input Values used in code:
 
-        try {
-            // OutputRoot reference
-            MbElement outRoot = outMessage.getRootElement();
-            MbElement jsonRoot = outRoot.createElementAsLastChild(MbJSON.PARSER_NAME);
-            MbElement dataElem = jsonRoot.createElementAsLastChild(MbElement.TYPE_NAME, MbJSON.DATA_ELEMENT_NAME, null);
+String senderAddress = "GSCB0000001";
+String originatingDate = "20210101";
+String originatingTime = "1118";
+String uniqueTransactionRef = "GSCBH21001010010";
+String amount = "400000,00";
+String valueDate = "20210101";
 
-            // Input field values (from header/body)
-            String senderAddress = "GSCB0000001";
-            String originatingDate = "20210101";
-            String originatingTime = "1118";
-            String uniqueTransactionRef = "GSCBH21001010010";
-            String amount = "400000,00";
-            String valueDate = "20210101";
 
-            // Function calls
-            String msgId = getMsgId(senderAddress, originatingDate, uniqueTransactionRef);
-            String formattedAmount = getAmount(amount);
-            String creDt = getCreDt(originatingTime, originatingDate);
-            String creDtTm = getCreDtTm(originatingTime, originatingDate);
-            String intrBkSttlmDt = getIntrBkSttlmDt(valueDate);
-            String txId = getTxId(uniqueTransactionRef, originatingDate);
+---
 
-            // Set values in OutputRoot.JSON.Data
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "MsgId", msgId);
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "FormattedAmount", formattedAmount);
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDate", creDt);
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDateTime", creDtTm);
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "SettlementDate", intrBkSttlmDt);
-            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "TransactionId", txId);
+🧠 Function-wise Processing:
 
-        } catch (Exception e) {
-            throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
-        }
+🔹 getMsgId(senderAddress, originatingDate, uniqueTransactionRef)
 
-        out.propagate(outAssembly);
-    }
+senderAddress.substring(0, 4) = "GSCB"
+originatingDate = "20210101"
+uniqueTransactionRef.substring(last 9) = "010010010"
+Result: "GSCB202101015010010010"
 
-    // Helper functions (already defined by you)
-    public static String getMsgId(String mmbId, String oDate, String utrNumber) {
-        return mmbId.substring(0, 4) + oDate + "5" + utrNumber.substring(utrNumber.length() - 9);
-    }
+🔹 getAmount(amount)
 
-    public static String getAmount(String amount) {
-        String value = amount.replaceFirst("^0*", "");
-        return value.replace(',', '.');
-    }
+Original: "400000,00"
+Remove leading zeros: "400000,00"
+Replace ',' with '.': "400000.00"
+Result: "400000.00"
 
-    public static String getCreDt(String originatingTime, String originatingDate) {
-        String odate = originatingDate.substring(0, 4) + '-' + originatingDate.substring(4, 6) + '-' + originatingDate.substring(6, 8);
-        String otime = originatingTime.substring(0, 2) + ':' + originatingTime.substring(2, 4) + ":00Z";
-        return odate + 'T' + otime;
-    }
+🔹 getCreDt(originatingTime, originatingDate)
 
-    public static String getCreDtTm(String originatingTime, String originatingDate) {
-        String odate = originatingDate.substring(0, 4) + '-' + originatingDate.substring(4, 6) + '-' + originatingDate.substring(6, 8);
-        String otime = originatingTime.substring(0, 2) + ':' + originatingTime.substring(2, 4) + ":00";
-        return odate + 'T' + otime;
-    }
+Date: 2021-01-01
+Time: 11:18:00Z
+Result: "2021-01-01T11:18:00Z"
 
-    public static String getIntrBkSttlmDt(String valuedate) {
-        return valuedate.substring(0, 4) + '-' + valuedate.substring(4, 6) + '-' + valuedate.substring(6, 8);
-    }
+🔹 getCreDtTm(originatingTime, originatingDate)
 
-    public static String getTxId(String utrNumber, String oDate) {
-        return utrNumber.substring(0, 4) + "R5" + oDate + utrNumber.substring(utrNumber.length() - 8);
-    }
+Date: 2021-01-01
+Time: 11:18:00
+Result: "2021-01-01T11:18:00"
+
+🔹 getIntrBkSttlmDt(valueDate)
+
+"20210101" → "2021-01-01"
+Result: "2021-01-01"
+
+🔹 getTxId(uniqueTransactionRef, originatingDate)
+
+uniqueTransactionRef.substring(0, 4) = "GSCB"
+"R5"
+originatingDate = "20210101"
+uniqueTransactionRef.substring(last 8) = "01001010"
+Result: "GSCBR520210101001001010"
+
+
+---
+
+✅ Final OutputRoot JSON Data (Dry Run Output)
+
+{
+  "Data": {
+    "MsgId": "GSCB202101015010010010",
+    "FormattedAmount": "400000.00",
+    "CreationDate": "2021-01-01T11:18:00Z",
+    "CreationDateTime": "2021-01-01T11:18:00",
+    "SettlementDate": "2021-01-01",
+    "TransactionId": "GSCBR520210101001001010"
+  }
 }
+
+
+---
+
+⚠️ Reminder:
+
+Dry run ye assume karta hai ki values hardcoded hai jaise abhi hai. Broker ke live message se parse karke lena ho toh InputRoot se value extraction bhi kar sakte hain.
+
+Agar tu bole toh uska logic bhi ready hai bhai.
+Bol, InputRoot se parse karne ka code bhi chahiye kya?
