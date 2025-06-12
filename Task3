@@ -55,3 +55,14 @@ CREATE COMPUTE MODULE ONE_To_Three_Compute
 		END;
 	 
 END MODULE;
+
+1. BUSINESS REQUIREMENT:
+ Bank is facing duplicate UTR issue rejected from SFMS generated through CBS handled by lIB team. As per team comment to fix the issue by changing 22 digit UTR formation by taking last 9 digit of 16 digit UTR.
+ * Current 22 digit UTR: "First 4 digits of IFSC"+ "R9" + Date(YYYYMMDD) + "00" + Last 6 digits of 16 digit ÜTR
+ * New 22 digit UTR :"First 4 digit of IFSC"+ "R"+DATE(YYYYMMDD) +last 9 digit of 16 digit UTR.
+ 2. EXISTING FUNCTIONALITY:
+ IIB generate 22 digit ORG_TXN_ID by "first 4 digits of IFSC"+ "R9" + Date(YYYYMMDD) + "00" + Last 6 digits of 16 digit UTR. As per B team analysis UTR SBINH241377O0001 and UTR SBINH24138700001 have same last 6 digits, That is why both the transactions has generated with same ORG_TXN _ID. Similar. case happened to other transactions also.
+ * Current 22 digit UTR:"First 4 digits of IFSC"+ "R9" + Date(YYYYMMDD) + "00" + Last 6 digits of 16 digit UTR
+ 3. NEW REQUIREMENT: To fix the issue code changes required as
+ New 22 digit UTR :"First 4 digit of IFSC"+ "R"+DATE(YYYYMMDD)+last 9 digit of 16 digit UTR.
+ 4. SCOPEIASSUMPTIONS/CONSTRAINTS:
