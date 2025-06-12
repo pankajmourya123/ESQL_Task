@@ -1,50 +1,79 @@
-public void evaluate(MbMessageAssembly inAssembly) throws MbException {
-    MbOutputTerminal out = getOutputTerminal("out");
-    MbOutputTerminal alt = getOutputTerminal("alternate");
+import com.ibm.broker.javacompute.MbJavaComputeNode;
+import com.ibm.broker.plugin.*;
 
-    MbMessage inMessage = inAssembly.getMessage();
-    MbMessageAssembly outAssembly = null;
-    try {
-        // Create new message as a copy of the input
-        MbMessage outMessage = new MbMessage(inMessage);
-        outAssembly = new MbMessageAssembly(inAssembly, outMessage);
+public class Map_code_RTGS_JavaCompute extends MbJavaComputeNode {
 
-        // Access OutputRoot
-        MbElement outRoot = outMessage.getRootElement();
-        MbElement jsonRoot = outRoot.createElementAsLastChild(MbJSON.PARSER_NAME);
-        MbElement dataElem = jsonRoot.createElementAsLastChild(MbElement.TYPE_NAME, "Data", null);
+    public void evaluate(MbMessageAssembly inAssembly) throws MbException {
+        MbOutputTerminal out = getOutputTerminal("out");
 
-        // Declare input values
-        String senderAddress = "GSCB0000001";
-        String originatingDate = "20210101";
-        String originatingTime = "1118";
-        String uniqueTransactionRef = "GSCBH21001010010";
-        String amount = "400000,00";
-        String valueDate = "20210101";
+        MbMessage inMessage = inAssembly.getMessage();
+        MbMessage outMessage = new MbMessage(inMessage); // copy full message
+        MbMessageAssembly outAssembly = new MbMessageAssembly(inAssembly, outMessage);
 
-        // Function calls
-        String msgId = getMsgId(senderAddress, originatingDate, uniqueTransactionRef);
-        String formattedAmount = getAmount(amount);
-        String creDt = getCreDt(originatingTime, originatingDate);
-        String creDtTm = getCreDtTm(originatingTime, originatingDate);
-        String intrBkSttlmDt = getIntrBkSttlmDt(valueDate);
-        String txId = getTxId(uniqueTransactionRef, originatingDate);
+        try {
+            // OutputRoot reference
+            MbElement outRoot = outMessage.getRootElement();
+            MbElement jsonRoot = outRoot.createElementAsLastChild(MbJSON.PARSER_NAME);
+            MbElement dataElem = jsonRoot.createElementAsLastChild(MbElement.TYPE_NAME, MbJSON.DATA_ELEMENT_NAME, null);
 
-        // Set values in OutputRoot JSON structure
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "MsgId", msgId);
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "FormattedAmount", formattedAmount);
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDate", creDt);
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDateTime", creDtTm);
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "SettlementDate", intrBkSttlmDt);
-        dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "TransactionId", txId);
+            // Input field values (from header/body)
+            String senderAddress = "GSCB0000001";
+            String originatingDate = "20210101";
+            String originatingTime = "1118";
+            String uniqueTransactionRef = "GSCBH21001010010";
+            String amount = "400000,00";
+            String valueDate = "20210101";
 
-    } catch (MbException e) {
-        throw e;
-    } catch (RuntimeException e) {
-        throw e;
-    } catch (Exception e) {
-        throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
+            // Function calls
+            String msgId = getMsgId(senderAddress, originatingDate, uniqueTransactionRef);
+            String formattedAmount = getAmount(amount);
+            String creDt = getCreDt(originatingTime, originatingDate);
+            String creDtTm = getCreDtTm(originatingTime, originatingDate);
+            String intrBkSttlmDt = getIntrBkSttlmDt(valueDate);
+            String txId = getTxId(uniqueTransactionRef, originatingDate);
+
+            // Set values in OutputRoot.JSON.Data
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "MsgId", msgId);
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "FormattedAmount", formattedAmount);
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDate", creDt);
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "CreationDateTime", creDtTm);
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "SettlementDate", intrBkSttlmDt);
+            dataElem.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "TransactionId", txId);
+
+        } catch (Exception e) {
+            throw new MbUserException(this, "evaluate()", "", "", e.toString(), null);
+        }
+
+        out.propagate(outAssembly);
     }
 
-    out.propagate(outAssembly);
+    // Helper functions (already defined by you)
+    public static String getMsgId(String mmbId, String oDate, String utrNumber) {
+        return mmbId.substring(0, 4) + oDate + "5" + utrNumber.substring(utrNumber.length() - 9);
+    }
+
+    public static String getAmount(String amount) {
+        String value = amount.replaceFirst("^0*", "");
+        return value.replace(',', '.');
+    }
+
+    public static String getCreDt(String originatingTime, String originatingDate) {
+        String odate = originatingDate.substring(0, 4) + '-' + originatingDate.substring(4, 6) + '-' + originatingDate.substring(6, 8);
+        String otime = originatingTime.substring(0, 2) + ':' + originatingTime.substring(2, 4) + ":00Z";
+        return odate + 'T' + otime;
+    }
+
+    public static String getCreDtTm(String originatingTime, String originatingDate) {
+        String odate = originatingDate.substring(0, 4) + '-' + originatingDate.substring(4, 6) + '-' + originatingDate.substring(6, 8);
+        String otime = originatingTime.substring(0, 2) + ':' + originatingTime.substring(2, 4) + ":00";
+        return odate + 'T' + otime;
+    }
+
+    public static String getIntrBkSttlmDt(String valuedate) {
+        return valuedate.substring(0, 4) + '-' + valuedate.substring(4, 6) + '-' + valuedate.substring(6, 8);
+    }
+
+    public static String getTxId(String utrNumber, String oDate) {
+        return utrNumber.substring(0, 4) + "R5" + oDate + utrNumber.substring(utrNumber.length() - 8);
+    }
 }
