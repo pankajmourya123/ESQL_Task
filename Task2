@@ -236,55 +236,62 @@ $SENDERADDRESS1 = APBL00000SC
 $ORIGINATINGDATE2 = 20250522
 					
 ==================================================================================
-       01 NEFT21051_RECORD.
-   03 NEFT21051_FRM_ACCT            PIC X(16).
-   03 FILLER_01                     PIC X(18).
-   03 NEFT21051_DEP_AMOUNT          PIC S9(14)V999 SIGN TRAILING.
-   03 FILLER_02                     PIC X(20).
-   03 NEFT21051_RTGS_UNQ            PIC X(1).
-   03 NEFT21051_INTER_ACCT          PIC 9(16).
-   03 NEFT21051_RTGS_TYPE           PIC X(1).
-   03 FILLER_03                     PIC X(17).
-   03 NEFT21051_SUB_MSG_TYPE        PIC X(3).
-   03 NEFT21051_REF_NO              PIC X(16).
-   03 FILLER_04                     PIC X(24).
-   03 NEFT21051_CURR_CODE           PIC X(3).     *> Changed from 4488-CURR
-   03 FILLER_05                     PIC X(77).
-   03 NEFT21051_SENDER_IFSC         PIC X(11).
-   03 NEFT21051_RECV_IFSC           PIC X(11).
-   03 NEFT21051_TO_ACCT             PIC X(16).
-   03 NEFT21051_UTR_NO              PIC X(16).    *> Changed from 2020-UTR
-   03 NEFT21051_OTH_TIME            PIC X(6).
-   03 FILLER_06                     PIC X(281).
-   03 NEFT21051_OTH_BRANCH          PIC 9(5).
-   03 NEFT21051_OTH_SCH             PIC 9(2).
-   03 NEFT21051_OTH_DATE            PIC X(8).
-   03 FILLER_07                     PIC X(18).
-   03 NEFT21051_STAT_NARR           PIC X(50).
-   03 NEFT21051_BENF_ACCT_NO        PIC X(33).
+01 TRANSACTION-RECORD.
+           03 SPACE-01                PIC X(1).
+           03 LENGTH-OF-STRING       PIC X(4).
+           03 ZEROS-01               PIC X(20).
+           03 FILLER-01              PIC X(2).
+           03 SPACE-02               PIC X(12).
+           03 INSTITUTION-NO         PIC X(3).
+           03 BRANCH-NO              PIC 9(5).
+           03 TERMINAL-NO            PIC 9(3).
+           03 TELLER-NO              PIC 9(7).
+           03 TRAN-CODE              PIC X(6).
+           03 ZEROS-02               PIC X(9).
+           03 SPACE-03               PIC X(5).
+           03 ZERO-01                PIC X(1).
+           03 SPACE-04               PIC X(2).
+           03 ZEROS-03               PIC X(3).
+           03 BATCH-TANDAM-1         PIC X(1).
+           03 SPACE-05               PIC X(49).
+           03 BENEF-ACCOUNT-NO       PIC X(17).
+           03 SPACE-06               PIC X(2).
+           03 AMOUNT                 PIC S9(14)V99 SIGN TRAILING.
+           03 FILLER-02              PIC X(1).
+           03 SPACE-07               PIC X(10).
+           03 BATCH-TANDAM-2         PIC X(1).
+           03 BGL                    PIC X(17).
+           03 SPACE-08               PIC X(1).
+           03 MSG-TYPE               PIC X(3).
+           03 SPACE-09               PIC X(1).
+           03 SUB-MSG-TYPE           PIC X(3).
+           03 UTR                    PIC X(22).
+           03 SPACE-10               PIC X(2).
+           03 CURRENCY               PIC X(3).
+           03 FILLER-03              PIC X(77).
+           03 SENDER-IFSC            PIC X(11).
+           03 RECEIVER-IFSC          PIC X(11).
+           03 ACCOUNT-NO             PIC X(17).
+           03 TIME                   PIC X(6).
+           03 UTR-2020               PIC X(22).
+           03 SPACE-11               PIC X(2).
+           03 BRANCH-NO-02           PIC 9(5).
+           03 OTH-SCH                PIC 9(2).
+           03 DATE                   PIC X(8).
+           03 SPACE-12               PIC X(1).
+           03 NARRATION              PIC X(39).
+           03 FILLER-04              PIC X(1).
+           03 BENEF-DETAILS          PIC X(33).
+           03 SPACE-13               PIC X(1).
 
-   03 NEFT_BENEF_ADDR.
-      05 NEFT_BENEF_ADDR1           PIC X(35).
-      05 NEFT_BENEF_ADDR2           PIC X(35).
-      05 NEFT_BENEF_ADDR3           PIC X(35).
-      05 NEFT_BENEF_ADDR4           PIC X(35).
+           03 BENEF-ADDRESS.
+               05 BENEF-ADDR         PIC X(100).
 
-   03 NEFT_REMIT_ADDR.
-      05 NEFT_REMIT_ADDR1           PIC X(35).
-      05 NEFT_REMIT_ADDR2           PIC X(35).
-      05 NEFT_REMIT_ADDR3           PIC X(35).
-      05 NEFT_REMIT_ADDR4           PIC X(35).
+           03 REMITTER-ADDRESS.
+               05 REMITTER-ADDR      PIC X(100).
 
-   03 NEFT_PAY_DTLS_ADDR.
-      05 NEFT_PAY_DTLS_ADDR1        PIC X(35).
-      05 NEFT_PAY_DTLS_ADDR2        PIC X(35).
-      05 NEFT_PAY_DTLS_ADDR3        PIC X(35).
-      05 NEFT_PAY_DTLS_ADDR4        PIC X(35).
+           03 PAY-DETAILS.
+               05 PAY-DETAILS-ADDR   PIC X(100).
 
-   03 NEFT_SND_REC_INFO_ADDR.
-      05 NEFT_SND_REC_INFO_ADDR1    PIC X(35).
-      05 NEFT_SND_REC_INFO_ADDR2    PIC X(35).
-      05 NEFT_SND_REC_INFO_ADDR3    PIC X(35).
-      05 NEFT_SND_REC_INFO_ADDR4    PIC X(35).
-
-   03 FILLER_08                     PIC X(111).
+           03 SENDER-RECEIVER-INFO.
+               05 SND-REC-INFO       PIC X(100).
