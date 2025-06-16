@@ -57,3 +57,55 @@ CREATE COMPUTE MODULE ONE_To_Three_Compute
 END MODULE;
 
 
+       01 NEFT21051-RECORD.
+           03 FRM-ACCT              PIC X(16).
+           03 FILLER-01             PIC X(18).
+           03 DEP-AMOUNT            PIC S9(14)V999 SIGN TRAILING.
+           03 FILLER-02             PIC X(20).
+           03 RTGS-UNQ              PIC X(1).
+           03 INTER-ACCT            PIC 9(16).
+           03 RTGS-TYPE             PIC X(1).
+           03 FILLER-03             PIC X(17).
+           03 SUB-MSG-TYPE          PIC X(3).
+           03 REF-NO                PIC X(16).
+           03 FILLER-04             PIC X(24).
+           03 CURR-CODE             PIC X(3).
+           03 FILLER-05             PIC X(77).
+           03 SENDER-IFSC           PIC X(11).
+           03 RECV-IFSC             PIC X(11).
+           03 TO-ACCT               PIC X(16).
+           03 UTR                   PIC X(16).
+           03 OTH-TIME              PIC X(6).
+           03 FILLER-06             PIC X(281).
+           03 OTH-BRANCH            PIC 9(5).
+           03 OTH-SCH               PIC 9(2).
+           03 OTH-DATE              PIC X(8).
+           03 FILLER-07             PIC X(18).
+           03 STAT-NARR             PIC X(50).
+           03 BENF-ACCT-NO          PIC X(33).
+
+           03 BENF-ADDR.
+               05 BENF-ADDR1        PIC X(35).
+               05 BENF-ADDR2        PIC X(35).
+               05 BENF-ADDR3        PIC X(35).
+               05 BENF-ADDR4        PIC X(35).
+
+           03 REMIT-ADDR.
+               05 REMIT-ADDR1       PIC X(35).
+               05 REMIT-ADDR2       PIC X(35).
+               05 REMIT-ADDR3       PIC X(35).
+               05 REMIT-ADDR4       PIC X(35).
+
+           03 PAY-DTLS-ADDR.
+               05 PAY-DTLS-ADDR1    PIC X(35).
+               05 PAY-DTLS-ADDR2    PIC X(35).
+               05 PAY-DTLS-ADDR3    PIC X(35).
+               05 PAY-DTLS-ADDR4    PIC X(35).
+
+           03 SND-REC-INFO-ADDR.
+               05 SND-REC-ADDR1     PIC X(35).
+               05 SND-REC-ADDR2     PIC X(35).
+               05 SND-REC-ADDR3     PIC X(35).
+               05 SND-REC-ADDR4     PIC X(35).
+
+           03 FILLER-08             PIC X(111).
