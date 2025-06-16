@@ -234,4 +234,58 @@ Assume:
 $SENDERADDRESS1 = APBL00000SC
 
 $ORIGINATINGDATE2 = 20250522
-											 
+					
+==================================================================================
+       01 NEFT21051-RECORD.
+           03 NEFT21051-FRM-ACCT            PIC X(16).
+           03 FILLER                        PIC X(18).
+           03 NEFT21051-DEP-AMOUNT          PIC S9(14)V999 SIGN TRAILING SEPARATE.
+           03 FILLER                        PIC X(20).
+           03 NEFT21051-RTGS-UNQ            PIC X(1).
+           03 NEFT21051-INTER-ACCT          PIC 9(16).
+           03 NEFT21051-RTGS-TYPE           PIC X(1).
+           03 FILLER                        PIC X(17).
+           03 NEFT21051-SUB-MSG-TYPE        PIC X(3).
+           03 NEFT21051-REF-NO              PIC X(16).
+           03 FILLER                        PIC X(24).
+           03 NEFT21051-4488-CURR           PIC X(3).
+           03 FILLER                        PIC X(77).
+           03 NEFT21051-SENDER-IFSC         PIC X(11).
+           03 NEFT21051-RECV-IFSC           PIC X(11).
+           03 NEFT21051-TO-ACCT             PIC X(16).
+           03 NEFT21051-2020-UTR            PIC X(16).
+           03 NEFT21051-OTH-TIME            PIC X(6).
+           03 FILLER                        PIC X(281).
+           03 NEFT21051-OTH-BRANCH          PIC 9(5).
+           03 NEFT21051-OTH-SCH             PIC 9(2).
+           03 NEFT21051-OTH-DATE            PIC X(8).
+           03 FILLER                        PIC X(18).
+           03 NEFT21051-STAT-NARR           PIC X(50).
+           03 NEFT21051-BENF-ACCT-NO        PIC X(33).
+
+           03 NEFT-BENEF-ADDR.
+               05 NEFT-BENEF-ADDR1          PIC X(35).
+               05 NEFT-BENEF-ADDR2          PIC X(35).
+               05 NEFT-BENEF-ADDR3          PIC X(35).
+               05 NEFT-BENEF-ADDR4          PIC X(35).
+
+           03 NEFT-REMIT-ADDR.
+               05 NEFT-REMIT-ADDR1          PIC X(35).
+               05 NEFT-REMIT-ADDR2          PIC X(35).
+               05 NEFT-REMIT-ADDR3          PIC X(35).
+               05 NEFT-REMIT-ADDR4          PIC X(35).
+
+           03 NEFT-PAY-DTLS-ADDR.
+               05 NEFT-PAY-DTLS-ADDR1       PIC X(35).
+               05 NEFT-PAY-DTLS-ADDR2       PIC X(35).
+               05 NEFT-PAY-DTLS-ADDR3       PIC X(35).
+               05 NEFT-PAY-DTLS-ADDR4       PIC X(35).
+
+           03 NEFT-SND-REC-INFO-ADDR.
+               05 NEFT-SND-REC-INFO-ADDR1   PIC X(35).
+               05 NEFT-SND-REC-INFO-ADDR2   PIC X(35).
+               05 NEFT-SND-REC-INFO-ADDR3   PIC X(35).
+               05 NEFT-SND-REC-INFO-ADDR4   PIC X(35).
+
+           03 FILLER                        PIC X(111).
+						 
