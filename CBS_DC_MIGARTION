@@ -216,6 +216,49 @@ workflow edit
 
 
 
+===================================================================================================
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.1:11883         0.0.0.0:*               LISTEN      3048366/bipMQTT
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      -
+tcp        0      0 127.0.0.1:9010          0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:8180            0.0.0.0:*               LISTEN      2824830/DataFlowEng
+tcp        0      0 0.0.0.0:8181            0.0.0.0:*               LISTEN      2824827/DataFlowEng
+tcp        0      0 192.168.122.1:53        0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:8183            0.0.0.0:*               LISTEN      2824834/DataFlowEng
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:8184            0.0.0.0:*               LISTEN      2824835/DataFlowEng
+tcp        0      0 0.0.0.0:7801            0.0.0.0:*               LISTEN      2824823/DataFlowEng
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:10050           0.0.0.0:*               LISTEN      -
+tcp6       0      0 :::1416                 :::*                    LISTEN      -
+tcp6       0      0 ::1:11883               :::*                    LISTEN      3048366/bipMQTT
+tcp6       0      0 :::2222                 :::*                    LISTEN      2824823/DataFlowEng
+tcp6       0      0 :::111                  :::*                    LISTEN      -
+tcp6       0      0 :::8081                 :::*                    LISTEN      -
+tcp6       0      0 :::22                   :::*                    LISTEN      -
+tcp6       0      0 ::1:631                 :::*                    LISTEN      -
+tcp6       0      0 ::1:6010                :::*                    LISTEN      -
+tcp6       0      0 :::4414                 :::*                    LISTEN      2824578/bipbroker
+tcp6       0      0 127.0.0.1:35713         :::*                    LISTEN      3640851/java
+tcp6       0      0 :::9443                 :::*                    LISTEN      3640851/java
+udp        0      0 0.0.0.0:46361           0.0.0.0:*                           -
+udp        0      0 192.168.122.1:53        0.0.0.0:*                           -
+udp        0      0 0.0.0.0:67              0.0.0.0:*                           -
+udp        0      0 0.0.0.0:49255           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:111             0.0.0.0:*                           -
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:34038           0.0.0.0:*                           3048366/bipMQTT
+udp        0      0 0.0.0.0:35640           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:52739           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:53148           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -
+udp6       0      0 :::45445                :::*                                -
+udp6       0      0 :::111                  :::*                                -
+udp6       0      0 ::1:323                 :::*                                -
+udp6       0      0 :::5353                 :::*                                -
+udp6       0      0 :::8082                 :::*                                -
 
 
 
