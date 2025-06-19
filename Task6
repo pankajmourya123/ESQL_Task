@@ -82,3 +82,29 @@ CREATE COMPUTE MODULE xmljson_Compute
 
 
 END MODULE;
+===========================================================================================
+CTDP3002E: Unexpected data found at offset '34' after parsing completed. Data: '0x0d...'.
+			ParsedDataRegion[SimpleContent, startOffset = 33, length = 1, scd = #xscd(/schemaElement::Serverdfdl/type::0/model::sequence/schemaElement::body/type::0/model::sequence/schemaElement::Flag)]
+			
+			<?xml version="1.0" encoding="UTF-8"?>
+
+-<Serverdfdl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+=========================================================================================
+-<body>
+
+<Trans_ref_no xsi:type="xs:string">TGMBH21001010055656565</Trans_ref_no>
+
+<IFSC xsi:type="xs:string">TGMBH211234</IFSC>
+
+<Flag xsi:type="xs:string">y</Flag>
+
+</body>
+
+</Serverdfdl>
+
+
+=========================================================================
+
+TGMBH21001010055656565TGMBH211234y
+
