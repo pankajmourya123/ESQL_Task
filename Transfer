@@ -1,92 +1,495 @@
-9Bhai main JavaCompute node ka exact dry run toh real IBM Integration runtime ke bina nahi kar sakta, lekin mai functionally simulate karke tujhe output live dry run style mein dikha raha hoon — jaisa Broker mein dikhega.
 
 
----
+CREATE FILTER MODULE NEFT_PULL_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	
+		DECLARE Timing  TIME;
+		DECLARE hr,min,sec CHARACTER;
+		
+		
+		SET Timing=CAST(CURRENT_TIME as TIME FORMAT 'hh:mm:ss'); 
+		SET hr=EXTRACT(HOUR FROM Timing);
+		
+		DECLARE hrlength INTEGER;
+		SET hrlength = LENGTH(hr);
+		
+		WHILE hrlength < 2 DO
+			SET hr = '0'||hr;
+			SET hrlength = hrlength + 1; 
+		END WHILE;
+		
+		IF hr ='06' THEN
+			RETURN TRUE;
+		ELSE
+			RETURN FALSE;
+		END IF;
+		
 
-🔧 Input Values used in code:
+	END;
 
-String senderAddress = "GSCB0000001";
-String originatingDate = "20210101";
-String originatingTime = "1118";
-String uniqueTransactionRef = "GSCBH21001010010";
-String amount = "400000,00";
-String valueDate = "20210101";
+END MODULE;
+
+CREATE FUNCTION initLog4j( IN CONFIG_FILE_NAME CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
+CREATE FUNCTION log4j( IN COMPONENT_NAME CHARACTER,
+IN LEVEL CHARACTER,
+IN TEXT CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
+CREATE FUNCTION log4j_1_1( IN COMPONENT_NAME CHARACTER,
+IN LOGGER_NAME CHARACTER,
+IN LEVEL CHARACTER,
+IN TEXT CHARACTER )
+RETURNS BOOLEAN
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
+
+CREATE COMPUTE MODULE NEFT_MAIN_FLOW_Compute
+	DECLARE DSN EXTERNAL CHARACTER;	
+	DECLARE PROP_LOC EXTERNAL CHARACTER;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE bool BOOLEAN;
+		--CALL CopyMessageHeaders();
+		SET bool=CopyEntireMessage();
+        RETURN bool;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage()RETURNS BOOLEAN BEGIN
+		SET OutputRoot = InputRoot;
+		DECLARE rc BOOLEAN;
+		CALL initLog4j('/var/iib/interface/mp/neft/inward/properties/log4j/mp_neft_inward.xml') INTO rc;
+		CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','---------------START---------------') INTO rc;
+
+		SET OutputRoot.BLOB = NULL;
+		DECLARE BankDB , N06 , N07 , N02 , N2R ROW;
+		DECLARE count , bankCount , i , rowCount INTEGER 1;
+		DECLARE msgType CHARACTER '';
+		DECLARE dataCount INTEGER '0';
+		DECLARE tranDate DATE;
+		DECLARE seqNum,tranDateCharDB,tranDateChar,currentDate ,rupee,paise,wholeMsgChar, tranDateChar1 ,amount,senderIfsc,receiverIfsc, bank , tranRefNo , outRow ,outRowN02 ,outRowNO7,outRowN06,outRowN2R ,CRLF , CR , LF ,FtpProvider ,fileLoc CHARACTER;
+		DECLARE key,inStringN02 , outStringN07 ,inStringN2R ,outStringN06,filename,AMT CHARACTER '';
+		DECLARE outString CHARACTER '';
+		DECLARE outMsgBlob BLOB;
+	
+		DECLARE ifsc CHARACTER;
+		DECLARE endLine CHARACTER '-';
+		DECLARE tranrefLen INTEGER;
+		DECLARE tempTranrefLen INTEGER;		--CHANGED for N07 starting UTR 
+		DECLARE tranRefNoChar CHARACTER;
+		DECLARE seqLen INTEGER;
+		DECLARE seqChar CHARACTER;
+
+		
+		SET CRLF  = CAST(X'0D0A' AS CHARACTER CCSID 1208);
+		SET CR    = CAST(X'0D' AS CHARACTER CCSID 1208);
+		SET LF    = CAST(X'0A' AS CHARACTER CCSID 1208);
+		
+		SET tranDate = CAST(CURRENT_DATE AS DATE FORMAT 'yyyyMMdd');
+		SET currentDate=CAST(tranDate AS CHARACTER CCSID 1208);
+		SET currentDate=CAST(tranDate AS CHARACTER FORMAT 'yyyyMMdd');
+		SET tranDate = tranDate - CAST(1 AS INTERVAL DAY);   
+		SET tranDateChar = CAST(tranDate AS CHARACTER CCSID 1208);
+	
+		
+		SET tranDateChar = CAST(tranDate AS CHARACTER FORMAT 'yyyyMMdd');
+		
+		------------------------------------WE ARE USING THIS TABLE FOR UAT TESTING-------------------------------------------------------------------------------------------------------------
+		--SET BankDB.R[] = PASSTHRU('select * from MP_BANKNAME');
+		-----------------------------------------------------------------------------------------------------------------------------------------------------
+		SET BankDB.R[] = PASSTHRU('select * from IFSC_BANKNAME');
+		
+		SET count = CARDINALITY(BankDB.R[]);
+		
+		WHILE bankCount <= count DO
+				SET bank = BankDB.R[i].BANKNAME;
+				SET ifsc = BankDB.R[i].IFSC;
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','bank name is '||bank) INTO rc;
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','tran date is '||tranDateChar) INTO rc;
 
 
----
+---------------------------------------********GENERATING N07 MESSAGES********---------------------------------------------------------------------
+			
+			CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','checking outgoing N07 transactions : '||bank) INTO rc;
+			SET N07.R[] = PASSTHRU( 'SELECT TRAN_REF_NO , TRAN_DATE , AMOUNT , IFSC_SENDER , IFSC_RECVR ,SEQINHEADER FROM NEFT_OUT WHERE TRAN_DATE = ? and SUB_MSG_TYPE = ''N07'' and TRIM(BANKNAME) = ? ' TO Database.{DSN} VALUES (tranDateChar , bank));
+			SET dataCount = CARDINALITY(N07.R[]);
+			SET rowCount = '1';
+			
+			DECLARE tranRefNoChar CHARACTER;
+			WHILE dataCount >= rowCount DO
+				SET msgType = 'N07';
+				SET seqNum = TRIM(N07.R[rowCount].SEQINHEADER);
+				SET tranRefNo = TRIM(N07.R[rowCount].TRAN_REF_NO);
+				SET tempTranrefLen = LENGTH(tranRefNo);							--CHANGED for N07 starting UTR 
+				SET tranRefNo = SUBSTRING(tranRefNo FROM 4 FOR tempTranrefLen);  --CHANGED for N07 starting UTR 
+		
+				SET tranrefLen = LENGTH(tranRefNo);	
+				SET tranRefNoChar = tranRefNo;
+				WHILE tranrefLen < 16 DO
+					SET tranRefNoChar = ' ' || tranRefNoChar ;
+					SET tranrefLen = tranrefLen + 1;
+				END WHILE;
+				SET tranRefNo = tranRefNoChar;
+				
+				SET seqLen = LENGTH(seqNum);	
+				    SET seqChar =seqNum ;
+				   	WHILE seqLen < 9 DO
+						SET seqChar = '0' || seqChar;
+						SET seqLen = seqLen + 1;					 
+					END WHILE;
+				SET seqNum=seqChar;
+				
+				SET tranDateCharDB = N07.R[rowCount].TRAN_DATE;								
 
-🧠 Function-wise Processing:
+				SET tranDateChar1 = SUBSTRING(tranDateCharDB FROM 1 FOR 4);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 5 FOR 2);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 7 FOR 2);
+				
+				SET AMT=N07.R[rowCount].AMOUNT;
+				
+				IF CONTAINS(AMT,'.') THEN
+				    SET rupee = SUBSTRING(AMT  BEFORE '.');
+					SET paise = SUBSTRING(AMT  AFTER '.');	
+				ELSE
+					SET rupee = SUBSTRING(AMT  BEFORE  ',');
+					SET paise = SUBSTRING(AMT  AFTER  ',');
+				END IF;
+		
+				IF LENGTH(rupee) < 14 THEN
+					WHILE LENGTH(rupee) < 14 DO
+						SET rupee = '0'|| rupee;
+					END WHILE;
+				END IF;	
 
-🔹 getMsgId(senderAddress, originatingDate, uniqueTransactionRef)
+				SET amount = rupee||paise;	
+				SET amount = TRIM ( CR from amount );		
+									
+				SET senderIfsc = TRIM(N07.R[rowCount].IFSC_SENDER);
+				SET senderIfsc = TRIM ( CR from senderIfsc );	
+				
+				SET receiverIfsc = TRIM(N07.R[rowCount].IFSC_RECVR);
+				SET receiverIfsc = TRIM ( CR from receiverIfsc );
+				
+				SET outRowNO7 = msgType || seqNum || tranRefNo || tranDateChar1 || amount || senderIfsc || receiverIfsc || LF;
+				SET outStringN07 = outStringN07||outRowNO7;
+				SET rowCount = rowCount + 1;
+			END WHILE;
+	
+			SET msgType = '';
+			SET seqNum = '';
+			SET tranRefNo = '';
+			SET tranDateChar1 = '';
+			SET tranDateCharDB = '';
+			SET amount = '';
+			SET rupee = '';
+			SET paise = '';
+			SET senderIfsc = '';
+			SET receiverIfsc = '';
+			
+			SET dataCount = 0;
+						
+-----------------*************GENERATING N06 MESSAGES**************----------------------------------------------------------------------------------------------
+		        CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','checking outgoing N06 transactions : '||bank) INTO rc;
+				SET N06.R[] = PASSTHRU( 'SELECT TRAN_REF_NO , TRAN_DATE , AMOUNT , IFSC_SENDER , IFSC_RECVR ,SEQINHEADER FROM NEFT_OUT WHERE TRAN_DATE = ? and SUB_MSG_TYPE = ''N06'' and TRIM(BANKNAME) = ? ' TO Database.{DSN} VALUES (tranDateChar , bank));
+				SET dataCount = CARDINALITY(N06.R[]);
+				SET rowCount = '1';
+				
+				WHILE dataCount >= rowCount DO
+					SET tranRefNo = TRIM(N06.R[rowCount].TRAN_REF_NO);
+					
+					IF CONTAINS (outStringN07,tranRefNo) THEN
+						
+					    SET rowCount = rowCount + 1;
+							
+					ELSE
+							
+						SET msgType = 'N06';
+						SET seqNum = TRIM(N06.R[rowCount].SEQINHEADER);
+				
+					
+						SET seqLen = LENGTH(seqNum);	
+				   		SET seqChar =seqNum ;
+				   		WHILE seqLen < 9 DO
+							SET seqChar = '0' || seqChar;
+							SET seqLen = seqLen + 1;					 
+						END WHILE;
+						SET seqNum=seqChar;
+						SET tranrefLen = LENGTH(tranRefNo);	
+				    	SET tranRefNoChar = tranRefNo;
+				   		WHILE tranrefLen < 16 DO
+							SET tranRefNoChar = ' ' || tranRefNoChar ;
+							SET tranrefLen = tranrefLen + 1;					 
+						END WHILE;
+							SET tranRefNo = tranRefNoChar;
+							SET tranDateCharDB = N06.R[rowCount].TRAN_DATE;								
+				
+				
+						SET tranDateChar1 = SUBSTRING(tranDateCharDB FROM 1 FOR 4);
+						SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 5 FOR 2);
+						SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 7 FOR 2);
+				
+						SET AMT=N06.R[rowCount].AMOUNT;
+				
+						IF CONTAINS(AMT,'.') THEN
+				   			SET rupee = SUBSTRING(AMT  BEFORE '.');
+							SET paise = SUBSTRING(AMT  AFTER '.');	
+						ELSE
+							SET rupee = SUBSTRING(AMT  BEFORE  ',');
+							SET paise = SUBSTRING(AMT  AFTER  ',');
+						END IF;
+				
+						IF LENGTH(rupee) < 14 THEN
+							WHILE LENGTH(rupee) < 14 DO
+								SET rupee = '0'|| rupee;
+							END WHILE;
+						END IF;	
 
-senderAddress.substring(0, 4) = "GSCB"
-originatingDate = "20210101"
-uniqueTransactionRef.substring(last 9) = "010010010"
-Result: "GSCB202101015010010010"
+						SET amount = rupee||paise;	
+						SET amount = TRIM ( CR from amount );	
+												
+						SET senderIfsc = TRIM(N06.R[rowCount].IFSC_SENDER);
+						SET senderIfsc = TRIM ( CR from senderIfsc );	
+						
+						SET receiverIfsc = TRIM(N06.R[rowCount].IFSC_RECVR);
+						SET receiverIfsc = TRIM ( CR from receiverIfsc );	
+						
+						SET outRowN06= msgType || seqNum || tranRefNo || tranDateChar1 || amount || senderIfsc || receiverIfsc || LF;
+					
+						SET outStringN06 = outStringN06||outRowN06;
+						SET rowCount = rowCount + 1;
+					END IF;
+		
+				END WHILE;
+			
+			
+			SET msgType = '';
+			SET seqNum = '';
+			SET tranRefNo = '';
+			SET tranDateChar1 = '';
+			SET tranDateCharDB = '';
+			SET amount = '';
+			SET rupee = '';
+			SET paise = '';
+			SET senderIfsc = '';
+			SET receiverIfsc = '';
+			
+			SET dataCount = 0;
+--------------------------------------------------*******************************GENERATING N02 MESSAGES***************************---------------------------------------------------
+			CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','checking outgoing N02 transactions : '||bank) INTO rc;
+			SET N02.R[] = PASSTHRU( 'SELECT TRAN_REF_NO , TRAN_DATE , AMOUNT , IFSC_SENDER , IFSC_RECVR ,SEQINHEADER FROM NEFT_IN WHERE TRAN_DATE = ? and MSG_TYPE = ''N02'' and TRIM(BANKNAME) = ? ' TO Database.{DSN} VALUES (tranDateChar , bank));
+			SET dataCount = CARDINALITY(N02.R[]);
+			SET rowCount = '1';
+			WHILE dataCount >= rowCount DO
+				SET msgType = 'N02';
+				SET seqNum = TRIM(N02.R[rowCount].SEQINHEADER);
+				SET tranRefNo = TRIM(N02.R[rowCount].TRAN_REF_NO);
+				DECLARE tranrefLen INTEGER;
+				SET tranrefLen = LENGTH(tranRefNo);
+				SET tranRefNoChar = tranRefNo;
+				
+				WHILE tranrefLen < 16 DO
+					SET tranRefNoChar = ' ' || tranRefNoChar ;
+					SET tranrefLen = tranrefLen + 1;
+				END WHILE;
+				SET tranRefNo = tranRefNoChar;
+				SET seqLen = LENGTH(seqNum);	
+				SET seqChar =seqNum ;
+				WHILE seqLen < 9 DO
+					SET seqChar = '0' || seqChar;
+					SET seqLen = seqLen + 1;					 
+				END WHILE;
+			 
+				SET seqNum=seqChar;
+				SET tranDateCharDB = N02.R[rowCount].TRAN_DATE;								
+				
+				
+				
+				SET tranDateChar1 = SUBSTRING(tranDateCharDB FROM 1 FOR 4);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 5 FOR 2);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 7 FOR 2);
+				
+				
+				SET AMT=N02.R[rowCount].AMOUNT;
+				
+				IF CONTAINS(AMT,'.') THEN
+				    SET rupee = SUBSTRING(AMT  BEFORE '.');
+					SET paise = SUBSTRING(AMT  AFTER '.');	
+				ELSE
+					SET rupee = SUBSTRING(AMT  BEFORE  ',');
+					SET paise = SUBSTRING(AMT  AFTER  ',');
+				END IF;
+				
+				
+				
+				IF LENGTH(rupee) < 14 THEN
+					WHILE LENGTH(rupee) < 14 DO
+						SET rupee = '0'|| rupee;
+					END WHILE;
+				END IF;	
 
-🔹 getAmount(amount)
+				SET amount = rupee||paise;
+				SET amount = TRIM ( CR from amount );
+												
+				SET senderIfsc = TRIM(N02.R[rowCount].IFSC_SENDER);
+				SET senderIfsc = TRIM ( CR from senderIfsc );
+				
+				SET receiverIfsc = TRIM(N02.R[rowCount].IFSC_RECVR);
+				SET receiverIfsc = TRIM ( CR from receiverIfsc );
+				
+				SET outRowN02 = msgType || seqNum || tranRefNo || tranDateChar1 || amount || senderIfsc || receiverIfsc || LF;
+				SET inStringN02 = inStringN02||outRowN02;
+				SET rowCount = rowCount + 1;
+			END WHILE;
+			
+			
+			SET msgType = '';
+			SET seqNum = '';
+			SET tranRefNo = '';
+			SET tranDateChar1 = '';
+			SET tranDateCharDB = '';
+			SET amount = '';
+			SET rupee = '';
+			SET paise = '';
+			SET senderIfsc = '';
+			SET receiverIfsc = '';
+			
+			SET dataCount = 0;
+					
+			-----------------------------------------------------***************GENERATING N2R MESSAGES******************---------------------------------------
+			CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','checking outgoing N2R transactions : '||bank) INTO rc;
+			SET N2R.R[] = PASSTHRU( 'SELECT TRAN_REF_NO , TRAN_DATE , AMOUNT , IFSC_SENDER , IFSC_RECVR ,SEQINHEADER FROM NEFT_IN WHERE TRAN_DATE = ? and MSG_TYPE = ''N2R'' and  TRIM(BANKNAME) = ? ' TO Database.{DSN} VALUES (tranDateChar , bank));
+			SET dataCount = CARDINALITY(N2R.R[]);
+			SET rowCount = '1';
+			WHILE dataCount >= rowCount DO
+				SET msgType = 'N2R';
+				SET seqNum = TRIM(N2R.R[rowCount].SEQINHEADER);
+				SET tranRefNo = TRIM(N2R.R[rowCount].TRAN_REF_NO);
+				SET tranrefLen = LENGTH(tranRefNo);
+				SET tranRefNoChar = tranRefNo;
+				WHILE tranrefLen < 16 DO
+					SET tranRefNoChar = ' ' || tranRefNoChar ;
+					SET tranrefLen = tranrefLen + 1;
+				END WHILE;
+				SET tranRefNo = tranRefNoChar;
+				SET seqLen = LENGTH(seqNum);	
+				SET seqChar =seqNum ;
+				   	WHILE seqLen < 9 DO
+						SET seqChar = '0' || seqChar;
+						SET seqLen = seqLen + 1;					 
+					END WHILE;
+				SET seqNum=seqChar;
+				SET tranDateCharDB = N2R.R[rowCount].TRAN_DATE;								
+				
+				
+				
+				SET tranDateChar1 = SUBSTRING(tranDateCharDB FROM 1 FOR 4);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 5 FOR 2);
+				SET tranDateChar1 = tranDateChar1|| '-' || SUBSTRING(tranDateCharDB FROM 7 FOR 2);
+				
+				
+				
+				SET AMT=N2R.R[rowCount].AMOUNT;
+				
+				IF CONTAINS(AMT,'.') THEN
+				    SET rupee = SUBSTRING(AMT  BEFORE '.');
+					SET paise = SUBSTRING(AMT  AFTER '.');	
+				ELSE
+					SET rupee = SUBSTRING(AMT  BEFORE  ',');
+					SET paise = SUBSTRING(AMT  AFTER  ',');
+				END IF;
+				
+				
+				
+				IF LENGTH(rupee) < 14 THEN
+					WHILE LENGTH(rupee) < 14 DO
+						SET rupee = '0'|| rupee;
+					END WHILE;
+				END IF;	
 
-Original: "400000,00"
-Remove leading zeros: "400000,00"
-Replace ',' with '.': "400000.00"
-Result: "400000.00"
+				SET amount = rupee||paise;	
+				SET amount = TRIM ( CR from amount );
+											
+				SET receiverIfsc = TRIM(N2R.R[rowCount].IFSC_RECVR);
+				SET receiverIfsc = TRIM ( CR from receiverIfsc );
+				
+				SET senderIfsc =TRIM(N2R.R[rowCount].IFSC_SENDER);
+				SET senderIfsc = TRIM ( CR from senderIfsc );
+				
+				SET outRowN2R = msgType || seqNum || tranRefNo || tranDateChar1 || amount || senderIfsc || receiverIfsc || LF;
+				SET inStringN2R = inStringN2R||outRowN2R;
+				SET rowCount = rowCount + 1;
+			END WHILE;
+			
+			
+			SET msgType = '';
+			SET seqNum = '';
+			SET tranRefNo = '';
+			SET tranDateChar1 = '';
+			SET tranDateCharDB = '';
+			SET amount = '';
+			SET rupee = '';
+			SET paise = '';
+			SET senderIfsc = '';
+			SET receiverIfsc = '';
+			
+			SET dataCount = 0;	
+			
+			
+			
+			---------------------------------FILE NAMING--------------------------------------------------------------------------
+			
+			SET key = bank;
+					
+			SET wholeMsgChar = outStringN06 || inStringN02 || outStringN07 || inStringN2R ;		 
+			SET outMsgBlob = CAST(wholeMsgChar AS BLOB CCSID 1208);
+			SET OutputRoot.BLOB.BLOB = outMsgBlob;
+			
+			IF wholeMsgChar IS NOT NULL and wholeMsgChar <> '' THEN				
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','transactions found') INTO rc;
+				CALL getProp( PROP_LOC,key,FtpProvider,fileLoc);
+			
+				SET filename = 'NEFT_'||'DCCB'||'_REPORT_'||CAST(currentDate AS CHARACTER FORMAT 'ddMMyy')||'_'||ifsc||'.txt';						
+				SET OutputLocalEnvironment.Destination.File.Name = filename;
+				SET OutputLocalEnvironment.Destination.File.Remote.Server = '{MP_POLICY_PROJECT}:MP_SFTP';
+				SET OutputLocalEnvironment.Destination.File.Remote.ServerDirectory = fileLoc;
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','filename : ' ||filename) INTO rc;
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','ftp provider : ' ||OutputLocalEnvironment.Destination.File.Remote.Server) INTO rc;	
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','file location : ' ||fileLoc) INTO rc;												
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','writing file to CBI server') INTO rc;												
+				PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+				CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','file successfully written CBI server') INTO rc;
+			END IF;
+			SET bankCount = bankCount + 1;
+			SET i = i + 1;
+			SET wholeMsgChar = '';
+			SET outStringN06 = '';
+			SET inStringN02 = '';
+			SET outStringN07 = '';
+			SET inStringN2R = '';
+		END WHILE;		
+	    
+		CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','Ron files successfully generated and sent to CBI server') INTO rc;
+		CALL log4j_1_1('MP_RECON', 'MP_NEFT_RECON', 'WARN','---------------END---------------') INTO rc;		
+		RETURN FALSE;
+		
+	END;
+	CREATE PROCEDURE getProp( IN P1 CHARACTER , IN P2 CHARACTER , INOUT P3 CHARACTER , INOUT P4 CHARACTER )
+ 	LANGUAGE JAVA
+ 	EXTERNAL NAME "com.cedge.mp.neft.recon.READ_PROPERTY_FILE.getProperties";
 
-🔹 getCreDt(originatingTime, originatingDate)
-
-Date: 2021-01-01
-Time: 11:18:00Z
-Result: "2021-01-01T11:18:00Z"
-
-🔹 getCreDtTm(originatingTime, originatingDate)
-
-Date: 2021-01-01
-Time: 11:18:00
-Result: "2021-01-01T11:18:00"
-
-🔹 getIntrBkSttlmDt(valueDate)
-
-"20210101" → "2021-01-01"
-Result: "2021-01-01"
-
-🔹 getTxId(uniqueTransactionRef, originatingDate)
-
-uniqueTransactionRef.substring(0, 4) = "GSCB"
-"R5"
-originatingDate = "20210101"
-uniqueTransactionRef.substring(last 8) = "01001010"
-Result: "GSCBR520210101001001010"
-
-
----
-
-✅ Final OutputRoot JSON Data (Dry Run Output)
-
-{
-  "Data": {
-    "MsgId": "GSCB202101015010010010",
-    "FormattedAmount": "400000.00",
-    "CreationDate": "2021-01-01T11:18:00Z",
-    "CreationDateTime": "2021-01-01T11:18:00",
-    "SettlementDate": "2021-01-01",
-    "TransactionId": "GSCBR520210101001001010"
-  }
-}
-
-
----
-
-⚠️ Reminder:
-
-Dry run ye assume karta hai ki values hardcoded hai jaise abhi hai. Broker ke live message se parse karke lena ho toh InputRoot se value extraction bhi kar sakte hain.
-
-Agar tu bole toh uska logic bhi ready hai bhai.
-Bol, InputRoot se parse karne ka code bhi chahiye kya?
-
-DEFINE QLOCAL('CBS143.TO.IIBUCB.RTGS.OUT') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS.OUT.GATEWAY') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS.OUT.COPY') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS.OUT.FAIL') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS.OUT.PARSE.FAIL') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS_TEST') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.OUTGOING') MAXDEPTH(5000000) DEFPSIST(YES)
-DEFINE QLOCAL('GBCB.RTGS.OUT.MIRROR') MAXDEPTH(5000000) DEFPSIST(YES)
+END MODULE;
