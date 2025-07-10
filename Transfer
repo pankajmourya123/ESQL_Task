@@ -81,3 +81,13 @@ Dry run ye assume karta hai ki values hardcoded hai jaise abhi hai. Broker ke li
 
 Agar tu bole toh uska logic bhi ready hai bhai.
 Bol, InputRoot se parse karne ka code bhi chahiye kya?
+
+CBS143.TO.IIBUCB.RTGS.OUT
+GBCB.RTGS.OUT.GATEWAY
+GBCB.RTGS.OUT.COPY
+GBCB.RTGS.OUT.FAIL
+GBCB.RTGS.OUT.PARSE.FAIL
+GBCB.RTGS_TEST
+GBCB.OUTGOING
+GBCB.RTGS.OUT.MIRROR
+GBCB.RTGS.OUT.PARSE.FAIL
