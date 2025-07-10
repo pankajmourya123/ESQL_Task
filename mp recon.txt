@@ -1,0 +1,763 @@
+      Kindly check and confirm this at earliest           
+
+Thank you
+Ajay Jamdar
+Amit Kulshreshtha
+​Vikas Pandey;​Ajay Ramchandra Jamdar​
+​Samuel C <r.samuel@tcs.com>;​nabard.servicedelivery;​+7 others​​​​​​​
+Dear @Vikas Pandey,
+
+As discussed, please find attached the list of transactions that failed at FTM due to insufficient funds. Additionally, the F27 -ve have been sent by the central bank but same are not reflecting on the interface.
+
+I am also attaching a RON Report for your reference (check N2R entries).
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+
+Vikas Pandey
+​Ajay Ramchandra Jamdar​
+​Amit Kulshreshtha;​Samuel C <r.samuel@tcs.com>;​+8 others​​​​​​​​
+Hi Ajay,
+Kindly refer to the trail mail and treat this issue as a top priority. Currently, 39 banks are affected, and they are having to manually process N2R settlement entries on a daily basis. This manual intervention poses a significant operational risk and could potentially lead to financial losses.
+Please investigate and resolve the issue at the earliest to avoid further complications.
+
+Thanks and Regards
+Vikas Pandey
+Nabard Service Delivery
+C-Edge Technologies Ltd
+ (A TCS-SBI Enterprise)
+Website: www.cedge.in
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar;​Samuel C <r.samuel@tcs.com>;​+2 others​​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​+8 others​​​​​​​​
+Dear @nabard.servicedelivery, @Vikas Pandey,
+
+Please refer to the trail mail regarding the issue and coordinate with Mr. Ajay Jamdar (IIB Team) to get an update on the resolution, as we have not been able to receive a response from him.
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar;​Samuel C <r.samuel@tcs.com>​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​IIB Private Team;​+8 others​​​​​​​​
+REMINDER !!!
+
+@Ajay Ramchandra Jamdar,
+
+Please provide update.
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar;​Samuel C <r.samuel@tcs.com>​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​IIB Private Team;​+8 others​​​​​​​​
+REMINDER !!!
+
+Dear @Ajay Ramchandra Jamdar,
+
+Please provide update.
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+Ajay Ramchandra Jamdar
+​Amit Kulshreshtha;​Samuel C <r.samuel@tcs.com>​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​IIB Private Team;​+8 others​​​​​​​​
+Hi @Amit Kulshreshtha ,
+
+The team is currently reviewing the issue. As our UAT environment is currently occupied by another bank’s testing, it is expected to be free by this weekend. Once it becomes available, we will proceed with testing in our UAT region and update you accordingly.
+
+Thank You
+Ajay Jamdar
+Amit Kulshreshtha
+​Samuel C <r.samuel@tcs.com>;​Ajay Ramchandra Jamdar​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​IIB Private Team;​+8 others​​​​​​​​
+Dear @Ajay Ramchandra Jamdar,
+
+Please check this issue, I think our system is unable to receive the F27 -ve sent by FTM.
+
+Refer the latest transaction.
+
+
+
+ Bank Name 
+ Ref. no. 
+ Tran Date 
+ AMOUNT 
+ TYPE 
+ Recvr Acct. No 
+ Sender Acct. No 
+ Status 
+ Tran Branch
+ Reject Reason 
+ABAA  
+CBIAA25182026088   
+01-Jul-2025 17:52:18
+65200000.00
+N06
+42845733955                        
+00000687002111801                  
+Acknowledgement(N10) not received
+00002
+ 
+
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+Amit Kulshreshtha
+​Samuel C <r.samuel@tcs.com>;​Ajay Ramchandra Jamdar​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​IIB Private Team;​+8 others​​​​​​​​
+Dear @Ajay Ramchandra Jamdar,
+
+You are requested to coordinate with CBI team and resolve this issue on priority.
+
+As reconciliation and customer service is getting affected due to the issue.
+
+
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: Samuel C <r.samuel@tcs.com>
+Sent: Monday, June 30, 2025 8:18 PM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Cc: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>; neft_rtgs <neft_rtgs@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; nabard.servicedelivery <nabard.servicedelivery@cedge.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+CAUTION : This email has not originated from CEDGE. Do not click on attachment or link/URL unless sender is reliable. Malware/Viruses can easily get transmitted via email.
+TCS Confidential
+
+
+Dear Ajay,
+
+As discussed, kindly check and process the attached file in your UAT environment.
+
+Thanks & Regards,
+
+Samuelraj C.
+
+TCS, Central Bank of India Project
+
+CBD Belapur
+
+Ph: +919920155612
+
+ 
+
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Monday, June 30, 2025 6:36 PM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>; Samuel C <r.samuel@tcs.com>
+Cc: neft_rtgs <neft_rtgs@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; nabard.servicedelivery <nabard.servicedelivery@cedge.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+External Email : Be cautious while opening any links or attachments.
+Dear Sir, @Samuel TCS Central Bank,
+
+Hi @Amit Kulshreshtha ,
+
+          we have not received any response from CBI for the outward transactions. 
+
+
+
+
+Get Outlook for Android
+
+From: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Sent: Monday, June 30, 2025 6:22:42 PM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: neft_rtgs <neft_rtgs@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; nabard.servicedelivery <nabard.servicedelivery@cedge.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date  22.06.2025 to till date
+
+Hi @Amit Kulshreshtha ,
+
+          we have not received any response from CBI for the outward transactions. 
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Monday, June 30, 2025 5:50 PM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Cc: neft_rtgs <neft_rtgs@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; nabard.servicedelivery <nabard.servicedelivery@cedge.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+REMINDER !!!
+
+Dear @Ajay Ramchandra Jamdar
+
+Kindly refer the attached sample msg and confirm why these msg not consumed by our system.
+ 
+ 
+Related to below UTRs which are failed at FTM but as per previous communication not received response from CBI.
+ 
+CBIAN25175046802
+CBIAN25175046803
+CBIAN25175046805
+CBIAN25174046771
+CBIAN25174046773
+CBIAN25174046774
+CBIAN25174046775
+CBIAN25174046776
+CBIAN25174046777
+CBIAN25174046778
+CBIAN25174046781
+CBIAN25172046752
+CBIAN25172046753
+CBIAN25172046754
+CBIAN25172046755
+CBIAN25172046756
+CBIAN25172046757
+
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Monday, June 30, 2025 11:50 AM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Cc: neft_rtgs <neft_rtgs@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+Notice: The information contained in this e-mail
+message and/or attachments to it may contain
+confidential or privileged information. If you are
+not the intended recipient, any dissemination, use,
+review, distribution, printing or copying of the
+information contained in this e-mail message
+and/or attachments to it are strictly prohibited. If
+you have received this communication in error,
+please notify us by reply e-mail or telephone and
+immediately and permanently delete the message
+and any attachments. Thank you
+
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar;​+1 other​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​+9 others​​​​​​​​​
+Dear Sir, @Samuel TCS Central Bank,
+
+Hi @Amit Kulshreshtha ,
+
+          we have not received any response from CBI for the outward transactions. 
+
+
+
+
+Get Outlook for Android
+Ajay Ramchandra Jamdar
+​Amit Kulshreshtha​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​+10 others​​​​​​​​​​
+Hi @Amit Kulshreshtha ,
+
+          we have not received any response from CBI for the outward transactions. 
+
+Thank you
+Ajay Jamdar
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​+10 others​​​​​​​​​​
+REMINDER !!!
+
+Dear @Ajay Ramchandra Jamdar
+
+Kindly refer the attached sample msg and confirm why these msg not consumed by our system.
+ 
+ 
+Related to below UTRs which are failed at FTM but as per previous communication not received response from CBI.
+ 
+CBIAN25175046802
+CBIAN25175046803
+CBIAN25175046805
+CBIAN25174046771
+CBIAN25174046773
+CBIAN25174046774
+CBIAN25174046775
+CBIAN25174046776
+CBIAN25174046777
+CBIAN25174046778
+CBIAN25174046781
+CBIAN25172046752
+CBIAN25172046753
+CBIAN25172046754
+CBIAN25172046755
+CBIAN25172046756
+CBIAN25172046757
+
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+Amit Kulshreshtha
+​Ajay Ramchandra Jamdar​
+​neft_rtgs;​Pratik Dugge;​Rohan Tanaji Pol;​+9 others​​​​​​​​​
+Dear @Ajay Ramchandra Jamdar,
+
+Kindly refer the trail mail analysis of NFET_RTGS team, please check the same and revert on priority.
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: neft_rtgs <neft_rtgs@cedge.in>
+Sent: Monday, June 30, 2025 11:37 AM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Subject: Re: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+
+
+Dear Amit,
+ 
+As we checked at our middleware F27 message not received at our end.
+ 
+ 
+********Please do not break the mail chain********
+Note:- Kindly route all issues/escalation/requirements through the helpdesk team 
+Email:- helpdesk@cedge.in, cbsplushelpdesk@cedge.in
+ 
+Thanks and Regards,
+Pratik Dugge
+Payment System Monitoring Group.
+C-Edge Technologies Ltd. (TCS-SBI Enterprise)
+Unit no 901, 9th floor & Unit no 704, 7th floor
+Lodha i-Think Tower A, Sandoz Baug,
+Kolshet Road,
+Thane West – 400607.
+NOTE : - MAIL TO (  psmg@cedge.in  ) REGARDING ISSUES OTHER THAN NEFT/RTGS
+On 30-06-2025 11:09 AM, Amit Kulshreshtha wrote:
+
+Dear @Rohan Tanaji Pol,
+ 
+Please intervene.
+ 
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Sunday, June 29, 2025 4:31 PM
+To: Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>
+Cc: IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; neft_rtgs <neft_rtgs@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>; Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+Reminder!!!!
+ 
+Get Outlook for Android
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Friday, June 27, 2025 9:15:05 PM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>; Pratik Dugge <pratik.dugge@cedge.in>; Rohan Tanaji Pol <rohan.pol@cedge.in>
+Cc: IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; neft_rtgs <neft_rtgs@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+Dear @Pratik Dugge, @Rohan Tanaji Pol
+ 
+Kindly refer the trail mail and revert on priority.
+ 
+ 
+Get Outlook for Android
+From: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Sent: Friday, June 27, 2025 9:02:54 PM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; neft_rtgs <neft_rtgs@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+Hi @Amit Kulshreshtha ,
+ 
+     First neft rtgs team need to provide analysis of the trail mail utr and if there is any issue they will revert with the issue 
+ 
+Thank You
+Ajay Jamdar
+ 
+Get Outlook for iOS
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Friday, June 27, 2025 8:04 PM
+To: Ajay Ramchandra Jamdar <ajay.jamdar@cedge.in>
+Cc: IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>; neft_rtgs <neft_rtgs@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; Integration Support <integration_support@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+Dear @Ajay Ramchandra Jamdar,
+ 
+Please check the issue and revert on priority.
+ 
+Get Outlook for Android
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Friday, June 27, 2025 6:19:25 PM
+To: IIB Private Team <iib_teaM@cedge.in>; neft_rtgs <neft_rtgs@cedge.in>
+Cc: Integration Support <integration_support@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date  22.06.2025 to till date
+
+Gentle reminder !!!
+ 
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Friday, June 27, 2025 4:33 PM
+To: neft_rtgs <neft_rtgs@cedge.in>
+Cc: Integration Support <integration_support@centralbank.co.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; IIB Private Team <iib_teaM@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+Dear Team,
+ 
+Kindly refer the attached sample msg and confirm why these msg not consumed by our system.
+ 
+ 
+Related to below UTRs which are failed at FTM but as per previous communication not received response from CBI.
+ 
+CBIAN25175046802
+CBIAN25175046803
+CBIAN25175046805
+CBIAN25174046771
+CBIAN25174046773
+CBIAN25174046774
+CBIAN25174046775
+CBIAN25174046776
+CBIAN25174046777
+CBIAN25174046778
+CBIAN25174046781
+CBIAN25172046752
+CBIAN25172046753
+CBIAN25172046754
+CBIAN25172046755
+CBIAN25172046756
+CBIAN25172046757
+ 
+ 
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: integration_support@centralbank.co.in <integration_support@centralbank.co.in>
+Sent: Friday, June 27, 2025 3:34 PM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cc: cmitps@centralbank.co.in <cmitps@centralbank.co.in>; IIB Private Team <iib_teaM@cedge.in>; neft_rtgs <neft_rtgs@cedge.in>; Pavan Choudhary <pavan.choudhary@cedge.in>; Samuel C <r.samuel@tcs.com>; Satish Singh <satish.singh@cedge.in>; zccbhopzo <zccbhopzo@centralbank.co.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date
+ 
+CAUTION : This email has not originated from CEDGE. Do not click on attachment or link/URL unless sender is reliable. Malware/Viruses can easily get transmitted via email.
+Dear Sir/Madam,
+
+Please find some sample messages.
+
+(See attached file: F27F_M_CBIN202506245175097235.txt)(See attached file: F27F_M_CBIN202506245175097237.txt)(See attached file: F27F_M_CBIN202506245175097238.txt)(See attached file: F27F_M_CBIN202506275178097641.txt)
+
+Thanks and Regards,
+Abhijit
+CP4i Support Team
+
+
+Inactive hide details for integration_support---27-06-2025 11:43:44---Dear Sir/Madam,  Below mentioned UTR's Failed at FTM endintegration_support---27-06-2025 11:43:44---Dear Sir/Madam,  Below mentioned UTR's Failed at FTM end due to insufficient fund.
+
+From: integration_support/Belapur/co/cbi
+To: "Amit Kulshreshtha" <amit.kulshreshtha@cedge.in>
+Cc: "Anand Shah" <anand.shah@cedge.in>, "VINAY HEDAU" <cbs@mpapexbank.in>, "cc: cmitps@centralbank.co.in" <cmitps@centralbank.co.in>, "IIB Private Team" <iib_teaM@cedge.in>, "neft_rtgs" <neft_rtgs@cedge.in>, "Pavan Choudhary" <pavan.choudhary@cedge.in>, "Samuel C" <r.samuel@tcs.com>, "Satish Singh" <satish.singh@cedge.in>, "zccbhopzo" <zccbhopzo@centralbank.co.in>, integration_support/Belapur/co/cbi@CBI
+Date: 27-06-2025 11:43
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date  22.06.2025 to till date
+
+
+
+
+Dear Sir/Madam,
+
+Below mentioned UTR's Failed at FTM end due to insufficient fund.
+
+Thanks and Regards,
+Sagar
+CP4i Support Team
+
+
+
+Inactive hide details for "Amit Kulshreshtha" ---27-06-2025 11:28:11---<p><span style="color: #ff0000;">-----------------------"Amit Kulshreshtha" ---27-06-2025 11:28:11---<p><span style="color: #ff0000;">-------------------------------------------------------------------
+From: "Amit Kulshreshtha" <amit.kulshreshtha@cedge.in>
+To: "Integration Support" <integration_support@centralbank.co.in>, "Samuel C" <r.samuel@tcs.com>
+Cc: "Pavan Choudhary" <pavan.choudhary@cedge.in>, "Anand Shah" <anand.shah@cedge.in>, "VINAY HEDAU" <cbs@mpapexbank.in>, "neft_rtgs" <neft_rtgs@cedge.in>, "Satish Singh" <satish.singh@cedge.in>, "IIB Private Team" <iib_teaM@cedge.in>, "cc: cmitps@centralbank.co.in" <cmitps@centralbank.co.in>, "zccbhopzo" <zccbhopzo@centralbank.co.in>
+Date: 27-06-2025 11:28
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date  22.06.2025 to till date
+
+
+
+--------------------------------------------------------------------------------------
+
+THIS EMAIL ORIGINATES FROM AN EXTERNAL DOMAIN.
+HENCE EXERCISE CAUTION BEFORE OPENING ANY LINKS, DOWNLOADING ANY FILES AND TAKING ANY ACTION.
+
+--------------------------------------------------------------------------------------
+Dear Sir @Samuel C,
+
+Kindly review the provided transactions and clarify the reasons for their reversal, as well as why no negative response was issued by the Central Bank regarding these transactions.
+
+This problem started occurring from 21st, due to which customers are not able to get their money back and the process of recon file is also getting affected.
+
+
+CBIAN25175046802
+CBIAN25175046803
+CBIAN25175046805
+CBIAN25174046771
+CBIAN25174046773
+CBIAN25174046774
+CBIAN25174046775
+CBIAN25174046776
+CBIAN25174046777
+CBIAN25174046778
+CBIAN25174046781
+CBIAN25172046752
+CBIAN25172046753
+CBIAN25172046754
+CBIAN25172046755
+CBIAN25172046756
+CBIAN25172046757
+From: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Sent: Thursday, June 26, 2025 6:25 PM
+To: cbshoshangabad.mp@gmail.com <cbshoshangabad.mp@gmail.com>
+Cc: Pavan Choudhary <pavan.choudhary@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; neft_rtgs <neft_rtgs@cedge.in>
+Subject: Re: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date 
+ 
+Dear Bank,
+
+Kindly refer the mail, and confirm the reason for failure.
+
+Thanks and regards
+ 
+
+Amit K
+
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha
+@
+cedge.in
+Website:
+www.cedge.in
+From: CEDGE_NEFT_RTGS <neft_rtgs@cedge.in>
+Sent: Thursday, June 26, 2025 6:05 PM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: Pavan Choudhary <pavan.choudhary@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>; cbshoshangabad.mp@gmail.com <cbshoshangabad.mp@gmail.com>
+Subject: Re[2]: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date 
+ 
+
+
+Dear Team, 
+
+
+
+For below UTR we have Not received any response from SFMS. Check with SFMS if failed Kindly confirm us to return the same.
+
+
+********Please do not break the mail chain********
+Note:- Kindly route all issues/escalation/requirements through the helpdesk team
+Email:- helpdesk@cedge.in, cbsplushelpdesk@cedge.in
+
+Thanks and Regards,
+Kiran
+Payment System Monitoring Group.
+C-Edge Technologies Ltd. (TCS-SBI Enterprise)
+Unit no 901, 9th floor & Unit no 704, 7th floor
+Lodha i-Think Tower A, Sandoz Baug,
+Kolshet Road,
+Thane West – 400607.
+NOTE : - MAIL TO (  psmg@cedge.in  ) REGARDING ISSUES OTHER THAN NEFT/RTGS
+
+
+
+On Thu, Jun 26, 2025 at 18:01, Amit Kulshreshtha <amit.kulshreshtha@cedge.in> wrote: Dear Team,
+
+Kindly check and confirm the status of below mentioned UTRs.
+
+CBIAN25175046802
+CBIAN25175046803
+CBIAN25175046805
+CBIAN25174046771
+CBIAN25174046773
+CBIAN25174046774
+CBIAN25174046775
+CBIAN25174046776
+CBIAN25174046777
+CBIAN25174046778
+CBIAN25174046781
+CBIAN25172046752
+CBIAN25172046753
+CBIAN25172046754
+CBIAN25172046755
+CBIAN25172046756
+CBIAN25172046757
+
+Thanks and regards
+
+Amit K
+System Analyst,
+C-EDGE  
+C-Edge Technologies Ltd.,
+(A TCS-SBI Enterprise),
+MP-Nabard, LHD Bhopal,
+Subhash Yadav Bhawan,4th Floor,
+Apex Bank, TT Nagar,
+Bhopal (Madhya Pradesh) 462 003
+Mobile  : 8871760743
+Mail to  : amit.kulshreshtha@cedge.in
+Website: www.cedge.in
+From: DCCB HOSHANGABAD <cbshoshangabad.mp@gmail.com>
+Sent: Thursday, June 26, 2025 5:46 PM
+To: Amit Kulshreshtha <amit.kulshreshtha@cedge.in>
+Cc: Pavan Choudhary <pavan.choudhary@cedge.in>; Anand Shah <anand.shah@cedge.in>; VINAY HEDAU <cbs@mpapexbank.in>
+Subject: N2R entries continuously getting failed in RON reports from date 22.06.2025 to till date 
+ 
+CAUTION : This email has not originated from CEDGE. Do not click on attachment or link/URL unless sender is reliable. Malware/Viruses can easily get transmitted via email.
+
+Dear Sir,
+               In RON reports from date 22.06.2025 to till date all N2R entries getting failed with response message "CORRESPONDING ORIGINATING ENTRY NOT FOUND" and amount getting credited to SAL TF UNPOST TO ACT and because of this we have to manually credit to customers on daily basis. For this we have raised IR ticket NBT2532980. We request you to kindly look into the issue and get it resolved as soon as possible. Please find the attached RON reports of these dates.
+
+
+
+
+
+
+
+
+Thanks & Regards  
+DCCB Hoshangabad
+Near Nehru Park,
+Head Office, Hoshangabad (M.P.)
+Ph.No. 07574-252660
+
+Every 3000 sheets of paper cost us a tree. Let's consider our environmental responsibility. Save Paper. Think Before You Print
+=====================================================================================================================
+डिस्क्लेमर : इस ई-मेल में जिला सहकारी बैंक से संबंधित विशेषाधिकार-प्राप्त सूचना या सूचना निहित है और केवल उस व्यक्ति के उपयोग के लिए निर्दिष्ट है जिसे वह प्रेषित की गई है. किसी अन्य व्यक्ति द्वारा इस मेल तक पहुंच अनधिकृत है. इसे (पूर्णत: या अंशत:) कॉपी करना या निर्दिष्ट प्राप्तकर्ता से परे इसका वितरण करना प्रतिबंधित है और गैर-कानूनी भी हो सकता है. प्राप्तकर्ता अभिस्वीकार करता है कि जिला सहकारी बैंक ई-मेल पारेषणों पर नियंत्रण रखने या उनमें निहित अंतर्वस्तुओं की अखंडता सुनिश्चित करने या उसकी गारंटी देने में असमर्थ रहा है और यह भी अभिस्वीकार करता है कि इस संदेश में व्यक्त विचार वैयक्तिक प्रेषक के विचार हैं और जिला सहकारी बैंक  पर आबद्धकर नहीं हैं. ई-मेल परिवर्तित किए जा सकते हैं या उनकी अखंडता की गारंटी नहीं दी जा सकती है. जिला सहकारी बैंक इस ई-मेल के कारण हुए किसी नुकसान के लिए कोई देयता स्वीकार नहीं करता है , यदि आपको गलती से यह ईमेल प्राप्त हो गया हो तो कृपया प्रेषक से संपर्क करें और इसे अपने कंप्यूटर से हटा दें |
+
+===================================================================================================================== 
+
+
+CENTRAL BANK OF INDIA The information contained in this transmission may contain privileged and confidential information and is intended only for the use of the person(s) named above. If you are not the intended recipient, or an employee or agent responsible for delivering this message to the intended recipient, any review, dissemination, distribution or duplication of this communication is strictly prohibited. If you are not the intended recipient, please contact the sender immediately by reply e-mail and destroy all copies of the original message. Do not print this email unless absolutely necessary --- Save paper ----Protect Earth
