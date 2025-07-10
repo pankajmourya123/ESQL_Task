@@ -1,4 +1,4 @@
-Bhai main JavaCompute node ka exact dry run toh real IBM Integration runtime ke bina nahi kar sakta, lekin mai functionally simulate karke tujhe output live dry run style mein dikha raha hoon — jaisa Broker mein dikhega.
+9Bhai main JavaCompute node ka exact dry run toh real IBM Integration runtime ke bina nahi kar sakta, lekin mai functionally simulate karke tujhe output live dry run style mein dikha raha hoon — jaisa Broker mein dikhega.
 
 
 ---
@@ -82,12 +82,11 @@ Dry run ye assume karta hai ki values hardcoded hai jaise abhi hai. Broker ke li
 Agar tu bole toh uska logic bhi ready hai bhai.
 Bol, InputRoot se parse karne ka code bhi chahiye kya?
 
-CBS143.TO.IIBUCB.RTGS.OUT
-GBCB.RTGS.OUT.GATEWAY
-GBCB.RTGS.OUT.COPY
-GBCB.RTGS.OUT.FAIL
-GBCB.RTGS.OUT.PARSE.FAIL
-GBCB.RTGS_TEST
-GBCB.OUTGOING
-GBCB.RTGS.OUT.MIRROR
-GBCB.RTGS.OUT.PARSE.FAIL
+DEFINE QLOCAL('CBS143.TO.IIBUCB.RTGS.OUT') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS.OUT.GATEWAY') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS.OUT.COPY') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS.OUT.FAIL') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS.OUT.PARSE.FAIL') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS_TEST') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.OUTGOING') MAXDEPTH(5000000) DEFPSIST(YES)
+DEFINE QLOCAL('GBCB.RTGS.OUT.MIRROR') MAXDEPTH(5000000) DEFPSIST(YES)
