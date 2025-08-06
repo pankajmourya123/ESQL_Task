@@ -1,0 +1,182 @@
+ExceptionList
+      RecoverableException
+File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/MessageServices/ImbDataFlowNode.cpp
+Line:INTEGER:1867
+Function:CHARACTER:ImbDataFlowNode::createExceptionList
+Type:CHARACTER:InputNode
+Name:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING#FCMComposite_1_3.com.cedge.rmgb.neft.string.TCPIP_CONNECTION#InTerminal.Input
+Label:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.TCPIP_CONNECTION.com.cedge.rmgb.neft.string.TCPIP_CONNECTION#InTerminal.Input
+Catalog:CHARACTER:BIPmsgs
+Severity:INTEGER:3
+Number:INTEGER:2230
+Text:CHARACTER:Node throwing exception
+Insert
+            Type:INTEGER:14
+            Text:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.TCPIP_CONNECTION.com.cedge.rmgb.neft.string.TCPIP_CONNECTION#InTerminal.Input
+RecoverableException
+            File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/SQLNodeLibrary/ImbComputeNode.cpp
+            Line:INTEGER:343
+            Function:CHARACTER:ImbComputeNode::evaluate
+            Type:CHARACTER:ComIbmComputeNode
+            Name:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING#FCMComposite_1_6
+            Label:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.Routing_On_response_Code
+            Catalog:CHARACTER:BIPmsgs
+            Severity:INTEGER:3
+            Number:INTEGER:2230
+            Text:CHARACTER:Caught exception and rethrowing
+            Insert
+      Type:INTEGER:14
+      Text:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.Routing_On_response_Code
+            RecoverableException
+      File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+      Line:INTEGER:785
+      Function:CHARACTER:SqlStatementGroup::execute
+      Type:CHARACTER:
+      Name:CHARACTER:
+      Label:CHARACTER:
+      Catalog:CHARACTER:BIPmsgs
+      Severity:INTEGER:3
+      Number:INTEGER:2488
+      Text:CHARACTER:Error detected, rethrowing
+      Insert
+Type:INTEGER:5
+Text:CHARACTER:com.cedge.rmgb.neft.string.CBS_RESPONSE.Main
+      Insert
+Type:INTEGER:5
+Text:CHARACTER:5.4
+      Insert
+Type:INTEGER:5
+Text:CHARACTER:SET flag = CopyEntireMessage();
+      RecoverableException
+File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
+Line:INTEGER:1337
+Function:CHARACTER:SqlRoutine::invoke
+Type:CHARACTER:
+Name:CHARACTER:
+Label:CHARACTER:
+Catalog:CHARACTER:BIPmsgs
+Severity:INTEGER:3
+Number:INTEGER:2934
+Text:CHARACTER:Error occured in procedure
+Insert
+            Type:INTEGER:5
+            Text:CHARACTER:CopyEntireMessage
+RecoverableException
+            File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+            Line:INTEGER:785
+            Function:CHARACTER:SqlStatementGroup::execute
+            Type:CHARACTER:
+            Name:CHARACTER:
+            Label:CHARACTER:
+            Catalog:CHARACTER:BIPmsgs
+            Severity:INTEGER:3
+            Number:INTEGER:2488
+            Text:CHARACTER:Error detected, rethrowing
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:com.cedge.rmgb.neft.string.CBS_RESPONSE.CopyEntireMessage
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:71.4
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:PROPAGATE TO TERMINAL 1 FINALIZE DEFAULT DELETE NONE;
+            RecoverableException
+      File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/PluginInterface/jlinklib/ImbJniNode.cpp
+      Line:INTEGER:430
+      Function:CHARACTER:ImbJniNode::evaluate
+      Type:CHARACTER:ComIbmMSLMappingNode
+      Name:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING#FCMComposite_1_7
+      Label:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.STRING_N02
+      Catalog:CHARACTER:BIPmsgs
+      Severity:INTEGER:3
+      Number:INTEGER:2230
+      Text:CHARACTER:Caught exception and rethrowing
+      Insert
+Type:INTEGER:14
+Text:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.STRING_N02
+      RecoverableException
+File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/SQLNodeLibrary/ImbComputeNode.cpp
+Line:INTEGER:343
+Function:CHARACTER:ImbComputeNode::evaluate
+Type:CHARACTER:ComIbmComputeNode
+Name:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING#FCMComposite_1_9
+Label:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.N10 or N02 Response
+Catalog:CHARACTER:BIPmsgs
+Severity:INTEGER:3
+Number:INTEGER:2230
+Text:CHARACTER:Caught exception and rethrowing
+Insert
+            Type:INTEGER:14
+            Text:CHARACTER:com.cedge.rmgb.neft.string.APGVB_NEFT_INWARD_STRING.N10 or N02 Response
+RecoverableException
+            File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+            Line:INTEGER:785
+            Function:CHARACTER:SqlStatementGroup::execute
+            Type:CHARACTER:
+            Name:CHARACTER:
+            Label:CHARACTER:
+            Catalog:CHARACTER:BIPmsgs
+            Severity:INTEGER:3
+            Number:INTEGER:2488
+            Text:CHARACTER:Error detected, rethrowing
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:com.cedge.rmgb.neft.string.RMGB_NEFT_INWARD_STRING_Compute.Main
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:6.3
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:SET flag = CopyEntireMessage();
+            RecoverableException
+      File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlRoutine.cpp
+      Line:INTEGER:1337
+      Function:CHARACTER:SqlRoutine::invoke
+      Type:CHARACTER:
+      Name:CHARACTER:
+      Label:CHARACTER:
+      Catalog:CHARACTER:BIPmsgs
+      Severity:INTEGER:3
+      Number:INTEGER:2934
+      Text:CHARACTER:Error occured in procedure
+      Insert
+Type:INTEGER:5
+Text:CHARACTER:CopyEntireMessage
+      RecoverableException
+File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlStatementGroup.cpp
+Line:INTEGER:785
+Function:CHARACTER:SqlStatementGroup::execute
+Type:CHARACTER:
+Name:CHARACTER:
+Label:CHARACTER:
+Catalog:CHARACTER:BIPmsgs
+Severity:INTEGER:3
+Number:INTEGER:2488
+Text:CHARACTER:Error detected, rethrowing
+Insert
+            Type:INTEGER:5
+            Text:CHARACTER:com.cedge.rmgb.neft.string.RMGB_NEFT_INWARD_STRING_Compute.CopyEntireMessage
+Insert
+            Type:INTEGER:5
+            Text:CHARACTER:100.4
+Insert
+            Type:INTEGER:5
+            Text:CHARACTER:CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN', 'FileName:' || fileName) INTO rc;
+RecoverableException
+            File:CHARACTER:/build/jenkins_swg/slot0/product-build/WMB/src/DataFlowEngine/ImbRdl/ImbRdlCastOperations.cpp
+            Line:INTEGER:1995
+            Function:CHARACTER:SqlCastUtility::cast
+            Type:CHARACTER:
+            Name:CHARACTER:
+            Label:CHARACTER:
+            Catalog:CHARACTER:BIPmsgs
+            Severity:INTEGER:3
+            Number:INTEGER:2465
+            Text:CHARACTER:Cannot cast the value '%1' to type type '%2'. The types are incompatible
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:TRUE
+            Insert
+      Type:INTEGER:5
+      Text:CHARACTER:BLOB
