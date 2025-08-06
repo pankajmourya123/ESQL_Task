@@ -1057,3 +1057,46 @@ CREATE PROCEDURE updateQStatus( )
 
 
 END MODULE;
+[iibadmin@dciibprod-uat ufm]$ vi PANKAJ_UFM_TRAIL.log
+2025-08-06 19:12:01 INFO  - Successfully closed the queue 'AJAY.OUT'
+2025-08-06 19:12:01 INFO  - Successfully disconnected.
+2025-08-06 19:14:41 INFO  - There is/are 1 item(s).
+2025-08-06 19:14:41 INFO  - Watched file found: /opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT
+2025-08-06 19:14:41 INFO  -
+2025-08-06 19:14:41 INFO  - MQSend action now being performed.
+2025-08-06 19:14:41 INFO  - User Supplied parameters:
+2025-08-06 19:14:41 INFO  -      Format               = S
+2025-08-06 19:14:41 INFO  -      Priority             = MQPRI_PRIORITY_AS_Q_DEF
+2025-08-06 19:14:41 INFO  -      Persistence          = Yes
+2025-08-06 19:14:41 INFO  -      CCSID                = MQCCSI_Q_MGR
+2025-08-06 19:14:41 INFO  -      Input Path & Filename= /opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT
+2025-08-06 19:14:41 INFO  -      JobFile              =
+2025-08-06 19:14:41 INFO  -      Delete File          = No
+2025-08-06 19:14:41 INFO  -      Archive File         = Yes
+2025-08-06 19:14:41 INFO  -      Archive Create Dir   = No
+2025-08-06 19:14:41 INFO  -      Archive Directory    = /opt/mqm/Capitalware/UFM/workflow/new3
+2025-08-06 19:14:41 INFO  -      Archive Filename     =
+2025-08-06 19:14:41 INFO  -      Remote JobXmlFile    =
+2025-08-06 19:14:41 INFO  -      Remote Directory     = /opt/mqm/Catalware/UFM/workflow/new2
+2025-08-06 19:14:41 INFO  -      Remote Filename      = ABC.TXT
+2025-08-06 19:14:41 INFO  -      ReplyToQMgrName      =
+2025-08-06 19:14:41 INFO  -      Queue Manager Name   = IIBPRODQMGR
+2025-08-06 19:14:41 INFO  -      Queue Name           = AJAY.OUT
+2025-08-06 19:14:41 INFO  -      Channel Name         = PROD.DEV.SVRCONN
+2025-08-06 19:14:41 INFO  -      Hostname             = 10.43.49.53
+2025-08-06 19:14:41 INFO  -      Port Number          = 1416
+2025-08-06 19:14:41 INFO  -      UserID               = iibadmin
+2025-08-06 19:14:41 INFO  - connect() port='1416'
+2025-08-06 19:14:41 INFO  - connect() hostname='10.43.49.53'
+2025-08-06 19:14:41 INFO  - connect() userID='iibadmin'
+2025-08-06 19:14:41 INFO  - connect() channel='PROD.DEV.SVRCONN'
+2025-08-06 19:14:41 INFO  - Successfully connected to IIBPRODQMGR using PROD.DEV.SVRCONN and 10.43.49.53(1416)
+2025-08-06 19:14:41 INFO  - simplePut1: Attempting to open queue 'AJAY.OUT'
+2025-08-06 19:14:41 INFO  - Successfully opened output queue: 'AJAY.OUT'
+2025-08-06 19:14:41 INFO  - putMsgLess4MB: Attempting to send a file '/opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT'
+2025-08-06 19:14:41 INFO  - Read completed.
+2025-08-06 19:14:41 INFO  - Put file '/opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT' as a message to queue: 'AJAY.OUT'
+2025-08-06 19:14:41 INFO  - Successfully copied file: /opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT to /opt/mqm/Capitalware/UFM/workflow/new3/ABC.TXT
+2025-08-06 19:14:41 INFO  - Successfully deleted file: /opt/mqm/Capitalware/UFM/workflow/new/ABC.TXT
+2025-08-06 19:14:41 INFO  - Successfully closed the queue 'AJAY.OUT'
+2025-08-06 19:14:41 INFO  - Successfully disconnected.
