@@ -1,0 +1,157 @@
+BROKER SCHEMA com.cedge.rmgb.neft.string
+
+
+CREATE COMPUTE MODULE RMGB_NEFT_INWARD_STRING_Compute
+	DECLARE DSNNAME EXTERNAL CHARACTER '';
+	DECLARE SCHEMANAME EXTERNAL CHARACTER '';
+	DECLARE BANKCOUNT_TABLENAME EXTERNAL CHARACTER '' ;
+	DECLARE iib_destiniton_path EXTERNAL CHARACTER '';
+	DECLARE NEFT_IN_TABLENAME EXTERNAL CHARACTER '';
+	DECLARE NEFT_IN_PAYLOAD_TABLENAME EXTERNAL CHARACTER '';
+	DECLARE N10_OUT_TABLE EXTERNAL CHARACTER '';
+	DECLARE pfxpath EXTERNAL CHARACTER;
+	DECLARE pfxpass EXTERNAL CHARACTER ;
+	DECLARE AppID EXTERNAL CHARACTER ;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE rc BOOLEAN;
+		DECLARE flag BOOLEAN ;
+		 CALL CopyMessageHeaders();
+		SET flag = CopyEntireMessage();
+		UPDATE Database.{DSNNAME}.{SCHEMANAME}.{NEFT_IN_PAYLOAD_TABLENAME} AS P SET STATUS='S' WHERE P.UTR= Environment.Variable.status.utr ;
+--		CALL log4j_1_1('Routing_On_response_Code', 'APGV_NEFT_IN_STRING', 'INFO','STATUS Updated in to neft_in_payload table') INTO rc;
+		RETURN flag;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() RETURNS BOOLEAN BEGIN
+		DECLARE msgblob, rc BLOB;
+		DECLARE msgchar,fileName,fileLoc CHARACTER;
+		
+		IF FIELDNAME(InputBody) = 'XMLNSC' THEN
+			
+			--------------------------------------------sign---------------------------------------------------------------------
+			SET OutputRoot.Properties = InputRoot.Properties;
+			DECLARE CRLF ,CR,LF ,fourBlock CHARACTER ;
+			DECLARE i INTEGER;
+			DECLARE rc BOOLEAN;
+			DECLARE verify ROW;
+			DECLARE  ref REFERENCE TO InputRoot.XMLNSC.RequestPayload.Document[1];							
+			MOVE ref FIRSTCHILD TYPE XMLNSC.Element;
+			DECLARE  refMsgType REFERENCE TO InputRoot.XMLNSC.RequestPayload.AppHdr.MsgDefIdr[1];						
+			MOVE refMsgType FIRSTCHILD TYPE XMLNSC.Element;
+			DECLARE wholeMsgBlob BLOB;
+			SET wholeMsgBlob = ASBITSTREAM( ref OPTIONS FolderBitStream CCSID 1208);
+			DECLARE wholeMsgChar CHARACTER CAST(wholeMsgBlob AS CHARACTER ENCODING 546);
+	        
+	        IF refMsgType = 'pacs.008.001.09' THEN
+	        	SET fourBlock ='<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.09">'||wholeMsgChar||'</Document>';      
+	        ELSEIF refMsgType = 'pacs.004.001.10' THEN
+	        	SET fourBlock ='<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.004.001.10">'||wholeMsgChar||'</Document>';
+	        ELSEIF refMsgType = 'camt.059.001.06' THEN	
+	       		SET fourBlock ='<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.059.001.06">'||wholeMsgChar||'</Document>';		
+	        END IF;
+		    
+			DECLARE signature CHARACTER;
+			CALL getProp( pfxpath,pfxpass,fourBlock,signature);
+			SET signature = signature ;
+			DECLARE sigmsg CHARACTER;
+			SET sigmsg = signature;
+			SET Environment.SIG = sigmsg ;
+			SET sigmsg = REPLACE(signature, '"','');
+			DECLARE addpayload REFERENCE TO InputRoot.XMLNSC;
+		    SET addpayload.RequestPayload.AppHdr.Sgntr.XMLSgntrs = NULL;
+--		    SET addpayload.RequestPayload.*:AppHdr.Sgntr.(XMLNSC.NamespaceDecl)sig:XMLSgntrs=NULL;
+--		    SET addpayload.RequestPayload.AppHdr.Sgntr.XMLSgntrs.(XMLNSC.NamespaceDecl)Sgntrs1	='http://www.w3.org/2000/09/xmldsig#';
+	        SET addpayload.RequestPayload.AppHdr.Sgntr."sig:XMLSgntrs"								='-----BEGIN PKCS7-----'||sigmsg||'-----END PKCS7-----';
+	       
+			CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN','Message is successully signing') INTO rc;
+			DECLARE appId CHARACTER AppID;
+			DECLARE wholeMsgBlob1 BLOB ASBITSTREAM(addpayload, 546, 1208 );		
+	    	DECLARE wholeMsgChar1 CHAR CAST(wholeMsgBlob1 AS CHAR CCSID 1208);
+	    	SET wholeMsgChar1 = appId||wholeMsgChar1;	
+			SET wholeMsgChar1 = REPLACE(wholeMsgChar1,'^M','');		
+			SET wholeMsgChar1 = REPLACE(wholeMsgChar1,'AppHdr1','xmlns');
+			SET wholeMsgChar1 = REPLACE(wholeMsgChar1,'AppHdr2','xmlns:xsi');
+			SET wholeMsgChar1 = REPLACE(wholeMsgChar1,'AppHdr3','xmlns:sig');
+			SET wholeMsgChar1 = REPLACE(wholeMsgChar1,'Document1','xmlns');
+--			CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN','Message :- ' || wholeMsgChar1 ) INTO rc;
+--	    	DECLARE wholeMsgBlob2 BLOB CAST(wholeMsgChar1 AS BLOB CCSID 1208);
+--	    	SET OutputRoot.BLOB.BLOB = wholeMsgBlob2;
+	   
+			---------------------------------------------sign--------------------------------------------------------------------
+			DECLARE utr,batch CHARACTER ;
+			SET batch = CAST(Environment.Variables.RequestPayload.batch AS INTEGER);
+			SET utr = InputRoot.XMLNSC.RequestPayload.*:Document.*:NtfctnToRcvStsRpt.*:OrgnlNtfctnAndSts.*:OrgnlNtfctnRef.*:OrgnlItmAndSts.*:OrgnlEndToEndId;
+--			SET utr1 =utr;
+--			SET msgblob = ASBITSTREAM(InputBody CCSID InputRoot.Properties.CodedCharSetId);
+--			SET msgchar = CAST(msgblob AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+			INSERT INTO Database.{DSNNAME}.{SCHEMANAME}.{N10_OUT_TABLE} (UTR,N10_MSG,BATCH,FLAG,TRANDATE) VALUES (utr,wholeMsgChar1,batch,'0',CURRENT_GMTTIMESTAMP );
+			CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN','N10 Message inserted in to N10_OUT table') INTO rc;
+--			SET OutputLocalEnvironment.Destination.File.Name = 'campt.059.txt';
+--			SET OutputLocalEnvironment.Destination.File.Directory ='/var/iib/interface/Rathod/STRING/CAMT059';
+		RETURN FALSE;
+		ELSEIF FIELDNAME(InputBody) = 'DFDL' THEN
+			DECLARE sysdate,bankName,batchTime,flag,utr CHARACTER ;
+			DECLARE count,count1 INTEGER;
+			DECLARE DB_Call ROW ;
+			SET bankName =Environment.Variables.RequestPayload.bankName;
+			SET sysdate = CAST (CURRENT_DATE AS CHARACTER FORMAT 'yyyyMMdd');
+			SET batchTime =Environment.Variables.RequestPayload.batch;
+			SET msgblob = ASBITSTREAM(InputBody CCSID InputRoot.Properties.CodedCharSetId);
+			SET msgchar = CAST(msgblob AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+			---------------------------------------------NEFTCOUNT-------------------------------------------
+			DECLARE Qry CHARACTER 'SELECT NEFTCOUNT FROM '||SCHEMANAME||'.'||BANKCOUNT_TABLENAME ||' A WHERE A.BANKNAME = ?';
+			SET DB_Call.A[] = PASSTHRU(Qry TO Database.{DSNNAME} VALUES(bankName));
+			SET count = DB_Call.A.NEFTCOUNT;
+			SET count1 = count + 1 ;
+			IF count1 > 99999 THEN 
+				SET count1 = '0';
+			END IF;
+			SET flag = CAST(count AS CHARACTER);
+			DECLARE len INTEGER ;
+			SET len = LENGTH(flag);
+			IF len < 5 THEN
+				SET len = (5 -len);
+				SET flag = REPLICATE('0',len)||flag ;
+			END IF;
+			UPDATE Database.{DSNNAME}.{SCHEMANAME}.{BANKCOUNT_TABLENAME} as A SET NEFTCOUNT = count1 WHERE A.BANKNAME = bankName ;
+			---------------------------------------------NEFTCOUNT-------------------------------------------
+--			SET utr1 =Environment.Variables.RequestPayload.utr;
+			SET fileName = 'NEFT_'||sysdate||'_'||flag||'_'||bankName||'_'||batchTime||'.TXT';
+			SET fileLoc = iib_destiniton_path||bankName||'/N02';
+			SET utr = InputRoot.DFDL.N02.body.record.Transaction_RefNumber;
+			SET OutputLocalEnvironment.Destination.File.Name = fileName;
+			SET OutputLocalEnvironment.Destination.File.Directory =fileLoc;
+			CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN','FileName:'||fileName) INTO rc;
+			CALL log4j_1_1('Signed', 'APGV_NEFT_IN_STRING', 'WARN','FileDirectory :'||fileLoc) INTO rc;
+			UPDATE Database.{DSNNAME}.{SCHEMANAME}.{BANKCOUNT_TABLENAME} as A SET NEFTCOUNT = count1 WHERE A.BANKNAME = bankName ;
+			UPDATE Database.{DSNNAME}.{SCHEMANAME}.{NEFT_IN_TABLENAME} AS B SET CBS_MSG = msgchar ,CBS_FILENAME =fileName, FLAG_FILE_CREATED='Y' WHERE B.TRAN_REF_NO= utr ;
+			SET OutputRoot = InputRoot;
+			RETURN TRUE;
+		ELSE 
+				CALL log4j_1_1('Routing_On_response_Code', 'APGV_NEFT_IN_STRING', 'INFO','Msg Not Related To XML Or DFDL Format') INTO rc;
+				RETURN FALSE;
+		END IF;
+--		CALL log4j_1_1('Routing_On_response_Code', 'APGV_NEFT_IN_STRING', 'INFO','Response_CODE : 080000 O.K.') INTO rc;
+	
+--		DECLARE responsechar CHARACTER CAST (InputBody AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding);
+--		 SET responsechar = responsechar;
+--		SET OutputLocalEnvironment.Destination.File.Name=Environment.Variables.RequestPayload.utr||'_camt059.TXT';
+--		SET OutputLocalEnvironment.Destination.File.Directory = '/var/iib/interface/Rathod/STRING/N02';
+
+	END;
+	
+	CREATE PROCEDURE  getProp( IN P1 CHARACTER, IN P2 CHARACTER,IN P3 CHARACTER, INOUT P4 CHARACTER)
+ 	LANGUAGE JAVA 
+ 	EXTERNAL NAME "com.cedge.signer.Signatureflow_JavaCompute.getProperties";
+END MODULE;
