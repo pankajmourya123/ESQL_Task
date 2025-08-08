@@ -31,3 +31,6 @@ WAY 5
 copy whole script content in terminl and enter 
 
 we sholud give prefrence according to the top to dwon ways 
+-----------------------------------------------------------------
+
+suppose we have chanege the ufm worflow script or mq file to reflect this changes we have to run ./ufm.sh for 1 time 
