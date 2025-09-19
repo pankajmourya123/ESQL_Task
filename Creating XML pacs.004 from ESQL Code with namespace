@@ -1,0 +1,85 @@
+DECLARE nsAppHdr NAMESPACE 'urn:iso:std:iso:20022:tech:xsd:head.001.001.02';
+DECLARE nsXsi    NAMESPACE 'urn:iso:std:iso:20022:tech:xsd:Header';
+DECLARE nsSig    NAMESPACE 'http://www.w3.org/2000/09/xmldsig#';
+DECLARE nsDoc    NAMESPACE 'urn:iso:std:iso:20022:tech:xsd:pacs.004.001.10';
+
+CREATE COMPUTE MODULE msg2_Compute
+  CREATE FUNCTION Main() RETURNS BOOLEAN
+  BEGIN
+    CALL CopyEntireMessage();
+    RETURN TRUE;
+  END;
+
+  CREATE PROCEDURE CopyEntireMessage() BEGIN
+    
+    -----------------------------------------------------------------
+    -- AppHdr with namespaces
+    -----------------------------------------------------------------
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.(XMLNSC.NamespaceDecl)xmlns     = nsAppHdr;
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.(XMLNSC.NamespaceDecl)xmlns:xsi = nsXsi;
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.(XMLNSC.NamespaceDecl)xmlns:sig = nsSig;
+    
+    -- Fr
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:Fr.nsAppHdr:FIId.nsAppHdr:FinInstnId.nsAppHdr:ClrSysMmbId.nsAppHdr:MmbId = 'APBL00000SC';
+    
+    -- To
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:To.nsAppHdr:FIId.nsAppHdr:FinInstnId.nsAppHdr:ClrSysMmbId.nsAppHdr:MmbId = 'RBIP0NEFTSC';
+    
+    -- Other fields
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:BizMsgIdr = 'APBL202508315244175240';
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:MsgDefIdr = 'pacs.004.001.10';
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:BizSvc    = 'NEFTPaymentReturn';
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:CreDt     = '2025-08-31T23:35:00Z';
+    
+    -- Signature (sig namespace inside AppHdr)
+    SET OutputRoot.XMLNSC.RequestPayload.nsAppHdr:AppHdr.nsAppHdr:Sgntr.nsSig:XMLSgntrs = '-----BEGIN PKCS7-----...-----END PKCS7-----';
+
+    -----------------------------------------------------------------
+    -- Document with nsDoc namespace
+    -----------------------------------------------------------------
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.(XMLNSC.NamespaceDecl)xmlns = nsDoc;
+    
+    -- GrpHdr
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:MsgId = 'APBL202508315244175240';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:CreDtTm = '2025-08-31T23:35:00';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:NbOfTxs = '1';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:TtlRtrdIntrBkSttlmAmt.(XMLNSC.Attribute)Ccy = 'INR';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:TtlRtrdIntrBkSttlmAmt = '100.00';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:IntrBkSttlmDt = '2025-08-31';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:SttlmInf.nsDoc:SttlmMtd = 'CLRG';
+
+    -- Agents
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:InstgAgt.nsDoc:FinInstnId.nsDoc:ClrSysMmbId.nsDoc:MmbId = 'APBL00000SC';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:GrpHdr.nsDoc:InstdAgt.nsDoc:FinInstnId.nsDoc:ClrSysMmbId.nsDoc:MmbId = 'RBIP0NEFTSC';
+
+    -----------------------------------------------------------------
+    -- TxInf
+    -----------------------------------------------------------------
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:RtrId = 'APBLN52025083144175240';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlEndToEndId = '/XUTR/HDFCH00453263881';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxId = 'HDFCN52025083141700922';
+    
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:RtrdIntrBkSttlmAmt.(XMLNSC.Attribute)Ccy = 'INR';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:RtrdIntrBkSttlmAmt = '100.00';
+    
+    -- Return Reason
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:RtrRsnInf.nsDoc:Rsn.nsDoc:Cd = 'AC01';
+    
+    -----------------------------------------------------------------
+    -- OrgnlTxRef
+    -----------------------------------------------------------------
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:Dbtr.nsDoc:Nm = 'CHANDRASEKHARUNI S P V V VIDYA SAG';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:DbtrAcct.nsDoc:Id.nsDoc:Othr.nsDoc:Id = '50200082254216';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:DbtrAcct.nsDoc:Tp.nsDoc:Cd = '11';
+    
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:DbtrAgt.nsDoc:FinInstnId.nsDoc:ClrSysMmbId.nsDoc:MmbId = 'HDFC0000001';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:CdtrAgt.nsDoc:FinInstnId.nsDoc:ClrSysMmbId.nsDoc:MmbId = 'APBL0002020';
+    
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:Cdtr.nsDoc:Nm = 'Spvv vid';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:CdtrAcct.nsDoc:Id.nsDoc:Othr.nsDoc:Id = '204000021342';
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:CdtrAcct.nsDoc:Tp.nsDoc:Cd = '10';
+    
+    SET OutputRoot.XMLNSC.RequestPayload.nsDoc:Document.nsDoc:PmtRtr.nsDoc:TxInf.nsDoc:OrgnlTxRef.nsDoc:UndrlygCstmrCdtTrf.nsDoc:InstrForCdtrAgt.nsDoc:InstrInf = 'CHANDRASEKHARUNI S P V V VIDYA SAGCHANDRAS';
+    
+  END;
+END MODULE;
