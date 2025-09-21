@@ -1,0 +1,12 @@
+
+[ ] Sample data example ready (edge cases noted)
+
+[ ] DFDL XSD created & added to library
+
+[ ] Application references library (Project References)
+
+[ ] Input node domain = DFDL, message = DFDL element
+
+[ ] Mapping node: source = DFDL model, target = XML (XMLNSC)
+
+[ ] Output node configured & flow deployed
