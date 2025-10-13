@@ -1,0 +1,16 @@
+GUJ NEFT OUTAWARD DOUBT
+
+GUJ.NEFT.OUT.COPY queue is used as a safety backup checkpoint —
+MQOutput puts a message copy before main processing,
+MQGet deletes it at the end if everything succeeds,
+otherwise, it remains for reprocessing.
+
+Soch jaise:
+
+Tu ek bank transaction kar raha hai.
+
+Pehle bank ek backup slip likh ke side me rakhta hai.
+
+Agar transaction success ho gaya → slip phaad di (delete).
+
+Agar failure aaya → slip se wapas transaction retry karega.
