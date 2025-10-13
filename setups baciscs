@@ -14,3 +14,27 @@ Pehle bank ek backup slip likh ke side me rakhta hai.
 Agar transaction success ho gaya → slip phaad di (delete).
 
 Agar failure aaya → slip se wapas transaction retry karega.
+
+unit of work (UOW) ke andar aate hain.
+
+> 👉 UOW = Either sab success (commit) ya sab fail (rollback).
+Jab tak commit nahi hota — message “temporary” hota hai.
+Commit hone ke baad agar success hua toh MQGet delete kar deta hai.
+Agar exception hua toh rollback hone ke baad woh message reprocess queue ke liye available hota hai.
+
+Main flow rollback hone ke baad IIB ek naya transaction kholta hai jisme exception flow COPY queue me message daal ke commit karta hai —
+isliye reprocess flow ko message dikhta hai.”
+
+
+
+So reprocess tabhi trigger hota hai jab:
+
+1. Main transaction failed (rollback),
+
+
+2. Exception flow ne message commit kiya.
+Jab exception flow execute hota hai ya GUJ.NEFT.OUT.EXCEPTION_FLOW call hoti hai,
+IIB automatically ek naya transaction context (Txn #2) start karta hai
+
+Main flow rollback → sab gaya.
+Exception flow new transaction → commit karke message safe kar diya (reprocess queue me
