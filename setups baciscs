@@ -38,3 +38,8 @@ IIB automatically ek naya transaction context (Txn #2) start karta hai
 
 Main flow rollback → sab gaya.
 Exception flow new transaction → commit karke message safe kar diya (reprocess queue me
+
+MQOutput(COPY) + MQGet(COPY.GET) ka real intention “backup safety during in-flight processing” hai.
+Matlab message jab flow ke andar travel kar raha hai (abhi commit hua nahi),
+agar koi bhi catastrophic failure aaya (like ACE crash, JVM kill, broker abort, node restart, etc.) —
+toh uncommitted message data kahin to safe ho before rollback.
